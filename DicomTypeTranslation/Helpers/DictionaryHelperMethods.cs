@@ -105,11 +105,14 @@ public static class DictionaryHelperMethods
     /// <returns></returns>
     public static string AsciiArt(IDictionary dict, string prefix = "")
     {
-        var sb = new StringBuilder();
+        var estimatedCapacity = dict.Count * 60; // Estimate for key-value pairs with formatting
+        var sb = new StringBuilder(estimatedCapacity);
 
-        var keys1 = dict.Keys.Cast<object>().OrderBy(static i => i).ToList();
+        var keys1 = new object[dict.Keys.Count];
+        dict.Keys.CopyTo(keys1, 0);
+        Array.Sort(keys1);
 
-        for (var i = 0; i < keys1.Count; i++)
+        for (var i = 0; i < keys1.Length; i++)
         {
             sb.Append(prefix);
 
@@ -140,21 +143,28 @@ public static class DictionaryHelperMethods
     /// <returns></returns>
     public static string AsciiArt(IDictionary dict, IDictionary dict2, string prefix = "")
     {
-        var sb = new StringBuilder();
+        var maxCount = Math.Max(dict.Count, dict2.Count);
+        var estimatedCapacity = maxCount * 80; // Estimate for comparing two dictionaries with formatting
+        var sb = new StringBuilder(estimatedCapacity);
 
-        var keys1 = dict.Keys.Cast<object>().OrderBy(i => i).ToList();
-        var keys2 = dict2.Keys.Cast<object>().OrderBy(i => i).ToList();
+        var keys1 = new object[dict.Keys.Count];
+        dict.Keys.CopyTo(keys1, 0);
+        Array.Sort(keys1);
 
-        for (var i = 0; i < Math.Max(keys1.Count, keys2.Count); i++)
+        var keys2 = new object[dict2.Keys.Count];
+        dict2.Keys.CopyTo(keys2, 0);
+        Array.Sort(keys2);
+
+        for (var i = 0; i < Math.Max(keys1.Length, keys2.Length); i++)
         {
             sb.Append($"{prefix}[{i}] - ");
 
             //if run out of values in dictionary 1
-            if (i > keys1.Count)
-                sb.AppendLine(string.Format(" {0} - \t <NULL> \t {1}", keys2[i], dict2[keys2[i]]));
+            if (i >= keys1.Length)
+                sb.AppendLine($" {keys2[i]} - \t <NULL> \t {dict2[keys2[i]]}");
             //if run out of values in dictionary 2
-            else if (i > keys2.Count)
-                sb.AppendLine(string.Format(" {0} - \t {1} \t <NULL>", keys1[i], dict[keys1[i]]));
+            else if (i >= keys2.Length)
+                sb.AppendLine($" {keys1[i]} - \t {dict[keys1[i]]} \t <NULL>");
             else
             {
                 var val1 = dict[keys1[i]];
@@ -170,11 +180,7 @@ public static class DictionaryHelperMethods
                         (IDictionary)val2, $"{prefix}\t")}");
                 else
                     //if we haven't outrun of either array
-                    sb.AppendLine(string.Format(" {0} - \t {1} \t {2} {3}",
-                        keys1[i],
-                        dict[keys1[i]],
-                        dict2[keys2[i]],
-                        FlexibleEquality.FlexibleEquals(dict[keys1[i]], dict2[keys2[i]]) ? "" : "<DIFF>"));
+                    sb.AppendLine($" {keys1[i]} - \t {dict[keys1[i]]} \t {dict2[keys2[i]]} {(FlexibleEquality.FlexibleEquals(dict[keys1[i]], dict2[keys2[i]]) ? "" : "<DIFF>")}");
             }
         }
 

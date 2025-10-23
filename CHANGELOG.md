@@ -7,7 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
-- Add a DICOM template for the Mammography (MG) modality
+## [4.2.0] - 2025-10-22
+
+### Changed
 - Migrate from HIC.FAnsiSql to FAnsiSql.Legacy 3.3.1
 - Upgrade to .NET 9.0
 - Centralize build configuration using Directory.Build.props, Directory.Packages.props, and global.json
@@ -18,6 +20,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Consolidate GitHub Actions workflows: merge CodeQL into dotnet-core.yml
 - Update dotnet-core.yml to use global.json for SDK version
 - Change NuGet secret from NUGET_KEY to NUGET_API_KEY
+
+### Added
+- Add a DICOM template for the Mammography (MG) modality
+
+### Performance
+- Replace String.Format with string interpolation (9 locations)
+- Optimize dictionary lookups using TryGetValue pattern
+- Eliminate unnecessary collection allocations in SetSequenceFromObject
+- Use Array.Sort instead of LINQ for dictionary key sorting
+- Implement regex source generators for compile-time optimization
+- Add StringBuilder capacity hints to reduce reallocations
+- Use Span<char> for zero-allocation tag parsing
+- Change generic Exception to ArgumentException for better diagnostics
+
+### Fixed
+- Fix NUnit analyzer warnings (NUnit1034, NUnit1033)
+- Fix PackageListIsCorrectTests for centralized package management
 
 ## [4.1.5] - 2024-10-28
 

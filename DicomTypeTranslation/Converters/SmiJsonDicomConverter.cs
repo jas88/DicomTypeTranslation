@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -306,10 +307,14 @@ public class SmiJsonDicomConverter : JsonConverter
 
     private static DicomTag ParseTag(string tagStr)
     {
-        var group = Convert.ToUInt16(tagStr[..4], 16);
-        var element = Convert.ToUInt16(tagStr[4..], 16);
-        var tag = new DicomTag(group, element);
-        return tag;
+        return ParseTag(tagStr.AsSpan());
+    }
+
+    private static DicomTag ParseTag(ReadOnlySpan<char> tagStr)
+    {
+        var group = ushort.Parse(tagStr[..4], NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        var element = ushort.Parse(tagStr[4..], NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+        return new DicomTag(group, element);
     }
 
     private DicomItem ReadJsonDicomItem(DicomTag tag, JsonReader reader, JsonSerializer serializer)
