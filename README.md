@@ -1,6 +1,5 @@
 
 [![.NET Core](https://github.com/jas88/DicomTypeTranslation/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/jas88/DicomTypeTranslation/actions/workflows/dotnet-core.yml)
-[![CodeQL](https://github.com/jas88/DicomTypeTranslation/actions/workflows/codeql.yml/badge.svg)](https://github.com/jas88/DicomTypeTranslation/actions/workflows/codeql.yml)
 [![NuGet Badge](https://img.shields.io/nuget/v/DicomTypeTranslation.svg)](https://www.nuget.org/packages/DicomTypeTranslation/)
 
 # DicomTypeTranslation
