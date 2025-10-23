@@ -17,7 +17,11 @@ public class PackageListIsCorrectTests
     private static readonly EnumerationOptions EnumerationOptions = new() { RecurseSubdirectories = true, MatchCasing = MatchCasing.CaseInsensitive, IgnoreInaccessible = true };
 
     //<PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
-    private static readonly Regex RPackageRef = new(@"<PackageReference\s+Include=""(.*)""\s+Version=""([^""]*)""", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    //<PackageReference Include="NUnit3TestAdapter" /> (centralized package management)
+    //<PackageReference Include="NUnit3TestAdapter"> (with child elements)
+    //<PackageVersion Include="NUnit3TestAdapter" Version="3.13.0" /> (Directory.Packages.props)
+    private static readonly Regex RPackageRef = new(@"<PackageReference\s+Include=""([^""]+)""", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    private static readonly Regex RPackageVersion = new(@"<PackageVersion\s+Include=""([^""]+)""\s+Version=""[^""]*""", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     // | Org.SomePackage |
     //
@@ -42,9 +46,25 @@ public class PackageListIsCorrectTests
             .Except(new[] { "Package", "-------" })
             .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
-        // Extract the named packages from csproj files
-        var usedPackages = GetCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef.Matches(s))
-            .Select(m => m.Groups[1].Value).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+        // Extract the named packages from production csproj files
+        var productionPackages = GetCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef.Matches(s))
+            .Select(m => m.Groups[1].Value)
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+        // Extract all packages from Directory.Packages.props
+        var allPackages = GetPackagePropsFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageVersion.Matches(s))
+            .Select(m => m.Groups[1].Value)
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+        // Extract packages from test csproj files (to exclude them)
+        var testPackages = GetTestCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef.Matches(s))
+            .Select(m => m.Groups[1].Value)
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+        // Used packages = production packages OR (all packages from Directory.Packages.props - test-only packages)
+        var usedPackages = productionPackages
+            .Concat(allPackages.Except(testPackages))
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
         // Then subtract those listed in PACKAGES.md (should be empty)
         var undocumentedPackages = usedPackages.Except(packagesMarkdown).Select(BuildRecommendedMarkdownLine);
@@ -97,6 +117,16 @@ public class PackageListIsCorrectTests
     }
 
     /// <summary>
+    /// Returns all test csproj files in the repository (those containing the string 'tests')
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    private static IEnumerable<string> GetTestCsprojFiles(DirectoryInfo root)
+    {
+        return root.EnumerateFiles("*.csproj", EnumerationOptions).Select(f => f.FullName).Where(f => f.Contains("tests", StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    /// <summary>
     /// Find the sole packages.md file wherever in the repo it lives. Error if multiple or none.
     /// </summary>
     /// <param name="root"></param>
@@ -106,6 +136,16 @@ public class PackageListIsCorrectTests
         var path = root.EnumerateFiles("packages.md", EnumerationOptions).Select(f => f.FullName).ToArray();
         Assert.That(path, Is.Not.Empty, "Could not find packages.md");
         return path;
+    }
+
+    /// <summary>
+    /// Returns all Directory.Packages.props files in the repository
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    private static IEnumerable<string> GetPackagePropsFiles(DirectoryInfo root)
+    {
+        return root.EnumerateFiles("Directory.Packages.props", EnumerationOptions).Select(f => f.FullName);
     }
 
 }
