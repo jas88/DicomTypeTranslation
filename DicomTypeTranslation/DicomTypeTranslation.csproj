@@ -1,40 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <!-- Override TargetFramework from Directory.Build.props to use TargetFrameworks -->
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <AssemblyTitle>DicomTypeTranslation</AssemblyTitle>
-    <Product>DicomTypeTranslation</Product>
-    <Copyright>Copyright ©  2018-2020</Copyright>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- NuGet package metadata -->
     <PackOnBuild>true</PackOnBuild>
-    <PackageId>HIC.DicomTypeTranslation</PackageId>
+    <PackageId>DicomTypeTranslation</PackageId>
     <PackageVersion>$(version)</PackageVersion>
     <Authors>Health Informatics Centre - University of Dundee</Authors>
     <Owners>Health Informatics Centre - University of Dundee</Owners>
-    <PackageProjectUrl>https://github.com/SMI/DicomTypeTranslation</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/jas88/DicomTypeTranslation</PackageProjectUrl>
     <PackageTags>Dicom,ETL,SQL</PackageTags>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <Title>HIC.DicomTypeTranslation</Title>
+    <Title>DicomTypeTranslation</Title>
     <Description>Extension library for FoDicom supporting flexible relational database schemas for storing large Dicom imaging datasets.  Also supports persisting Dicom tag data to MongoDb</Description>
-    </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>embedded</DebugType>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <None Include="DicomTypeTranslation.cd" />
     <Content Include="Elevation\Serialization\TagElevationRequestCollectionExample.xml" />
     <None Include="Elevation\TagElevation.cd" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="fo-dicom" Version="5.2.2" />
-    <PackageReference Include="HIC.FAnsiSql" Version="3.2.7" />
-    <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="6.0.0" />
-    <PackageReference Include="YamlDotNet" Version="16.3.0" />
+    <!-- Package versions managed centrally in Directory.Packages.props -->
+    <PackageReference Include="fo-dicom" />
+    <PackageReference Include="FAnsiSql.Legacy" />
+    <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="NLog" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 </Project>

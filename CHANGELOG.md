@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 - Add a DICOM template for the Mammography (MG) modality
+- Migrate from HIC.FAnsiSql to FAnsiSql.Legacy 3.3.1
+- Upgrade to .NET 9.0
+- Centralize build configuration using Directory.Build.props, Directory.Packages.props, and global.json
+- Enable nullable reference types
+- Change package name from HIC.DicomTypeTranslation to DicomTypeTranslation
+- Update README badges and URLs to reference jas88/DicomTypeTranslation fork
+- Replace buildstats.info NuGet badge with shields.io badge
+- Consolidate GitHub Actions workflows: merge CodeQL into dotnet-core.yml
+- Update dotnet-core.yml to use global.json for SDK version
+- Change NuGet secret from NUGET_KEY to NUGET_API_KEY
 
 ## [4.1.5] - 2024-10-28
 

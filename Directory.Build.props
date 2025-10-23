@@ -1,0 +1,29 @@
+<Project>
+  <PropertyGroup>
+    <!-- Common build settings -->
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net9.0</TargetFramework>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <DebugType>embedded</DebugType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+
+    <!-- Common assembly information -->
+    <Company>Universities of Dundee and Edinburgh</Company>
+    <Product>DicomTypeTranslation</Product>
+    <Copyright>Copyright © 2020-2025</Copyright>
+    <Version>4.1.5</Version>
+    <AssemblyVersion>4.1.5</AssemblyVersion>
+    <FileVersion>4.1.5</FileVersion>
+    <InformationalVersion>4.1.5</InformationalVersion>
+
+    <!-- Enable Central Package Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <!-- Release configuration settings -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>embedded</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+</Project>

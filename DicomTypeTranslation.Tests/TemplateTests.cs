@@ -36,7 +36,7 @@ class TemplateTests:DatabaseTests
         table.Columns = new[] {colTemplate};
         collection.Tables.Add(table);
 
-        TestContext.Write(collection.Serialize());
+        TestContext.Out.Write(collection.Serialize());
     }
 
     [TestCase("CT", FAnsi.DatabaseType.MicrosoftSQLServer)]

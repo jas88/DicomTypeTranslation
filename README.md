@@ -1,16 +1,15 @@
 
-[![.NET Core](https://github.com/SMI/DicomTypeTranslation/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/SMI/DicomTypeTranslation/actions/workflows/dotnet-core.yml)
-[![CodeQL](https://github.com/SMI/DicomTypeTranslation/actions/workflows/codeql.yml/badge.svg)](https://github.com/SMI/DicomTypeTranslation/actions/workflows/codeql.yml)
-[![NuGet Badge](https://buildstats.info/nuget/HIC.DicomTypeTranslation)](https://buildstats.info/nuget/HIC.DicomTypeTranslation)
+[![.NET Core](https://github.com/jas88/DicomTypeTranslation/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/jas88/DicomTypeTranslation/actions/workflows/dotnet-core.yml)
+[![NuGet Badge](https://img.shields.io/nuget/v/DicomTypeTranslation.svg)](https://www.nuget.org/packages/DicomTypeTranslation/)
 
 # DicomTypeTranslation
 
-- [Nuget](https://www.nuget.org/packages/HIC.DicomTypeTranslation/)
+- [Nuget](https://www.nuget.org/packages/DicomTypeTranslation/)
 - [Dependencies](./Packages.md)
 - [Changelog](./CHANGELOG.md)
 
 
-[Fo Dicom](https://github.com/fo-dicom/fo-dicom)/[FAnsiSql](https://github.com/HicServices/FAnsiSql) powered library for converting [dicom](https://www.dicomlibrary.com/dicom/) types into database/C# types at speed. The library lets you cherry pick specific tags from dicom images (e.g. PatientID) and populate a relational (or MongoDB) database with flat record results (e.g. 1 record per image). With DicomTypeTranslation you can create whatever schema works for you in whatever DBMS you want and then link it with existing EHR data you already have (E.g. by PatientID).
+[Fo Dicom](https://github.com/fo-dicom/fo-dicom)/[FAnsiSql](https://github.com/jas88/FAnsiSql) powered library for converting [dicom](https://www.dicomlibrary.com/dicom/) types into database/C# types at speed. The library lets you cherry pick specific tags from dicom images (e.g. PatientID) and populate a relational (or MongoDB) database with flat record results (e.g. 1 record per image). With DicomTypeTranslation you can create whatever schema works for you in whatever DBMS you want and then link it with existing EHR data you already have (E.g. by PatientID).
 
 Also included is a DICOM to JSON converter, which aims to allow better coverage when converting "real world" DICOM data than the standard fo-dicom implementation. More details [here](docs/JsonDicomConverters.md).
 
@@ -75,13 +74,13 @@ This results in the following table (with sensible datatypes):
 
 You can install the library via NuGet Package Manager:
 ```
-PM> Install-Package HIC.DicomTypeTranslation
+PM> Install-Package DicomTypeTranslation
 ```
 
 Or use the .Net CLI:
 
 ```
-> dotnet add package HIC.DicomTypeTranslation
+> dotnet add package DicomTypeTranslation
 ```
 
 ## The Dicom Specification
@@ -208,7 +207,7 @@ The Dicom specification has rules about how big datatypes can be (called ValueRe
 var tag = DicomDictionary.Default["PatientAddress"];            
 ```
 
-The library supports translating DicomTags into the matching [FAnsiSql](https://github.com/HicServices/FAnsiSql) common type representation:
+The library supports translating DicomTags into the matching [FAnsiSql](https://github.com/jas88/FAnsiSql) common type representation:
 
 ```csharp
 DatabaseTypeRequest type = DicomTypeTranslater.GetNaturalTypeForVr(tag.DictionaryEntry.ValueRepresentations,tag.DictionaryEntry.ValueMultiplicity);

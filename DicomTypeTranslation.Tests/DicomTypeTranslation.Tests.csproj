@@ -1,26 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
     <AssemblyTitle>DicomTypeTranslation.Tests</AssemblyTitle>
-    <Product>DicomTypeTranslation.Tests</Product>
-    <Copyright>Copyright ©  2018</Copyright>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DebugType>embedded</DebugType>
   </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="TextDetectionTets\**" />
     <EmbeddedResource Remove="TextDetectionTets\**" />
     <None Remove="TextDetectionTets\**" />
   </ItemGroup>
+
   <ItemGroup>
     <None Remove="TestDatabases.xml" />
     <None Remove="TestDicomFiles\image11.dcm" />
     <None Remove="TestDicomFiles\report01.dcm" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\SmiTagElevation.xml" Link="Templates\SmiTagElevation.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -29,6 +23,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\CT.it" Link="Templates\CT.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -49,60 +44,73 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\README.md" Link="Templates\README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\PT.it" Link="Templates\PT.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\NM.it" Link="Templates\NM.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\DX.it" Link="Templates\DX.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\SR.it" Link="Templates\SR.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\ECG.it" Link="Templates\ECG.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\XA.it" Link="Templates\XA.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\Templates\US.it" Link="Templates\US.it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="NUnit" Version="4.3.2" />
-    <PackageReference Include="NUnit.Analyzers" Version="4.9.2">
+    <!-- Package versions managed centrally in Directory.Packages.props -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit.Analyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-<PrivateAssets>all</PrivateAssets>
-</PackageReference>
+    <PackageReference Include="NUnit3TestAdapter">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\DicomTypeTranslation\DicomTypeTranslation.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>

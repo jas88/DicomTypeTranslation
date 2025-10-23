@@ -246,7 +246,7 @@ public class TagElevatorTests
     [TestCase("a", "abcd")]
     [TestCase("avmamaged", null)]
     [TestCase("h", "efgh\r\nhij")]
-    public void TagElevation_Multiplicity_Conditional(string toFind, string expectedResults)
+    public void TagElevation_Multiplicity_Conditional(string toFind, string? expectedResults)
     {
         if (!string.IsNullOrWhiteSpace(expectedResults))
             expectedResults = expectedResults.Replace("\r\n", Environment.NewLine);
@@ -522,7 +522,7 @@ public class TagElevatorTests
     //look in all sibling sequences for SpecimenShortDescription 2_1.1 (matches everything since they are all adjacent to one another)
     [TestCase("[..]->SpecimenShortDescription", "2_1.1", "2_0.1\r\n2_1.1\r\n2_2.1")]
 
-    public void TagElevation_SiblingConditionals(string conditional, string conditionalMatch, string expectedResults)
+    public void TagElevation_SiblingConditionals(string? conditional, string? conditionalMatch, string expectedResults)
     {
         expectedResults = expectedResults.Replace("\r\n", Environment.NewLine);
 
@@ -608,7 +608,7 @@ public class TagElevatorTests
 
     //conditional tests
     [TestCase("PseudoColorPaletteInstanceReferenceSequence->AbstractPriorCodeSequence->ProbeDriveEquipmentSequence->PatientID", "..->SpecimenShortDescription", "2.1", "3.2", TestName = "Complex_Conditional_1")]
-    public void ComplexTagNestingTests(string pathway, string conditional, string conditionalMatch, object expectedResults)
+    public void ComplexTagNestingTests(string pathway, string? conditional, string? conditionalMatch, object? expectedResults)
     {
         if (!string.IsNullOrWhiteSpace((string)expectedResults))
             expectedResults = ((string)expectedResults).Replace("\r\n", Environment.NewLine);
