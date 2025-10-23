@@ -10,3 +10,11 @@ DicomTypeTranslation.Tests/obj/
 [tT]est*[rR]esult.xml
 
 *.tmp
+
+# Claude Code and Claude Flow files
+.claude/
+CLAUDE.md
+claude-flow/
+.claude-flow/
+claude_*.json
+*.claude

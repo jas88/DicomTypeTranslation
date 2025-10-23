@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 - Add a DICOM template for the Mammography (MG) modality
+- Migrate from HIC.FAnsiSql to FAnsiSql.Legacy 3.3.1
+- Upgrade to .NET 9.0
 
 ## [4.1.5] - 2024-10-28
 
