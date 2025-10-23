@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add a DICOM template for the Mammography (MG) modality
 - Migrate from HIC.FAnsiSql to FAnsiSql.Legacy 3.3.1
 - Upgrade to .NET 9.0
+- Centralize build configuration using Directory.Build.props, Directory.Packages.props, and global.json
+- Enable nullable reference types
+- Change package name from HIC.DicomTypeTranslation to DicomTypeTranslation
 
 ## [4.1.5] - 2024-10-28
 
