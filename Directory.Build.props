@@ -12,10 +12,10 @@
     <Company>Universities of Dundee and Edinburgh</Company>
     <Product>DicomTypeTranslation</Product>
     <Copyright>Copyright © 2020-2025</Copyright>
-    <Version>4.2.0</Version>
-    <AssemblyVersion>4.2.0</AssemblyVersion>
-    <FileVersion>4.2.0</FileVersion>
-    <InformationalVersion>4.2.0</InformationalVersion>
+    <Version>4.2.1</Version>
+    <AssemblyVersion>4.2.1</AssemblyVersion>
+    <FileVersion>4.2.1</FileVersion>
+    <InformationalVersion>4.2.1</InformationalVersion>
 
     <!-- Enable Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
