@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Centralize build configuration using Directory.Build.props, Directory.Packages.props, and global.json
 - Enable nullable reference types
 - Change package name from HIC.DicomTypeTranslation to DicomTypeTranslation
+- Update README badges and URLs to reference jas88/DicomTypeTranslation fork
+- Replace buildstats.info NuGet badge with shields.io badge
 
 ## [4.1.5] - 2024-10-28
 
