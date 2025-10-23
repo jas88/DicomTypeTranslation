@@ -38,7 +38,7 @@ class TemplateDocumentationTests
             }
         }
 
-        TestContext.WriteLine("Suggested Documentation:");
-        TestContext.Write(sb.ToString());
+        TestContext.Out.WriteLine("Suggested Documentation:");
+        TestContext.Out.Write(sb.ToString());
     }
 }

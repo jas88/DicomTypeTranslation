@@ -18,7 +18,7 @@ namespace DicomTypeTranslation.Tests;
 
 [SingleThreaded]
 [NonParallelizable]
-public class DatabaseTests
+public abstract class DatabaseTests
 {
     protected Dictionary<DatabaseType,string> TestConnectionStrings = new Dictionary<DatabaseType, string>();
 
