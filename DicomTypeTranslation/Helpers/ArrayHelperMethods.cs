@@ -37,7 +37,8 @@ public static class ArrayHelperMethods
     /// <returns></returns>
     public static string AsciiArt(Array a, string prefix = "")
     {
-        var sb = new StringBuilder();
+        var estimatedCapacity = a.Length * 50; // Rough estimate for prefix, index, and value formatting
+        var sb = new StringBuilder(estimatedCapacity);
 
         for (var i = 0; i < a.Length; i++)
         {
@@ -66,7 +67,8 @@ public static class ArrayHelperMethods
     /// <returns></returns>
     public static string AsciiArt(Array a, Array b, string prefix = "")
     {
-        var sb = new StringBuilder();
+        var estimatedCapacity = Math.Max(a.Length, b.Length) * 80; // Estimate for comparing two arrays with formatting
+        var sb = new StringBuilder(estimatedCapacity);
 
         for (var i = 0; i < Math.Max(a.Length, b.Length); i++)
         {
@@ -74,10 +76,10 @@ public static class ArrayHelperMethods
 
             //if run out of values in dictionary 1
             if (i > a.Length)
-                sb.AppendLine(string.Format(" \t <NULL> \t {0}", b.GetValue(i)));
+                sb.AppendLine($" \t <NULL> \t {b.GetValue(i)}");
             //if run out of values in dictionary 2
             else if (i > b.Length)
-                sb.AppendLine(string.Format(" \t {0} \t <NULL>", a.GetValue(i)));
+                sb.AppendLine($" \t {a.GetValue(i)} \t <NULL>");
             else
             {
                 var val1 = a.GetValue(i);
@@ -92,10 +94,7 @@ public static class ArrayHelperMethods
                         array2, $"{prefix}\t")}");
                 else
                     //if we haven't outrun of either array
-                    sb.AppendLine(string.Format(" \t {0} \t {1} {2}",
-                        val1,
-                        val2,
-                        FlexibleEquality.FlexibleEquals(val1, val2) ? "" : "<DIFF>"));
+                    sb.AppendLine($" \t {val1} \t {val2} {(FlexibleEquality.FlexibleEquals(val1, val2) ? "" : "<DIFF>")}");
             }
         }
 
@@ -122,7 +121,8 @@ public static class ArrayHelperMethods
         if (ContainsSubArraysOrSubtrees(a))
             return AsciiArt(a);
 
-        var sb = new StringBuilder();
+        var estimatedCapacity = a.Length * 10; // Rough estimate for simple values with backslash separators
+        var sb = new StringBuilder(estimatedCapacity);
         sb.AppendJoin('\\', a.Cast<object>());
         return sb.ToString();
     }

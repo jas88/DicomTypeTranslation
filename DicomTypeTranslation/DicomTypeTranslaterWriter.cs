@@ -14,14 +14,15 @@ namespace DicomTypeTranslation;
 /// Helper class for rapidly writing <see cref="DicomTag"/> values into a <see cref="DicomDataset"/> in basic C# Types (string, int, double etc).  Also supports
 /// Bson types (for MongoDb).
 /// </summary>
-public static class DicomTypeTranslaterWriter
+public static partial class DicomTypeTranslaterWriter
 {
     /// <summary>
     /// Methods to call to add the given Type to the dataset (requires casting due to generic T) and sometimes you have to call Add(a,b) sometimes only Add(b) works
     /// </summary>
     private static readonly Dictionary<Type, Action<DicomDataset, DicomTag, object>> _dicomAddMethodDictionary = new Dictionary<Type, Action<DicomDataset, DicomTag, object>>();
 
-    private static readonly Regex _privateCreatorRegex = new Regex(@":(.*)\)-");
+    [GeneratedRegex(@":(.*)\)-", RegexOptions.CultureInvariant)]
+    private static partial Regex PrivateCreatorRegex();
 
     private static readonly string[] _ignoredBsonKeys = { "_id", "header" };
 
@@ -107,29 +108,33 @@ public static class DicomTypeTranslaterWriter
         }
 
         // Otherwise do generic add
-        var key = (_dicomAddMethodDictionary.ContainsKey(value.GetType())
-            ? value.GetType()
-            : _dicomAddMethodDictionary.Keys.FirstOrDefault(k => k.IsInstanceOfType(value))) ?? throw new Exception($"No method to call for value type {value.GetType()}");
-        _dicomAddMethodDictionary[key](dataset, tag, value);
+        var valueType = value.GetType(); // Cache the type
+
+        if (_dicomAddMethodDictionary.TryGetValue(valueType, out var addMethod))
+        {
+            addMethod(dataset, tag, value);
+        }
+        else
+        {
+            var key = _dicomAddMethodDictionary.Keys.FirstOrDefault(k => k.IsInstanceOfType(value))
+                ?? throw new ArgumentException($"No method to call for value type {valueType}", nameof(value));
+            _dicomAddMethodDictionary[key](dataset, tag, value);
+        }
     }
 
     private static void SetSequenceFromObject(DicomDataset parentDataset, DicomTag tag, Dictionary<DicomTag, object>[] sequenceArray)
     {
-        var sequenceList = new List<Dictionary<DicomTag, object>>(sequenceArray);
+        var subDatasets = new DicomDataset[sequenceArray.Length];
 
-        var subDatasets = new List<DicomDataset>();
-
-        foreach (var sequenceDict in sequenceList)
+        for (int i = 0; i < sequenceArray.Length; i++)
         {
             var subDataset = new DicomDataset();
-
-            foreach (var kvp in sequenceDict)
+            foreach (var kvp in sequenceArray[i])
                 SetDicomTag(subDataset, kvp.Key, kvp.Value);
-
-            subDatasets.Add(subDataset);
+            subDatasets[i] = subDataset;
         }
 
-        parentDataset.Add(new DicomSequence(tag, subDatasets.ToArray()));
+        parentDataset.Add(new DicomSequence(tag, subDatasets));
     }
 
     #region Bson Types
@@ -179,7 +184,7 @@ public static class DicomTypeTranslaterWriter
             if (!tag.IsPrivate)
                 return tag;
 
-            var creatorName = _privateCreatorRegex.Match(element.Name).Groups[1].Value;
+            var creatorName = PrivateCreatorRegex().Match(element.Name).Groups[1].Value;
             tag = dataset.GetPrivateTag(new DicomTag(tag.Group, tag.Element, DicomDictionary.Default.GetPrivateCreator(creatorName)));
 
             return tag;

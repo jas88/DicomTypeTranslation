@@ -165,8 +165,7 @@ public static class DicomDatasetHelpers
                         continue;
                 }
 
-                differences.Add(string.Format("Tag {0} {1} {2} had value \"{3}\" in A and \"{4}\" in B",
-                    item.Tag, item.ValueRepresentation, item.Tag.DictionaryEntry.Keyword, before, after));
+                differences.Add($"Tag {item.Tag} {item.ValueRepresentation} {item.Tag.DictionaryEntry.Keyword} had value \"{before}\" in A and \"{after}\" in B");
             }
             else if (item.ValueRepresentation == DicomVR.SQ)
             {
@@ -175,8 +174,7 @@ public static class DicomDatasetHelpers
 
                 if (seqA.Count() != seqB.Count())
                 {
-                    differences.Add(string.Format("Sequence of tag {0} {1} had {2} elements in A, but {3} in B",
-                        item.Tag, item.Tag.DictionaryEntry.Keyword, seqA.Count(), seqB.Count()));
+                    differences.Add($"Sequence of tag {item.Tag} {item.Tag.DictionaryEntry.Keyword} had {seqA.Count()} elements in A, but {seqB.Count()} in B");
                     continue;
                 }
 
@@ -192,8 +190,7 @@ public static class DicomDatasetHelpers
                     continue;
 
                 if (valA.Length != valB.Length)
-                    differences.Add(string.Format("Tag {0} {1} {2} had {3} values in A and {4} values in B",
-                        item.Tag, item.ValueRepresentation, item.Tag.DictionaryEntry.Keyword, valA.Length, valB.Length));
+                    differences.Add($"Tag {item.Tag} {item.ValueRepresentation} {item.Tag.DictionaryEntry.Keyword} had {valA.Length} values in A and {valB.Length} values in B");
 
                 var diffs = valA.Except(valB).ToList();
 

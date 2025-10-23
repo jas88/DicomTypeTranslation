@@ -12,7 +12,7 @@ namespace DicomTypeTranslation.Tests;
 /// Tests to confirm that the dependencies in csproj files (NuGet packages) match those in the .nuspec files and that packages.md
 /// lists the correct versions (in documentation)
 /// </summary>
-public class PackageListIsCorrectTests
+public partial class PackageListIsCorrectTests
 {
     private static readonly EnumerationOptions EnumerationOptions = new() { RecurseSubdirectories = true, MatchCasing = MatchCasing.CaseInsensitive, IgnoreInaccessible = true };
 
@@ -20,12 +20,16 @@ public class PackageListIsCorrectTests
     //<PackageReference Include="NUnit3TestAdapter" /> (centralized package management)
     //<PackageReference Include="NUnit3TestAdapter"> (with child elements)
     //<PackageVersion Include="NUnit3TestAdapter" Version="3.13.0" /> (Directory.Packages.props)
-    private static readonly Regex RPackageRef = new(@"<PackageReference\s+Include=""([^""]+)""", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
-    private static readonly Regex RPackageVersion = new(@"<PackageVersion\s+Include=""([^""]+)""\s+Version=""[^""]*""", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    [GeneratedRegex(@"<PackageReference\s+Include=""([^""]+)""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex RPackageRef();
+
+    [GeneratedRegex(@"<PackageVersion\s+Include=""([^""]+)""\s+Version=""[^""]*""", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex RPackageVersion();
 
     // | Org.SomePackage |
     //
-    private static readonly Regex RMarkdownEntry = new(@"^\|\s*\[?([^ |\]]+)(\]\([^)]+\))?\s*\|", RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.CultureInvariant);
+    [GeneratedRegex(@"^\|\s*\[?([^ |\]]+)(\]\([^)]+\))?\s*\|", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex RMarkdownEntry();
 
 
     /// <summary>
@@ -40,24 +44,24 @@ public class PackageListIsCorrectTests
 
         // Extract the named packages from PACKAGES.md
         var packagesMarkdown = GetPackagesMarkdown(root).SelectMany(File.ReadAllLines)
-            .Select(line => RMarkdownEntry.Match(line))
+            .Select(line => RMarkdownEntry().Match(line))
             .Where(m => m.Success)
             .Select(m => m.Groups[1].Value)
             .Except(new[] { "Package", "-------" })
             .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
         // Extract the named packages from production csproj files
-        var productionPackages = GetCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef.Matches(s))
+        var productionPackages = GetCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef().Matches(s))
             .Select(m => m.Groups[1].Value)
             .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
         // Extract all packages from Directory.Packages.props
-        var allPackages = GetPackagePropsFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageVersion.Matches(s))
+        var allPackages = GetPackagePropsFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageVersion().Matches(s))
             .Select(m => m.Groups[1].Value)
             .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
         // Extract packages from test csproj files (to exclude them)
-        var testPackages = GetTestCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef.Matches(s))
+        var testPackages = GetTestCsprojFiles(root).Select(File.ReadAllText).SelectMany(s => RPackageRef().Matches(s))
             .Select(m => m.Groups[1].Value)
             .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
