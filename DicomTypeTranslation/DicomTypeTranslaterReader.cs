@@ -466,7 +466,7 @@ public static class DicomTypeTranslaterReader
             : null;
     }
 
-    private static object GetValueFromDatasetWithMultiplicity<TNaturalType>(DicomDataset dataset, DicomTag tag)
+    private static object? GetValueFromDatasetWithMultiplicity<TNaturalType>(DicomDataset dataset, DicomTag tag)
     {
         Array array;
 

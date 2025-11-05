@@ -10,6 +10,6 @@ internal class ImageTableTemplateObjectFactory : ObjectFactoryBase
     {
         return type == typeof(DatabaseTypeRequest)
             ? new DatabaseTypeRequest(typeof(string), null, null)
-            : Activator.CreateInstance(type);
+            : Activator.CreateInstance(type) ?? throw new InvalidOperationException($"Failed to create instance of type {type}");
     }
 }

@@ -16,7 +16,7 @@ public static class FlexibleEquality
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    public static bool FlexibleEquals(object a, object b)
+    public static bool FlexibleEquals(object? a, object? b)
     {
         if (a == null || b == null)
             return ReferenceEquals(a,b);

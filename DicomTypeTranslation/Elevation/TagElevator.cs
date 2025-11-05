@@ -76,10 +76,10 @@ public class TagElevator
                     $"Array operator conditional is only valid in isolation (i.e. '[]'), it cannot be part of a pathway (e.g. '{conditional}')");
 
             _conditionalMatchesArrayElementsOfMultiplicity = true;
-            _conditionalMatchesArrayElementsOfMultiplicityPattern = conditionalShouldMatch;
+            _conditionalMatchesArrayElementsOfMultiplicityPattern = conditionalShouldMatch ?? throw new ArgumentNullException(nameof(conditionalShouldMatch));
         }
         else
-            _conditional = new TagRelativeConditional(conditional,conditionalShouldMatch);
+            _conditional = new TagRelativeConditional(conditional, conditionalShouldMatch ?? throw new ArgumentNullException(nameof(conditionalShouldMatch)));
     }
 
 
@@ -155,7 +155,7 @@ public class TagElevator
 
         if (_navigations[i].IsLast)
         {
-            var o = _navigations[i].GetTags(element, _conditional!);
+            var o = _navigations[i].GetTags(element, _conditional);
 
             if (o is Array a)
             {
@@ -168,7 +168,11 @@ public class TagElevator
                     return Array.Empty<object>();
 
                 if (a.Length == 1)
-                    toReturn.Add(a.GetValue(0));
+                {
+                    var val = a.GetValue(0);
+                    if (val is not null)
+                        toReturn.Add(val);
+                }
                 else
                 if (!ConcatenateMultiplicity)
                     throw new TagNavigationException(
@@ -177,7 +181,7 @@ public class TagElevator
                     toReturn.Add(string.Join(ConcatenateMultiplicitySplitter, a.Cast<object>().Select(s => s.ToString())));
             }
             else
-            if (IsMatch(o))
+            if (o is not null && IsMatch(o))
                 toReturn.Add(o);
         }
         else
@@ -187,7 +191,7 @@ public class TagElevator
         return toReturn.ToArray();
     }
 
-    private bool IsMatch(object element)
+    private bool IsMatch(object? element)
     {
         //if the element is null then don't include it as a matched element
         if (element == null)

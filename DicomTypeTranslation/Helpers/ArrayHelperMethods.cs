@@ -86,9 +86,8 @@ public static class ArrayHelperMethods
                 var val1 = a.GetValue(i);
                 var val2 = b.GetValue(i);
 
-                if (DictionaryHelperMethods.IsDictionary(val1) && DictionaryHelperMethods.IsDictionary(val2))
-                    sb.Append($"\r\n {DictionaryHelperMethods.AsciiArt((IDictionary)val1,
-                        (IDictionary)val2, $"{prefix}\t")}");
+                if (val1 is IDictionary dict1 && val2 is IDictionary dict2)
+                    sb.Append($"\r\n {DictionaryHelperMethods.AsciiArt(dict1, dict2, $"{prefix}\t")}");
                 else
                 if (val1 is Array array1 && val2 is Array array2)
                     sb.Append($"\r\n {AsciiArt(array1,

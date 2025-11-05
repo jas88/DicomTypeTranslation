@@ -12,7 +12,7 @@ class TagRelativeConditional
     public bool IsCurrentNodeMatch { get; private set; }
     private readonly string _conditionalShouldMatch;
 
-    private readonly List<TagNavigation> _navigations;
+    private readonly List<TagNavigation> _navigations = new();
 
     private static readonly string[] validStartersTokens = [".", "[..]", ".."];
 
@@ -93,7 +93,7 @@ class TagRelativeConditional
 
             //.. - match containing parent of the current Sequence (where not null)
             if (relativeOperator == "..")
-                toMatchIn = toMatchIn.Select(s => s.Parent).Where(p => p != null).Distinct().ToList();
+                toMatchIn = toMatchIn.Select(s => s.Parent).Where(p => p is not null).OfType<SequenceElement>().Distinct().ToList();
 
             //distinct it
             toMatchIn = toMatchIn.Distinct().ToList();
@@ -107,7 +107,11 @@ class TagRelativeConditional
 
             if (navigation.IsLast)
                 foreach (var sequenceElement in toMatchIn)
-                    finalObjects.Add(navigation.GetTags(sequenceElement, null));
+                {
+                    var tag = navigation.GetTags(sequenceElement, null);
+                    if (tag is not null)
+                        finalObjects.Add(tag);
+                }
             else
                 foreach (var sequenceElement in toMatchIn)
                     newSets.AddRange(navigation.GetSubset(sequenceElement));
@@ -118,7 +122,7 @@ class TagRelativeConditional
         return finalObjects.Any(IsMatch);
     }
 
-    private bool IsMatch(object value)
+    private bool IsMatch(object? value)
     {
         if (value == null)
             return false;
@@ -129,7 +133,11 @@ class TagRelativeConditional
                 return false;
             else
             if (a.Length == 1)
+            {
                 value = a.GetValue(0);
+                if (value == null)
+                    return false;
+            }
             else
             {
                 //return ((Array) value).Cast<object>().Any(o => o != null && Regex.IsMatch(o.ToString(), _conditionalShouldMatch));
@@ -139,6 +147,7 @@ class TagRelativeConditional
 
 
         //its not multiplicity
-        return Regex.IsMatch(value.ToString(),_conditionalShouldMatch);
+        var valueStr = value.ToString();
+        return valueStr is not null && Regex.IsMatch(valueStr,_conditionalShouldMatch);
     }
 }

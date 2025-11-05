@@ -66,7 +66,7 @@ public class ImagingTableCreation
     /// <param name="tableTemplate"></param>
     /// <param name="schema">Only applies to DBMS which support schemas (e.g. dbo)</param>
     /// <returns></returns>
-    public string GetCreateTableSql(DiscoveredDatabase expectedDatabase,string tablename, ImageTableTemplate tableTemplate,string schema=null)
+    public string GetCreateTableSql(DiscoveredDatabase expectedDatabase,string tablename, ImageTableTemplate tableTemplate,string? schema=null)
     {
         return expectedDatabase.Helper.GetCreateTableSql(expectedDatabase,tablename, tableTemplate.GetColumns(expectedDatabase.Server.DatabaseType),null,false,schema);
     }
@@ -79,7 +79,7 @@ public class ImagingTableCreation
     /// <returns></returns>
     public DatabaseColumnRequest GetColumnDefinition(ImageColumnTemplate col)
     {
-        if (col.Type != null)
+        if (col.Type is not null)
             return new DatabaseColumnRequest(col.ColumnName, col.Type, col.AllowNulls) { IsPrimaryKey = col.IsPrimaryKey };
 
         return GetColumnDefinition(col.ColumnName,col.AllowNulls,col.IsPrimaryKey);
