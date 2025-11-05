@@ -29,7 +29,6 @@
     <PackageReference Include="fo-dicom" />
     <PackageReference Include="FAnsiSql.Legacy" />
     <PackageReference Include="MongoDB.Bson" />
-    <PackageReference Include="NLog" />
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 </Project>
