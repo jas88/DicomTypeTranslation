@@ -30,8 +30,14 @@ public abstract class DatabaseTests
     [OneTimeSetUp]
     public void CheckFiles()
     {
-        // FAnsiSql 3.3.4+ auto-registers implementations when assemblies are loaded
-        // No need to manually call ImplementationManager.Load<T>()
+        // Force assembly loading to trigger auto-registration
+        // Even though marked obsolete, these calls are required to load the implementation assemblies
+#pragma warning disable CS0618 // Type or member is obsolete
+        ImplementationManager.Load<MicrosoftSQLImplementation>();
+        ImplementationManager.Load<MySqlImplementation>();
+        ImplementationManager.Load<OracleImplementation>();
+        ImplementationManager.Load<PostgreSqlImplementation>();
+#pragma warning restore CS0618 // Type or member is obsolete
 
         var file = Path.Combine(TestContext.CurrentContext.TestDirectory, TestFilename);
 
