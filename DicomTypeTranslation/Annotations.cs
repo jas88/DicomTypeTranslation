@@ -190,7 +190,7 @@ internal sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
         ParameterName = parameterName;
     }
 
-    [CanBeNull] public string ParameterName { get; private set; }
+    [CanBeNull] public string? ParameterName { get; private set; }
 }
 
 /// <summary>
@@ -422,7 +422,7 @@ internal sealed class PublicAPIAttribute : Attribute
         Comment = comment;
     }
 
-    [CanBeNull] public string Comment { get; private set; }
+    [CanBeNull] public string? Comment { get; private set; }
 }
 
 /// <summary>
@@ -460,7 +460,7 @@ internal sealed class MustUseReturnValueAttribute : Attribute
         Justification = justification;
     }
 
-    [CanBeNull] public string Justification { get; private set; }
+    [CanBeNull] public string? Justification { get; private set; }
 }
 
 /// <summary>
@@ -497,7 +497,7 @@ internal sealed class PathReferenceAttribute : Attribute
         BasePath = basePath;
     }
 
-    [CanBeNull] public string BasePath { get; private set; }
+    [CanBeNull] public string? BasePath { get; private set; }
 }
 
 /// <summary>
@@ -561,7 +561,7 @@ internal sealed class MacroAttribute : Attribute
     /// Allows specifying a macro that will be executed for a <see cref="SourceTemplateAttribute">source template</see>
     /// parameter when the template is expanded.
     /// </summary>
-    [CanBeNull] public string Expression { get; set; }
+    [CanBeNull] public string? Expression { get; set; }
 
     /// <summary>
     /// Allows specifying which occurrence of the target parameter becomes editable when the template is deployed.
@@ -577,7 +577,7 @@ internal sealed class MacroAttribute : Attribute
     /// Identifies the target parameter of a <see cref="SourceTemplateAttribute">source template</see> if the
     /// <see cref="MacroAttribute"/> is applied on a template method.
     /// </summary>
-    [CanBeNull] public string Target { get; set; }
+    [CanBeNull] public string? Target { get; set; }
 }
 
 [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
@@ -662,7 +662,7 @@ internal sealed class AspMvcActionAttribute : Attribute
         AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; private set; }
+    [CanBeNull] public string? AnonymousProperty { get; private set; }
 }
 
 /// <summary>
@@ -680,7 +680,7 @@ internal sealed class AspMvcAreaAttribute : Attribute
         AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; private set; }
+    [CanBeNull] public string? AnonymousProperty { get; private set; }
 }
 
 /// <summary>
@@ -699,7 +699,7 @@ internal sealed class AspMvcControllerAttribute : Attribute
         AnonymousProperty = anonymousProperty;
     }
 
-    [CanBeNull] public string AnonymousProperty { get; private set; }
+    [CanBeNull] public string? AnonymousProperty { get; private set; }
 }
 
 /// <summary>
@@ -802,7 +802,7 @@ internal sealed class HtmlElementAttributesAttribute : Attribute
         Name = name;
     }
 
-    [CanBeNull] public string Name { get; private set; }
+    [CanBeNull] public string? Name { get; private set; }
 }
 
 [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
@@ -1044,7 +1044,7 @@ internal sealed class RazorPageBaseTypeAttribute : Attribute
     }
 
     [NotNull] public string BaseType { get; private set; }
-    [CanBeNull] public string PageName { get; private set; }
+    [CanBeNull] public string? PageName { get; private set; }
 }
 
 [AttributeUsage(AttributeTargets.Method)]

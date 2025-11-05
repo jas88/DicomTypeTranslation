@@ -24,7 +24,6 @@ class TemplateTests:DatabaseTests
     public void Template_ExampleYaml()
     {
         var collection = new ImageTableTemplateCollection();
-        var table = new ImageTableTemplate();
 
         var colTemplate = new ImageColumnTemplate
         {
@@ -33,7 +32,11 @@ class TemplateTests:DatabaseTests
             Type = new DatabaseTypeRequest(typeof(string),100)
         };
 
-        table.Columns = new[] {colTemplate};
+        var table = new ImageTableTemplate
+        {
+            Columns = [colTemplate]
+        };
+
         collection.Tables.Add(table);
 
         TestContext.Out.Write(collection.Serialize());

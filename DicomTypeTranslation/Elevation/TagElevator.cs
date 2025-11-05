@@ -20,7 +20,7 @@ public class TagElevator
     public const string Splitter = "->";
 
     private readonly TagNavigation[] _navigations;
-    private readonly TagRelativeConditional _conditional;
+    private readonly TagRelativeConditional? _conditional;
 
     /// <summary>
     /// When ConcatenateMatches is on and multiple leaf nodes are detected (in different subsequences) then this string will be used to seperate them
@@ -44,7 +44,7 @@ public class TagElevator
 
 
     private readonly bool _conditionalMatchesArrayElementsOfMultiplicity;
-    private readonly string _conditionalMatchesArrayElementsOfMultiplicityPattern;
+    private readonly string? _conditionalMatchesArrayElementsOfMultiplicityPattern;
 
     /// <summary>
     /// Creates a new instance of the resolver ready to start evaluating matches to the given <paramref name="request"/>
@@ -59,7 +59,7 @@ public class TagElevator
     /// Creates a new instance of the resolver ready to start evaluating leaf matches to the given <paramref name="elevationPathway"/> in <see cref="DicomDataset"/>s with
     /// the provided (optional) <paramref name="conditional"/>
     /// </summary>
-    public TagElevator(string elevationPathway, string conditional, string conditionalShouldMatch): this(elevationPathway)
+    public TagElevator(string elevationPathway, string? conditional, string? conditionalShouldMatch): this(elevationPathway)
     {
 
         if(conditional == null)
@@ -121,7 +121,7 @@ public class TagElevator
     /// </summary>
     /// <param name="dataset"></param>
     /// <returns></returns>
-    public object GetValue(DicomDataset dataset)
+    public object? GetValue(DicomDataset dataset)
     {
         var finalObjects = new List<object>();
 
@@ -155,7 +155,7 @@ public class TagElevator
 
         if (_navigations[i].IsLast)
         {
-            var o = _navigations[i].GetTags(element, _conditional);
+            var o = _navigations[i].GetTags(element, _conditional!);
 
             if (o is Array a)
             {
@@ -198,7 +198,7 @@ public class TagElevator
             return true;
 
         //there is a conditonal on returned elememnts.  So is the array elementnot null and matches condition?
-        return Regex.IsMatch(element.ToString(), _conditionalMatchesArrayElementsOfMultiplicityPattern);
+        return Regex.IsMatch(element.ToString()!, _conditionalMatchesArrayElementsOfMultiplicityPattern!);
     }
 
 

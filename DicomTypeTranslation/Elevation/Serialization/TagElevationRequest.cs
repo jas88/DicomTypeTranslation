@@ -23,13 +23,13 @@ public class TagElevationRequest
     /// <summary>
     /// Optional relative pathway once reaching leaf(s) to decide whether to return the leaf.  Only valid when <see cref="ConditionalRegex"/> is set.
     /// </summary>
-    public string ConditionalPathway { get; set; }
+    public string? ConditionalPathway { get; set; }
 
     /// <summary>
     /// The regex pattern to run on adjacent nodes (to the leaf being evaluated) to decide whether to return the leaf.  Once a leaf is found by walking the
     /// <see cref="ElevationPathway"/> this regex is run on the adjacent tags (according to the <see cref="ConditionalPathway"/>).
     /// </summary>
-    public string ConditionalRegex { get; set; }
+    public string? ConditionalRegex { get; set; }
 
     /// <summary>
     /// Implementation class which will handle resolving this request
@@ -45,16 +45,16 @@ public class TagElevationRequest
         if(element.Name != "TagElevationRequest")
             throw new MalformedTagElevationRequestCollectionXmlException("Expected xml element name to be TagElevationRequest");
 
-        ColumnName = element["ColumnName"].InnerText;
-        ElevationPathway = element["ElevationPathway"].InnerText;
+        ColumnName = element["ColumnName"]!.InnerText;
+        ElevationPathway = element["ElevationPathway"]!.InnerText;
 
 
         var conditional = element["Conditional"];
 
         if (conditional != null)
         {
-            ConditionalPathway = conditional["ConditionalPathway"].InnerText;
-            ConditionalRegex = conditional["ConditionalRegex"].InnerText;
+            ConditionalPathway = conditional["ConditionalPathway"]!.InnerText;
+            ConditionalRegex = conditional["ConditionalRegex"]!.InnerText;
         }
 
         Elevator = new TagElevator(this);
