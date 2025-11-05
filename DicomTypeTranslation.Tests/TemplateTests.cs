@@ -128,12 +128,15 @@ class TemplateTests:DatabaseTests
                 {
                     var leafTag = seqMatch.Groups[1].Value;
 
-                    var tag = DicomDictionary.Default.FirstOrDefault(t => t.Keyword == leafTag) ?? throw new NotSupportedException($"Leaf tag {leafTag} of sequence column {col.ColumnName} was not a valid dicom tag name");
+                    var tag = DicomDictionary.Default.FirstOrDefault(t => t.Keyword == leafTag);
+                    if (tag == null)
+                        throw new NotSupportedException($"Leaf tag {leafTag} of sequence column {col.ColumnName} was not a valid dicom tag name");
                     var type = DicomTypeTranslater.GetNaturalTypeForVr(tag.ValueRepresentations, tag.ValueMultiplicity);
 
+                    Assert.That(col.Type, Is.Not.Null, $"Column {col.ColumnName} has null Type");
                     Assert.Multiple(() =>
                     {
-                        Assert.That(col.Type.CSharpType, Is.EqualTo(type.CSharpType), $"Listed Type for column {col.ColumnName} did not match expected Type");
+                        Assert.That(col.Type!.CSharpType, Is.EqualTo(type.CSharpType), $"Listed Type for column {col.ColumnName} did not match expected Type");
 
                         // The declared widths must be sufficient to hold the basic leaf node
                         Assert.That(col.Type.Width ?? 0,

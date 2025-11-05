@@ -117,7 +117,8 @@ public class DicomTypeTranslatorTests
         foreach (var item in originalDataset)
         {
             var value = DicomTypeTranslaterReader.GetCSharpValue(originalDataset, item);
-            translatedDataset.Add(item.Tag, value);
+            if (value != null)
+                translatedDataset.Add(item.Tag, value);
         }
 
         var reconstructedDataset = new DicomDataset();
@@ -137,8 +138,8 @@ public class DicomTypeTranslatorTests
         var asTag = DicomTag.SelectorASValue;
         var flTag = DicomTag.SelectorFLValue;
 
-        DicomTypeTranslaterWriter.SetDicomTag(dataset, asTag, null);
-        DicomTypeTranslaterWriter.SetDicomTag(dataset, flTag, null);
+        DicomTypeTranslaterWriter.SetDicomTag(dataset, asTag, null!);
+        DicomTypeTranslaterWriter.SetDicomTag(dataset, flTag, null!);
 
         Assert.That(dataset.Count(), Is.EqualTo(2));
 
@@ -167,7 +168,7 @@ public class DicomTypeTranslatorTests
 
         var result = DicomTypeTranslaterReader.GetCSharpValue(dicomDataset, DicomTag.ProcedureCodeSequence);
 
-
+        Assert.That(result, Is.Not.Null);
         var flat = DicomTypeTranslater.Flatten(result);
         Console.WriteLine(flat);
 
@@ -252,15 +253,15 @@ public class DicomTypeTranslatorTests
         var blacklistedTags = typeof(DicomTag)
             .GetFields(BindingFlags.Public | BindingFlags.Static)
             .Where(field => field.FieldType == typeof(DicomTag))
-            .Select(field => (DicomTag)field.GetValue(null))
-            .Where(tag => tag.DictionaryEntry.ValueRepresentations
+            .Select(field => (DicomTag?)field.GetValue(null))
+            .Where(tag => tag != null && tag.DictionaryEntry.ValueRepresentations
                 .Any(vr => DicomTypeTranslater.DicomVrBlacklist.Contains(vr)))
             .ToList();
 
         Console.WriteLine($"Total blacklisted elements {blacklistedTags.Count}");
 
-        foreach (var tag in blacklistedTags.OrderBy(x => x.DictionaryEntry.Keyword))
-            Console.WriteLine($"{tag} || {tag.DictionaryEntry.Keyword}");
+        foreach (var tag in blacklistedTags.OrderBy(x => x!.DictionaryEntry.Keyword))
+            Console.WriteLine($"{tag} || {tag!.DictionaryEntry.Keyword}");
     }
 
     /// <summary>

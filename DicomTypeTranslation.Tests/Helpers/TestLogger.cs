@@ -6,8 +6,8 @@ namespace DicomTypeTranslation.Tests.Helpers;
 
 public static class TestLogger
 {
-    private static LoggingConfiguration _logConfig;
-    private static ConsoleTarget _consoleTarget;
+    private static LoggingConfiguration? _logConfig;
+    private static ConsoleTarget? _consoleTarget;
 
     public static void Setup()
     {
@@ -28,7 +28,9 @@ public static class TestLogger
 
     public static void ShutDown()
     {
-        LogManager.Configuration = _logConfig = null;
-        _consoleTarget.Dispose();
+        LogManager.Configuration = null;
+        _logConfig = null;
+        _consoleTarget?.Dispose();
+        _consoleTarget = null;
     }
 }

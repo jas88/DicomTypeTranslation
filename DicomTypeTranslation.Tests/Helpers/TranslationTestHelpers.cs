@@ -14,12 +14,13 @@ public static class TranslationTestHelpers
     public static readonly DicomVR[] AllVrCodes = typeof(DicomVR)
         .GetFields(BindingFlags.Static | BindingFlags.Public)
         .Where(field => field.FieldType == typeof(DicomVR))
-        .Select(field => (DicomVR)field.GetValue(null))
-        .Where(vr => vr != DicomVR.NONE)
+        .Select(field => (DicomVR?)field.GetValue(null))
+        .Where(vr => vr != null && vr != DicomVR.NONE)
+        .Cast<DicomVR>()
         .ToArray();
 
 
-    public static DicomDataset BuildVrDataset(DicomVR singleVr = null)
+    public static DicomDataset BuildVrDataset(DicomVR? singleVr = null)
     {
         var ds = new DicomDataset
         {
@@ -198,7 +199,7 @@ public static class TranslationTestHelpers
             {DicomTag.SOPInstanceUID, DicomUIDGenerator.GenerateDerivedFromUUID()},
             {DicomTag.SeriesInstanceUID, Array.Empty<DicomUID>()},
             {DicomTag.DoseType, "HEJ"},
-            {DicomTag.ControlPointSequence, (DicomSequence[]) null}
+            {DicomTag.ControlPointSequence, (DicomSequence[]?)null}
         };
 
         var beams = new[] { 1, 2, 3 }.Select(beamNumber =>
@@ -211,7 +212,7 @@ public static class TranslationTestHelpers
             return beam;
         }).ToList();
 
-        beams.Insert(1, null);
+        beams.Insert(1, null!);
         target.Add(DicomTag.BeamSequence, beams.ToArray());
 
         return target;
@@ -237,7 +238,7 @@ public static class TranslationTestHelpers
                     break;
                 default:
                 {
-                    object value = item.Value.IsBsonNull ? null : item.Value;
+                    object? value = item.Value.IsBsonNull ? null : item.Value;
 
                     sb.AppendLine($":\t\"{value}\"");
                     break;
