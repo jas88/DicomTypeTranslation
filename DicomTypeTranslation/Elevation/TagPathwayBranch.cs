@@ -5,7 +5,7 @@ namespace DicomTypeTranslation.Elevation;
 
 class SequenceElement
 {
-    public SequenceElement Parent { get; private set; }
+    public SequenceElement? Parent { get; private set; }
 
     public List<SequenceElement> ArraySiblings { get; private set; }
 
@@ -13,7 +13,7 @@ class SequenceElement
 
     public Dictionary<DicomTag, object> Dataset { get; private set; }
 
-    public SequenceElement(DicomTag sequenceTag, Dictionary<DicomTag, object> dataset, SequenceElement parentIfAny = null)
+    public SequenceElement(DicomTag sequenceTag, Dictionary<DicomTag, object> dataset, SequenceElement? parentIfAny = null)
     {
         SequenceTag = sequenceTag;
         Dataset = dataset;

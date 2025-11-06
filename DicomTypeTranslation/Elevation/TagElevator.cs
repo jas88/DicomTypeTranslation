@@ -20,7 +20,7 @@ public class TagElevator
     public const string Splitter = "->";
 
     private readonly TagNavigation[] _navigations;
-    private readonly TagRelativeConditional _conditional;
+    private readonly TagRelativeConditional? _conditional;
 
     /// <summary>
     /// When ConcatenateMatches is on and multiple leaf nodes are detected (in different subsequences) then this string will be used to seperate them
@@ -44,7 +44,7 @@ public class TagElevator
 
 
     private readonly bool _conditionalMatchesArrayElementsOfMultiplicity;
-    private readonly string _conditionalMatchesArrayElementsOfMultiplicityPattern;
+    private readonly string? _conditionalMatchesArrayElementsOfMultiplicityPattern;
 
     /// <summary>
     /// Creates a new instance of the resolver ready to start evaluating matches to the given <paramref name="request"/>
@@ -59,7 +59,7 @@ public class TagElevator
     /// Creates a new instance of the resolver ready to start evaluating leaf matches to the given <paramref name="elevationPathway"/> in <see cref="DicomDataset"/>s with
     /// the provided (optional) <paramref name="conditional"/>
     /// </summary>
-    public TagElevator(string elevationPathway, string conditional, string conditionalShouldMatch): this(elevationPathway)
+    public TagElevator(string elevationPathway, string? conditional, string? conditionalShouldMatch): this(elevationPathway)
     {
 
         if(conditional == null)
@@ -76,10 +76,10 @@ public class TagElevator
                     $"Array operator conditional is only valid in isolation (i.e. '[]'), it cannot be part of a pathway (e.g. '{conditional}')");
 
             _conditionalMatchesArrayElementsOfMultiplicity = true;
-            _conditionalMatchesArrayElementsOfMultiplicityPattern = conditionalShouldMatch;
+            _conditionalMatchesArrayElementsOfMultiplicityPattern = conditionalShouldMatch ?? throw new ArgumentNullException(nameof(conditionalShouldMatch));
         }
         else
-            _conditional = new TagRelativeConditional(conditional,conditionalShouldMatch);
+            _conditional = new TagRelativeConditional(conditional, conditionalShouldMatch ?? throw new ArgumentNullException(nameof(conditionalShouldMatch)));
     }
 
 
@@ -121,7 +121,7 @@ public class TagElevator
     /// </summary>
     /// <param name="dataset"></param>
     /// <returns></returns>
-    public object GetValue(DicomDataset dataset)
+    public object? GetValue(DicomDataset dataset)
     {
         var finalObjects = new List<object>();
 
@@ -168,7 +168,11 @@ public class TagElevator
                     return Array.Empty<object>();
 
                 if (a.Length == 1)
-                    toReturn.Add(a.GetValue(0));
+                {
+                    var val = a.GetValue(0);
+                    if (val is not null)
+                        toReturn.Add(val);
+                }
                 else
                 if (!ConcatenateMultiplicity)
                     throw new TagNavigationException(
@@ -177,7 +181,7 @@ public class TagElevator
                     toReturn.Add(string.Join(ConcatenateMultiplicitySplitter, a.Cast<object>().Select(s => s.ToString())));
             }
             else
-            if (IsMatch(o))
+            if (o is not null && IsMatch(o))
                 toReturn.Add(o);
         }
         else
@@ -187,7 +191,7 @@ public class TagElevator
         return toReturn.ToArray();
     }
 
-    private bool IsMatch(object element)
+    private bool IsMatch(object? element)
     {
         //if the element is null then don't include it as a matched element
         if (element == null)
@@ -198,7 +202,7 @@ public class TagElevator
             return true;
 
         //there is a conditonal on returned elememnts.  So is the array elementnot null and matches condition?
-        return Regex.IsMatch(element.ToString(), _conditionalMatchesArrayElementsOfMultiplicityPattern);
+        return Regex.IsMatch(element.ToString()!, _conditionalMatchesArrayElementsOfMultiplicityPattern!);
     }
 
 

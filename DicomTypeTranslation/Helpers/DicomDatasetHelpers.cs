@@ -1,7 +1,6 @@
 
 using FellowOakDicom;
 using FellowOakDicom.IO.Buffer;
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;

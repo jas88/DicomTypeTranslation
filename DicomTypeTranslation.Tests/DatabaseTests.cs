@@ -30,10 +30,14 @@ public abstract class DatabaseTests
     [OneTimeSetUp]
     public void CheckFiles()
     {
+        // Force assembly loading to trigger auto-registration
+        // Even though marked obsolete, these calls are required to load the implementation assemblies
+#pragma warning disable CS0618 // Type or member is obsolete
         ImplementationManager.Load<MicrosoftSQLImplementation>();
         ImplementationManager.Load<MySqlImplementation>();
-        ImplementationManager.Load<PostgreSqlImplementation>();
         ImplementationManager.Load<OracleImplementation>();
+        ImplementationManager.Load<PostgreSqlImplementation>();
+#pragma warning restore CS0618 // Type or member is obsolete
 
         var file = Path.Combine(TestContext.CurrentContext.TestDirectory, TestFilename);
 
@@ -54,12 +58,12 @@ public abstract class DatabaseTests
 
         foreach (var element in root.Elements("TestDatabase"))
         {
-            var type = element.Element("DatabaseType").Value;
+            var type = element.Element("DatabaseType")?.Value ?? throw new Exception("Missing DatabaseType element");
 
             if (!Enum.TryParse(type, out DatabaseType databaseType))
                 throw new Exception($"Could not parse DatabaseType {type}");
 
-            var constr = element.Element("ConnectionString").Value;
+            var constr = element.Element("ConnectionString")?.Value ?? throw new Exception("Missing ConnectionString element");
 
             TestConnectionStrings.Add(databaseType,constr);
         }
@@ -111,24 +115,24 @@ public abstract class DatabaseTests
             Assert.Inconclusive("Test cannot run when AllowDatabaseCreation is false");
     }
 
-    protected bool AreBasicallyEquals(object o, object o2, bool handleSlashRSlashN = true)
+    protected bool AreBasicallyEquals(object? o, object? o2, bool handleSlashRSlashN = true)
     {
         //if they are legit equals
         if (Equals(o, o2))
             return true;
 
         //if they are null but basically the same
-        var oIsNull = o == null || o == DBNull.Value || o.ToString().Equals("0");
-        var o2IsNull = o2 == null || o2 == DBNull.Value || o2.ToString().Equals("0");
+        var oIsNull = o == null || o == DBNull.Value || o.ToString()?.Equals("0") == true;
+        var o2IsNull = o2 == null || o2 == DBNull.Value || o2.ToString()?.Equals("0") == true;
 
         if (oIsNull || o2IsNull)
             return oIsNull == o2IsNull;
 
         //they are not null so tostring them deals with int vs long etc that DbDataAdapters can be a bit flaky on
         if (handleSlashRSlashN)
-            return string.Equals(o.ToString().Replace("\r", "").Replace("\n", ""), o2.ToString().Replace("\r", "").Replace("\n", ""));
+            return string.Equals(o?.ToString()?.Replace("\r", "").Replace("\n", ""), o2?.ToString()?.Replace("\r", "").Replace("\n", ""));
 
-        return string.Equals(o.ToString(), o2.ToString());
+        return string.Equals(o?.ToString(), o2?.ToString());
     }
 
     protected void AssertAreEqual(DataTable dt1, DataTable dt2)

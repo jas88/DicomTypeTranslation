@@ -6,10 +6,8 @@ using System.Linq;
 
 using FellowOakDicom;
 
-using DicomTypeTranslation.Converters;
 using DicomTypeTranslation.Helpers;
 using FellowOakDicom.Serialization;
-using Newtonsoft.Json;
 using TypeGuesser;
 
 
@@ -33,7 +31,7 @@ public static class DicomTypeTranslater
 
     /// <summary>
     /// If false, binary items will have their key serialized but with their values set to null.
-    /// This applies to <see cref="SmiJsonDicomConverter"/> and <see cref="DicomTypeTranslaterReader.BuildBsonDocument"/>
+    /// This applies to <see cref="DicomTypeTranslaterReader.BuildBsonDocument"/>
     /// </summary>
     public static bool SerializeBinaryData = false;
 
@@ -42,31 +40,52 @@ public static class DicomTypeTranslater
     /// Serialize a <see cref="DicomDataset"/> to a json <see cref="string"/>.
     /// </summary>
     /// <param name="dataset"></param>
-    /// <param name="useOwn">Flag to use SMI DIY converter not fo-dicom</param>
     /// <returns>Json serialized string</returns>
-    public static string SerializeDatasetToJson(DicomDataset dataset, bool useOwn=false)
+    public static string SerializeDatasetToJson(DicomDataset dataset)
     {
         ArgumentNullException.ThrowIfNull(dataset);
-
-        if (useOwn)
-            return JsonConvert.SerializeObject(dataset, Formatting.None, new SmiJsonDicomConverter());
         return DicomJson.ConvertDicomToJson(dataset,false,false,NumberSerializationMode.PreferablyAsNumber);
+    }
+
+    /// <summary>
+    /// Serialize a <see cref="DicomDataset"/> to a json <see cref="string"/>.
+    /// </summary>
+    /// <param name="dataset"></param>
+    /// <param name="useOwn">This parameter is no longer supported. The custom SMI converter has been removed.</param>
+    /// <returns>Json serialized string</returns>
+    [Obsolete("The useOwn parameter is no longer supported. Use SerializeDatasetToJson(DicomDataset) instead.")]
+    public static string SerializeDatasetToJson(DicomDataset dataset, bool useOwn)
+    {
+        if (useOwn)
+            throw new NotImplementedException("The custom SMI JSON converter (useOwn=true) is no longer supported. Use the default fo-dicom converter.");
+        return SerializeDatasetToJson(dataset);
     }
 
     /// <summary>
     /// Deserialize a json <see cref="string"/> to a <see cref="DicomDataset"/>.
     /// </summary>
     /// <param name="json"></param>
-    /// <param name="useOwn">Flag to force use of old SMI DIY converter</param>
     /// <returns>Dataset</returns>
-    public static DicomDataset DeserializeJsonToDataset(string json, bool useOwn=false)
+    public static DicomDataset DeserializeJsonToDataset(string json)
     {
         if (string.IsNullOrWhiteSpace(json))
             throw new ArgumentNullException(nameof(json));
 
-        if (useOwn)
-            return JsonConvert.DeserializeObject<DicomDataset>(json, new SmiJsonDicomConverter());
         return FellowOakDicom.Serialization.DicomJson.ConvertJsonToDicom(json, false);
+    }
+
+    /// <summary>
+    /// Deserialize a json <see cref="string"/> to a <see cref="DicomDataset"/>.
+    /// </summary>
+    /// <param name="json"></param>
+    /// <param name="useOwn">This parameter is no longer supported. The custom SMI converter has been removed.</param>
+    /// <returns>Dataset</returns>
+    [Obsolete("The useOwn parameter is no longer supported. Use DeserializeJsonToDataset(string) instead.")]
+    public static DicomDataset DeserializeJsonToDataset(string json, bool useOwn)
+    {
+        if (useOwn)
+            throw new NotImplementedException("The custom SMI JSON converter (useOwn=true) is no longer supported. Use the default fo-dicom converter.");
+        return DeserializeJsonToDataset(json);
     }
 
     /// <summary>

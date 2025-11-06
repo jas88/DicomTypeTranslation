@@ -531,13 +531,13 @@ public class BsonRoundTripTranslationTests
     [Test]
     public void BsonRoundTrip_MaskedTags_ConvertedCorrectly()
     {
-        const string rawJson = "{\"60000010\":{\"vr\":\"US\",\"val\":[128]},\"60000011\":{\"vr\":\"US\",\"val\":[614]},\"60000040\":" +
-                               "{\"vr\":\"CS\",\"val\":\"G\"},\"60000050\":{\"vr\":\"SS\",\"val\":[0,0]},\"60000100\":{\"vr\":\"US\",\"val\":[1]}," +
-                               "\"60000102\":{\"vr\":\"US\",\"val\":[0]},\"60020010\":{\"vr\":\"US\",\"val\":[512]},\"60020011\":{\"vr\":\"US\",\"val\":[613]}," +
-                               "\"60020040\":{\"vr\":\"CS\",\"val\":\"H\"},\"60020050\":{\"vr\":\"SS\",\"val\":[1,2]},\"60020100\":{\"vr\":\"US\",\"val\":[3]}," +
-                               "\"60020102\":{\"vr\":\"US\",\"val\":[4]}}";
+        const string rawJson = "{\"60000010\":{\"vr\":\"US\",\"Value\":[128]},\"60000011\":{\"vr\":\"US\",\"Value\":[614]},\"60000040\":" +
+                               "{\"vr\":\"CS\",\"Value\":[\"G\"]},\"60000050\":{\"vr\":\"SS\",\"Value\":[0,0]},\"60000100\":{\"vr\":\"US\",\"Value\":[1]}," +
+                               "\"60000102\":{\"vr\":\"US\",\"Value\":[0]},\"60020010\":{\"vr\":\"US\",\"Value\":[512]},\"60020011\":{\"vr\":\"US\",\"Value\":[613]}," +
+                               "\"60020040\":{\"vr\":\"CS\",\"Value\":[\"H\"]},\"60020050\":{\"vr\":\"SS\",\"Value\":[1,2]},\"60020100\":{\"vr\":\"US\",\"Value\":[3]}," +
+                               "\"60020102\":{\"vr\":\"US\",\"Value\":[4]}}";
 
-        var maskDataset = DicomTypeTranslater.DeserializeJsonToDataset(rawJson,true);
+        var maskDataset = DicomTypeTranslater.DeserializeJsonToDataset(rawJson);
 
         Assert.That(maskDataset.Count(), Is.EqualTo(12));
 

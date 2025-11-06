@@ -16,7 +16,7 @@ public static class DictionaryHelperMethods
     /// </summary>
     /// <param name="o"></param>
     /// <returns></returns>
-    public static bool IsDictionary(object o)
+    public static bool IsDictionary(object? o)
     {
         return o is IDictionary;
     }
@@ -76,7 +76,7 @@ public static class DictionaryHelperMethods
     /// <typeparam name="TValue"></typeparam>
     /// <param name="dict"></param>
     /// <returns></returns>
-    public static int GetHashCode<TKey, TValue>(Dictionary<TKey, TValue> dict)
+    public static int GetHashCode<TKey, TValue>(Dictionary<TKey, TValue> dict) where TKey : notnull
     {
         if (dict == null)
             return 0;
@@ -86,11 +86,12 @@ public static class DictionaryHelperMethods
 
         unchecked
         {
-            var hashCode = dict.Keys.First().GetHashCode();
+            var firstKey = dict.Keys.First();
+            var hashCode = firstKey?.GetHashCode() ?? 0;
             foreach (var kvp in dict)
             {
-                hashCode = (hashCode * 397) ^ kvp.Key.GetHashCode();
-                hashCode = (hashCode * 397) ^ (kvp.Value != null ? kvp.Value.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (kvp.Key?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (kvp.Value?.GetHashCode() ?? 0);
             }
 
             return hashCode;
@@ -123,8 +124,8 @@ public static class DictionaryHelperMethods
                 sb.Append($" {keys1[i]} : \r\n {ArrayHelperMethods.AsciiArt(array, $"{prefix}\t")}");
             else
                 //if both are dictionaries
-            if (IsDictionary(val))
-                sb.Append($" {keys1[i]} : \r\n {AsciiArt((IDictionary)val, $"{prefix}\t")}");
+            if (val is IDictionary valDict)
+                sb.Append($" {keys1[i]} : \r\n {AsciiArt(valDict, $"{prefix}\t")}");
             else
                 //if we haven't outrun of either array
                 sb.AppendLine($" {keys1[i]} - \t {val}");
@@ -175,9 +176,8 @@ public static class DictionaryHelperMethods
                         array2, $"{prefix}\t")}");
                 else
                     //if both are dictionaries
-                if (IsDictionary(val1) && IsDictionary(val2))
-                    sb.Append($" {keys1[i]} : \r\n {AsciiArt((IDictionary)val1,
-                        (IDictionary)val2, $"{prefix}\t")}");
+                if (val1 is IDictionary valDict1 && val2 is IDictionary valDict2)
+                    sb.Append($" {keys1[i]} : \r\n {AsciiArt(valDict1, valDict2, $"{prefix}\t")}");
                 else
                     //if we haven't outrun of either array
                     sb.AppendLine($" {keys1[i]} - \t {dict[keys1[i]]} \t {dict2[keys2[i]]} {(FlexibleEquality.FlexibleEquals(dict[keys1[i]], dict2[keys2[i]]) ? "" : "<DIFF>")}");

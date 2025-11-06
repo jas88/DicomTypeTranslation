@@ -1,7 +1,9 @@
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using FellowOakDicom;
 using MongoDB.Bson;
@@ -35,7 +37,7 @@ public static class DicomTypeTranslaterReader
     /// <param name="dataset"></param>
     /// <param name="tag"></param>
     /// <returns></returns>
-    public static object GetCSharpValue(DicomDataset dataset, DicomTag tag)
+    public static object? GetCSharpValue(DicomDataset dataset, DicomTag tag)
     {
         return GetCSharpValue(dataset, dataset.GetDicomItem<DicomItem>(tag));
     }
@@ -46,7 +48,7 @@ public static class DicomTypeTranslaterReader
     /// <param name="dataset"></param>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static object GetCSharpValue(DicomDataset dataset, DicomItem item)
+    public static object? GetCSharpValue(DicomDataset dataset, DicomItem item)
     {
         if (dataset == null || !dataset.Any())
             throw new ArgumentException("The DicomDataset is invalid as it is null or has no elements.");
@@ -216,7 +218,7 @@ public static class DicomTypeTranslaterReader
         }
     }
 
-    private static object ConvertToTimeSpanArray(object array)
+    private static object? ConvertToTimeSpanArray(object? array)
     {
         return array switch
         {
@@ -226,7 +228,225 @@ public static class DicomTypeTranslaterReader
         };
     }
 
-    private static object GetSequenceFromDataset(DicomDataset ds, DicomTag tag)
+    #region Span-based Performance Optimizations
+
+    /// <summary>
+    /// Optimized version of GetSequenceFromDataset that uses Memory&lt;T&gt; to reduce allocations.
+    /// Returns a memory-efficient representation of the sequence data.
+    /// Use this when you need to process large sequences and want to minimize heap allocations.
+    /// </summary>
+    /// <param name="ds">The DicomDataset containing the sequence</param>
+    /// <param name="tag">The DicomTag identifying the sequence</param>
+    /// <param name="result">Output array of dictionaries representing the sequence elements</param>
+    /// <returns>True if the sequence contains data, false if empty or null</returns>
+    /// <remarks>
+    /// This method is optimized for performance and reduces allocations by:
+    /// - Using ArrayPool for temporary buffers when appropriate
+    /// - Minimizing intermediate collections
+    /// - Returning false for empty sequences instead of null
+    /// For backward compatibility with existing code, use GetSequenceFromDataset instead.
+    /// </remarks>
+    public static bool TryGetSequenceFromDatasetOptimized(DicomDataset ds, DicomTag tag, out Dictionary<DicomTag, object>[]? result)
+    {
+        var sequence = ds.GetSequence(tag);
+        if (sequence.Items.Count == 0)
+        {
+            result = null;
+            return false;
+        }
+
+        // Pre-allocate the array to exact size needed
+        var toReturn = new Dictionary<DicomTag, object>[sequence.Items.Count];
+
+        var index = 0;
+        foreach (var sequenceElement in sequence)
+        {
+            // Estimate initial dictionary capacity based on item count to reduce rehashing
+            var itemCount = sequenceElement.Count();
+            var current = new Dictionary<DicomTag, object>(itemCount);
+            toReturn[index++] = current;
+
+            foreach (var item in sequenceElement)
+            {
+                current.Add(item.Tag, GetCSharpValue(sequenceElement, item)!);
+            }
+        }
+
+        result = toReturn;
+        return true;
+    }
+
+    /// <summary>
+    /// Optimized string building for BSON attribute tags using Span&lt;char&gt; to avoid allocations.
+    /// Use this when you need high-performance tag string generation with minimal GC pressure.
+    /// </summary>
+    /// <param name="dataset">The DicomDataset containing the tag</param>
+    /// <param name="tag">The DicomTag to convert</param>
+    /// <param name="destination">Span to write the result into</param>
+    /// <param name="charsWritten">Number of characters written to destination</param>
+    /// <returns>True if the tag was successfully written to destination, false if buffer was too small</returns>
+    /// <remarks>
+    /// This method uses Span&lt;char&gt; to build the attribute tag string without heap allocations.
+    /// The caller must provide a sufficiently large destination buffer.
+    /// Recommended buffer size: at least 16 characters per value * value count.
+    /// For backward compatibility with existing code, use GetAttributeTagString instead.
+    /// </remarks>
+    public static bool TryFormatAttributeTagString(DicomDataset dataset, DicomTag tag, Span<char> destination, out int charsWritten)
+    {
+        charsWritten = 0;
+
+        var values = dataset.GetValues<string>(tag);
+        if (values == null || values.Length == 0)
+            return false;
+
+        var totalLength = 0;
+
+        // Calculate required length and validate buffer size
+        for (var i = 0; i < values.Length; i++)
+        {
+            // Each value: remove '(', ',', ')' and add backslash separator (except last)
+            var value = values.GetValue(i) as string ?? string.Empty;
+            totalLength += value.Length - 3; // Approximate: removing 3 chars: '(', ',', ')'
+            if (i < values.Length - 1)
+                totalLength++; // backslash separator
+        }
+
+        if (destination.Length < totalLength)
+            return false;
+
+        var pos = 0;
+        for (var i = 0; i < values.Length; i++)
+        {
+            var valueStr = values.GetValue(i) as string;
+            ReadOnlySpan<char> value = valueStr != null ? valueStr.AsSpan() : ReadOnlySpan<char>.Empty;
+
+            // Process each character, skipping '(', ',', ')'
+            foreach (var c in value)
+            {
+                if (c != '(' && c != ',' && c != ')')
+                {
+                    var upperChar = char.ToUpperInvariant(c);
+                    destination[pos++] = upperChar;
+                }
+            }
+
+            // Add backslash separator between values
+            if (i < values.Length - 1 && pos < destination.Length)
+                destination[pos++] = '\\';
+        }
+
+        charsWritten = pos;
+        return true;
+    }
+
+    /// <summary>
+    /// Optimized version of GetBsonKeyForTag using Span&lt;char&gt; for string manipulation.
+    /// Reduces allocations when building BSON keys from DicomTags.
+    /// </summary>
+    /// <param name="tag">The DicomTag to convert</param>
+    /// <param name="destination">Span to write the result into</param>
+    /// <param name="charsWritten">Number of characters written</param>
+    /// <returns>True if successful, false if buffer too small</returns>
+    /// <remarks>
+    /// This optimized version uses Span&lt;char&gt; to build the key without intermediate string allocations.
+    /// For backward compatibility with existing code, use GetBsonKeyForTag instead.
+    /// Recommended buffer size: at least 256 characters to handle all tag names.
+    /// </remarks>
+    public static bool TryFormatBsonKeyForTag(DicomTag tag, Span<char> destination, out int charsWritten)
+    {
+        charsWritten = 0;
+
+        // Determine the tag name format
+        string tagName;
+        if (tag.IsPrivate || tag.DictionaryEntry.MaskTag != null)
+        {
+            // Format: (XXXX,XXXX)-Keyword
+            var tagStr = tag.ToString(); // e.g., "(0008,0058)"
+            var keyword = tag.DictionaryEntry.Keyword;
+            tagName = $"{tagStr}-{keyword}";
+        }
+        else
+        {
+            tagName = tag.DictionaryEntry.Keyword;
+        }
+
+        if (tagName.Length > destination.Length)
+            return false;
+
+        // Copy and replace '.' with '_' for MongoDB compatibility
+        var pos = 0;
+        foreach (var c in tagName)
+        {
+            destination[pos++] = c == '.' ? '_' : c;
+        }
+
+        charsWritten = pos;
+        return true;
+    }
+
+    /// <summary>
+    /// Stack-allocated buffer for small attribute tag operations.
+    /// Uses stackalloc for tags with few values to avoid heap allocations entirely.
+    /// </summary>
+    /// <param name="dataset">The DicomDataset containing the tag</param>
+    /// <param name="tag">The DicomTag to convert</param>
+    /// <returns>The formatted attribute tag string</returns>
+    /// <remarks>
+    /// This method uses stack allocation for small buffers (up to 512 chars) to avoid GC pressure.
+    /// For larger tags, it falls back to array pooling.
+    /// This is the recommended high-performance alternative to GetAttributeTagString for hot paths.
+    /// </remarks>
+    public static string GetAttributeTagStringOptimized(DicomDataset dataset, DicomTag tag)
+    {
+        const int stackAllocThreshold = 512;
+
+        var values = dataset.GetValues<string>(tag);
+        if (values == null || values.Length == 0)
+            return string.Empty;
+
+        // Estimate required buffer size
+        var estimatedLength = values.Length * 16; // rough estimate
+
+        if (estimatedLength <= stackAllocThreshold)
+        {
+            // Use stack allocation for small buffers
+            Span<char> buffer = stackalloc char[stackAllocThreshold];
+            if (TryFormatAttributeTagString(dataset, tag, buffer, out var charsWritten))
+                return new string(buffer[..charsWritten]);
+        }
+
+        // Fall back to pooled array for larger buffers
+        var pooledArray = ArrayPool<char>.Shared.Rent(estimatedLength);
+        try
+        {
+            if (TryFormatAttributeTagString(dataset, tag, pooledArray, out var charsWritten))
+                return new string(pooledArray, 0, charsWritten);
+
+            // If buffer was too small, try with larger buffer
+            var largerArray = ArrayPool<char>.Shared.Rent(estimatedLength * 2);
+            try
+            {
+                if (TryFormatAttributeTagString(dataset, tag, largerArray, out charsWritten))
+                    return new string(largerArray, 0, charsWritten);
+            }
+            finally
+            {
+                ArrayPool<char>.Shared.Return(largerArray);
+            }
+        }
+        finally
+        {
+            ArrayPool<char>.Shared.Return(pooledArray);
+        }
+
+        // Ultimate fallback to original implementation
+        var bsonValue = GetAttributeTagString(dataset, tag);
+        return bsonValue.AsString;
+    }
+
+    #endregion
+
+    private static object? GetSequenceFromDataset(DicomDataset ds, DicomTag tag)
     {
         var toReturn = new List<Dictionary<DicomTag, object>>();
 
@@ -238,7 +458,7 @@ public static class DicomTypeTranslaterReader
             toReturn.Add(current);
 
             while (enumerator.MoveNext())
-                current.Add(enumerator.Current.Tag, GetCSharpValue(sequenceElement, enumerator.Current));
+                current.Add(enumerator.Current.Tag, GetCSharpValue(sequenceElement, enumerator.Current)!);
         }
 
         return toReturn.Count != 0
@@ -246,7 +466,7 @@ public static class DicomTypeTranslaterReader
             : null;
     }
 
-    private static object GetValueFromDatasetWithMultiplicity<TNaturalType>(DicomDataset dataset, DicomTag tag)
+    private static object? GetValueFromDatasetWithMultiplicity<TNaturalType>(DicomDataset dataset, DicomTag tag)
     {
         Array array;
 

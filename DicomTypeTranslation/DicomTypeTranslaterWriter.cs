@@ -1,10 +1,10 @@
 
 using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using FellowOakDicom;
-using JetBrains.Annotations;
 using MongoDB.Bson;
 
 
@@ -19,7 +19,7 @@ public static partial class DicomTypeTranslaterWriter
     /// <summary>
     /// Methods to call to add the given Type to the dataset (requires casting due to generic T) and sometimes you have to call Add(a,b) sometimes only Add(b) works
     /// </summary>
-    private static readonly Dictionary<Type, Action<DicomDataset, DicomTag, object>> _dicomAddMethodDictionary = new Dictionary<Type, Action<DicomDataset, DicomTag, object>>();
+    private static readonly FrozenDictionary<Type, Action<DicomDataset, DicomTag, object>> _dicomAddMethodDictionary;
 
     [GeneratedRegex(@":(.*)\)-", RegexOptions.CultureInvariant)]
     private static partial Regex PrivateCreatorRegex();
@@ -29,47 +29,52 @@ public static partial class DicomTypeTranslaterWriter
 
     static DicomTypeTranslaterWriter()
     {
-        // Single types
-        _dicomAddMethodDictionary.Add(typeof(string), (ds, t, o) => ds.Add(t, (string)o));
-        _dicomAddMethodDictionary.Add(typeof(DicomTag), (ds, t, o) => ds.Add(t, (DicomTag)o));
-        _dicomAddMethodDictionary.Add(typeof(DateTime), (ds, t, o) => ds.Add(t, (DateTime)o));
-        _dicomAddMethodDictionary.Add(typeof(decimal), (ds, t, o) => ds.Add(t, (decimal)o));
-        _dicomAddMethodDictionary.Add(typeof(double), (ds, t, o) => ds.Add(t, (double)o));
-        _dicomAddMethodDictionary.Add(typeof(float), (ds, t, o) => ds.Add(t, (float)o));
-        _dicomAddMethodDictionary.Add(typeof(int), (ds, t, o) => ds.Add(t, (int)o));
-        _dicomAddMethodDictionary.Add(typeof(byte), (ds, t, o) => ds.Add(t, (byte)o));
-        _dicomAddMethodDictionary.Add(typeof(short), (ds, t, o) => ds.Add(t, (short)o));
-        _dicomAddMethodDictionary.Add(typeof(ushort), (ds, t, o) => ds.Add(t, (ushort)o));
-        _dicomAddMethodDictionary.Add(typeof(DicomDateRange), (ds, t, o) => ds.Add(t, (DicomDateRange)o));
-        _dicomAddMethodDictionary.Add(typeof(DicomDataset), (ds, t, o) => ds.Add(t, (DicomDataset)o));
-        _dicomAddMethodDictionary.Add(typeof(DicomUID), (ds, t, o) => ds.Add(t, (DicomUID)o));
-        _dicomAddMethodDictionary.Add(typeof(DicomTransferSyntax), (ds, t, o) => ds.Add(t, (DicomTransferSyntax)o));
-        _dicomAddMethodDictionary.Add(typeof(DicomSequence), (ds, t, o) => ds.Add((DicomSequence)o));
-        _dicomAddMethodDictionary.Add(typeof(uint), (ds, t, o) => ds.Add(t, (uint)o));
-        _dicomAddMethodDictionary.Add(typeof(long), (ds, t, o) => ds.Add(t, (long)o));
+        var dictionary = new Dictionary<Type, Action<DicomDataset, DicomTag, object>>
+        {
+            // Single types
+            { typeof(string), (ds, t, o) => ds.Add(t, (string)o!) },
+            { typeof(DicomTag), (ds, t, o) => ds.Add(t, (DicomTag)o) },
+            { typeof(DateTime), (ds, t, o) => ds.Add(t, (DateTime)o) },
+            { typeof(decimal), (ds, t, o) => ds.Add(t, (decimal)o) },
+            { typeof(double), (ds, t, o) => ds.Add(t, (double)o) },
+            { typeof(float), (ds, t, o) => ds.Add(t, (float)o) },
+            { typeof(int), (ds, t, o) => ds.Add(t, (int)o) },
+            { typeof(byte), (ds, t, o) => ds.Add(t, (byte)o) },
+            { typeof(short), (ds, t, o) => ds.Add(t, (short)o) },
+            { typeof(ushort), (ds, t, o) => ds.Add(t, (ushort)o) },
+            { typeof(DicomDateRange), (ds, t, o) => ds.Add(t, (DicomDateRange)o) },
+            { typeof(DicomDataset), (ds, t, o) => ds.Add(t, (DicomDataset)o) },
+            { typeof(DicomUID), (ds, t, o) => ds.Add(t, (DicomUID)o) },
+            { typeof(DicomTransferSyntax), (ds, t, o) => ds.Add(t, (DicomTransferSyntax)o) },
+            { typeof(DicomSequence), (ds, t, o) => ds.Add((DicomSequence)o) },
+            { typeof(uint), (ds, t, o) => ds.Add(t, (uint)o) },
+            { typeof(long), (ds, t, o) => ds.Add(t, (long)o) },
 
-        // Array types
-        _dicomAddMethodDictionary.Add(typeof(string[]), (ds, t, o) => ds.Add(t, (string[])o));
-        _dicomAddMethodDictionary.Add(typeof(DicomTag[]), (ds, t, o) => ds.Add(t, (DicomTag[])o));
-        _dicomAddMethodDictionary.Add(typeof(DateTime[]), (ds, t, o) => ds.Add(t, (DateTime[])o));
-        _dicomAddMethodDictionary.Add(typeof(decimal[]), (ds, t, o) => ds.Add(t, (decimal[])o));
-        _dicomAddMethodDictionary.Add(typeof(double[]), (ds, t, o) => ds.Add(t, (double[])o));
-        _dicomAddMethodDictionary.Add(typeof(float[]), (ds, t, o) => ds.Add(t, (float[])o));
-        _dicomAddMethodDictionary.Add(typeof(int[]), (ds, t, o) => ds.Add(t, (int[])o));
-        _dicomAddMethodDictionary.Add(typeof(byte[]), (ds, t, o) => ds.Add(t, (byte[])o));
-        _dicomAddMethodDictionary.Add(typeof(short[]), (ds, t, o) => ds.Add(t, (short[])o));
-        _dicomAddMethodDictionary.Add(typeof(ushort[]), (ds, t, o) => ds.Add(t, (ushort[])o));
-        _dicomAddMethodDictionary.Add(typeof(DicomDateRange[]), (ds, t, o) => ds.Add(t, (DicomDateRange[])o));
-        _dicomAddMethodDictionary.Add(typeof(DicomDataset[]), (ds, t, o) => ds.Add(t, (DicomDataset[])o));
-        _dicomAddMethodDictionary.Add(typeof(DicomUID[]), (ds, t, o) => ds.Add(t, (DicomUID[])o));
-        _dicomAddMethodDictionary.Add(typeof(DicomTransferSyntax[]), (ds, t, o) => ds.Add(t, (DicomTransferSyntax[])o));
-        _dicomAddMethodDictionary.Add(typeof(DicomSequence[]), (ds, t, o) => ds.Add((DicomSequence[])o));
-        _dicomAddMethodDictionary.Add(typeof(uint[]), (ds, t, o) => ds.Add(t, (uint[])o));
-        _dicomAddMethodDictionary.Add(typeof(long[]), (ds, t, o) => ds.Add(t, (long[])o));
+            // Array types
+            { typeof(string[]), (ds, t, o) => ds.Add(t, (string[])o) },
+            { typeof(DicomTag[]), (ds, t, o) => ds.Add(t, (DicomTag[])o) },
+            { typeof(DateTime[]), (ds, t, o) => ds.Add(t, (DateTime[])o) },
+            { typeof(decimal[]), (ds, t, o) => ds.Add(t, (decimal[])o) },
+            { typeof(double[]), (ds, t, o) => ds.Add(t, (double[])o) },
+            { typeof(float[]), (ds, t, o) => ds.Add(t, (float[])o) },
+            { typeof(int[]), (ds, t, o) => ds.Add(t, (int[])o) },
+            { typeof(byte[]), (ds, t, o) => ds.Add(t, (byte[])o) },
+            { typeof(short[]), (ds, t, o) => ds.Add(t, (short[])o) },
+            { typeof(ushort[]), (ds, t, o) => ds.Add(t, (ushort[])o) },
+            { typeof(DicomDateRange[]), (ds, t, o) => ds.Add(t, (DicomDateRange[])o) },
+            { typeof(DicomDataset[]), (ds, t, o) => ds.Add(t, (DicomDataset[])o) },
+            { typeof(DicomUID[]), (ds, t, o) => ds.Add(t, (DicomUID[])o) },
+            { typeof(DicomTransferSyntax[]), (ds, t, o) => ds.Add(t, (DicomTransferSyntax[])o) },
+            { typeof(DicomSequence[]), (ds, t, o) => ds.Add((DicomSequence[])o) },
+            { typeof(uint[]), (ds, t, o) => ds.Add(t, (uint[])o) },
+            { typeof(long[]), (ds, t, o) => ds.Add(t, (long[])o) },
 
-        //Those Involving something more complicated than simply forcing the generic <T> by casting something already of that Type
-        _dicomAddMethodDictionary.Add(typeof(TimeSpan), (ds, t, o) => ds.Add(t, TimeSpanToDate((TimeSpan)o)));
-        _dicomAddMethodDictionary.Add(typeof(TimeSpan[]), (ds, t, o) => ds.Add(t, ((TimeSpan[])o).Select(TimeSpanToDate).ToArray()));
+            // Those Involving something more complicated than simply forcing the generic <T> by casting something already of that Type
+            { typeof(TimeSpan), (ds, t, o) => ds.Add(t, TimeSpanToDate((TimeSpan)o)) },
+            { typeof(TimeSpan[]), (ds, t, o) => ds.Add(t, ((TimeSpan[])o).Select(TimeSpanToDate).ToArray()) }
+        };
+
+        _dicomAddMethodDictionary = dictionary.ToFrozenDictionary();
     }
 
     private static DateTime TimeSpanToDate(TimeSpan ts)
@@ -195,7 +200,7 @@ public static partial class DicomTypeTranslaterWriter
         }
     }
 
-    private static DicomVR TryParseVr(BsonValue bsonValue)
+    private static DicomVR? TryParseVr(BsonValue bsonValue)
     {
         if (bsonValue == BsonNull.Value)
             return null;
@@ -207,7 +212,7 @@ public static partial class DicomTypeTranslaterWriter
         return DicomVR.Parse(asBsonDocument["vr"].AsString);
     }
 
-    private static DicomItem CreateDicomItem(DicomTag tag, BsonValue data, DicomVR vr = null)
+    private static DicomItem CreateDicomItem(DicomTag tag, BsonValue data, DicomVR? vr = null)
     {
         vr ??= GetVrForTag(tag, data);
 
@@ -311,7 +316,7 @@ public static partial class DicomTypeTranslaterWriter
         return typedArray;
     }
 
-    private static string GetString(BsonValue bsonValue)
+    private static string? GetString(BsonValue bsonValue)
     {
         return bsonValue.IsBsonNull ? null : bsonValue.AsString;
     }

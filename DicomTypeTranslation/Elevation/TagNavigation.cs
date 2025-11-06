@@ -40,7 +40,11 @@ class TagNavigation
         if (!dataset.Contains(_tag))
             return Array.Empty<SequenceElement>();
 
-        return ToSequenceElementArray((Dictionary<DicomTag, object>[])DicomTypeTranslaterReader.GetCSharpValue(dataset, _tag), null);
+        var value = DicomTypeTranslaterReader.GetCSharpValue(dataset, _tag);
+        if (value is not Dictionary<DicomTag, object>[] dictArray)
+            return Array.Empty<SequenceElement>();
+
+        return ToSequenceElementArray(dictArray, null);
     }
 
     public SequenceElement[] GetSubset(SequenceElement location)
@@ -50,7 +54,7 @@ class TagNavigation
             : Array.Empty<SequenceElement>();
     }
 
-    private SequenceElement[] ToSequenceElementArray(IEnumerable<Dictionary<DicomTag, object>> getCSharpValue, SequenceElement location)
+    private SequenceElement[] ToSequenceElementArray(IEnumerable<Dictionary<DicomTag, object>> getCSharpValue, SequenceElement? location)
     {
         if (getCSharpValue == null)
             return Array.Empty<SequenceElement>();
@@ -70,7 +74,7 @@ class TagNavigation
     /// <param name="sequenceElement"></param>
     /// <param name="conditional"></param>
     /// <returns></returns>
-    public object GetTags(SequenceElement sequenceElement, TagRelativeConditional conditional)
+    public object? GetTags(SequenceElement sequenceElement, TagRelativeConditional? conditional)
     {
         if (sequenceElement.Dataset.TryGetValue(_tag, out var tags) &&
             conditional?.IsMatch(sequenceElement, _tag) != false)

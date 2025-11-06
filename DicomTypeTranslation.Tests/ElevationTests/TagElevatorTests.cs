@@ -170,9 +170,10 @@ public class TagElevatorTests
         Assert.Multiple(() =>
         {
             Assert.That(file, Is.Not.Null);
-            Assert.That(value.ToString(), Does.Contain("Redlands Clinic"));
+            Assert.That(value, Is.Not.Null);
+            Assert.That(value!.ToString(), Does.Contain("Redlands Clinic"));
         });
-        Assert.That(value.ToString(), Does.Contain("This 78-year-old gentleman referred by Dr"));
+        Assert.That(value!.ToString(), Does.Contain("This 78-year-old gentleman referred by Dr"));
         Assert.That(value.ToString(), Does.Contain(" involving the skin of the left external ear, "));
 
         Assert.That(value.ToString(), Does.Contain("possibility of complication was discussed with this patient at some length, and he accepted therapy as outlined."));
@@ -610,8 +611,9 @@ public class TagElevatorTests
     [TestCase("PseudoColorPaletteInstanceReferenceSequence->AbstractPriorCodeSequence->ProbeDriveEquipmentSequence->PatientID", "..->SpecimenShortDescription", "2.1", "3.2", TestName = "Complex_Conditional_1")]
     public void ComplexTagNestingTests(string pathway, string? conditional, string? conditionalMatch, object? expectedResults)
     {
-        if (!string.IsNullOrWhiteSpace((string)expectedResults))
-            expectedResults = ((string)expectedResults).Replace("\r\n", Environment.NewLine);
+        var expectedResultsStr = expectedResults as string;
+        if (!string.IsNullOrWhiteSpace(expectedResultsStr))
+            expectedResults = expectedResultsStr.Replace("\r\n", Environment.NewLine);
 
         // Arrange
         var ds = new DicomDataset
@@ -761,13 +763,19 @@ public class TagElevatorTests
 
     }
 
-    private void ShowContentSequence(DicomDataset dataset, DicomTag tag = null)
+    private void ShowContentSequence(DicomDataset dataset, DicomTag? tag = null)
     {
         tag ??= DicomTag.ContentSequence;
         Console.WriteLine($"{tag.DictionaryEntry.Keyword} Contains the following:");
         Console.WriteLine("-------------------------------------------------------------");
 
-        var array = (Dictionary<DicomTag, object>[])DicomTypeTranslaterReader.GetCSharpValue(dataset, tag);
+        var arrayValue = DicomTypeTranslaterReader.GetCSharpValue(dataset, tag);
+        if (arrayValue == null)
+        {
+            Console.WriteLine("(null)");
+            return;
+        }
+        var array = (Dictionary<DicomTag, object>[])arrayValue;
         var str = ArrayHelperMethods.AsciiArt(array);
 
 

@@ -7,9 +7,11 @@ namespace DicomTypeTranslation.Tests;
 class ChangeLogIsCorrectTests
 {
     [TestCase("../../../../CHANGELOG.md")]
-    public void TestChangeLogContents(string changeLogPath)
+    public void TestChangeLogContents(string? changeLogPath)
     {
-        if (changeLogPath != null && !Path.IsPathRooted(changeLogPath))
+        Assert.That(changeLogPath, Is.Not.Null, "changeLogPath must be provided");
+
+        if (!Path.IsPathRooted(changeLogPath))
             changeLogPath = Path.Combine(TestContext.CurrentContext.TestDirectory, changeLogPath);
 
         if (!File.Exists(changeLogPath))
@@ -17,7 +19,10 @@ class ChangeLogIsCorrectTests
 
         var fi = new FileInfo(changeLogPath);
 
-        var assemblyInfo = Path.Combine(fi.Directory.FullName,"SharedAssemblyInfo.cs");
+        if (fi.Directory == null)
+            Assert.Fail($"Could not determine directory of {changeLogPath}");
+
+        var assemblyInfo = Path.Join(fi.Directory!.FullName,"SharedAssemblyInfo.cs");
 
         if(!File.Exists(assemblyInfo))
             Assert.Fail($"Could not find file {assemblyInfo}");

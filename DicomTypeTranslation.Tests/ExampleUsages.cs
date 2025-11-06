@@ -21,23 +21,26 @@ class ExampleUsages
         });
 
         var name = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.PatientName);
+        Assert.That(name, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(name.GetType(), Is.EqualTo(typeof(string)));
+            Assert.That(name!.GetType(), Is.EqualTo(typeof(string)));
             Assert.That(name, Is.EqualTo("Frank"));
         });
 
         var age = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.PatientAge);
+        Assert.That(age, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(age.GetType(), Is.EqualTo(typeof(string)));
+            Assert.That(age!.GetType(), Is.EqualTo(typeof(string)));
             Assert.That(age, Is.EqualTo("032Y"));
         });
 
         var dob = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.PatientBirthDate);
+        Assert.That(dob, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(dob.GetType(), Is.EqualTo(typeof(DateTime)));
+            Assert.That(dob!.GetType(), Is.EqualTo(typeof(DateTime)));
             Assert.That(dob, Is.EqualTo(new DateTime(2001, 01, 01)));
         });
 
@@ -49,9 +52,10 @@ class ExampleUsages
 
         //Get the C# type
         var name2 = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.ReferringPhysicianTelephoneNumbers);
+        Assert.That(name2, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(name2.GetType(), Is.EqualTo(typeof(string[])));
+            Assert.That(name2!.GetType(), Is.EqualTo(typeof(string[])));
             Assert.That(name2, Is.EqualTo(new string[] { "Frank", "Anderson" }));
         });
 
@@ -79,14 +83,18 @@ class ExampleUsages
             })
         });
 
-        var seq = (Dictionary<DicomTag, object>[])DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.ActualHumanPerformersSequence);
+        var seqValue = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.ActualHumanPerformersSequence);
+        Assert.That(seqValue, Is.Not.Null);
+        var seq = (Dictionary<DicomTag, object>[])seqValue;
         Assert.Multiple(() =>
         {
             Assert.That(seq[0][DicomTag.PatientName], Is.EqualTo("Rabbit"));
             Assert.That(seq[1][DicomTag.PatientName], Is.EqualTo("Roger"));
         });
 
-        var flattened = (string)DicomTypeTranslater.Flatten(seq);
+        var flattenedValue = DicomTypeTranslater.Flatten(seq);
+        Assert.That(flattenedValue, Is.Not.Null);
+        var flattened = (string)flattenedValue;
         Assert.That(
             flattened.Replace("\r", ""), Is.EqualTo(@"[0] - 
  	 (0010,0010) - 	 Rabbit

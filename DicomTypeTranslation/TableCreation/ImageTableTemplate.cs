@@ -7,17 +7,17 @@ namespace DicomTypeTranslation.TableCreation;
 /// <summary>
 /// Describes a table schema you intend to create for storing Dicom image metadata
 /// </summary>
-public class ImageTableTemplate
+public record class ImageTableTemplate
 {
     /// <summary>
     /// The table name that should be created in the database when deploying the template
     /// </summary>
-    public string TableName { get; set; }
+    public string TableName { get; init; } = string.Empty;
 
     /// <summary>
     /// The columns that should be created in the database when deploying the template
     /// </summary>
-    public ImageColumnTemplate[] Columns { get; set; }
+    public ImageColumnTemplate[] Columns { get; init; } = [];
 
     /// <summary>
     /// Creates a new instance ready to deploy into the DBMS <paramref name="databaseType"/> (See <see cref="ImagingTableCreation"/> for actually creating
