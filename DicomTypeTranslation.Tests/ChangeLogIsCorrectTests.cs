@@ -22,7 +22,7 @@ class ChangeLogIsCorrectTests
         if (fi.Directory == null)
             Assert.Fail($"Could not determine directory of {changeLogPath}");
 
-        var assemblyInfo = Path.Combine(fi.Directory!.FullName,"SharedAssemblyInfo.cs");
+        var assemblyInfo = Path.Join(fi.Directory!.FullName,"SharedAssemblyInfo.cs");
 
         if(!File.Exists(assemblyInfo))
             Assert.Fail($"Could not find file {assemblyInfo}");
