@@ -74,7 +74,7 @@ class TemplateTests:DatabaseTests
     [TestCase("US", FAnsi.DatabaseType.Oracle)]
     public void TestTemplate(string template, FAnsi.DatabaseType dbType)
     {
-        var templateFile = Path.Combine(TestContext.CurrentContext.TestDirectory,"Templates", $"{template}.yaml");
+        var templateFile = Path.Join(TestContext.CurrentContext.TestDirectory,"Templates", $"{template}.yaml");
 
         var collection = ImageTableTemplateCollection.LoadFrom(File.ReadAllText(templateFile));
 
