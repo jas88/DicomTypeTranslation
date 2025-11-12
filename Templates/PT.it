@@ -55,6 +55,9 @@ Tables:
     AllowNulls: true
   - ColumnName: SeriesNumber
     AllowNulls: true
+  - DicomTag: "(0020,1209)"
+    ColumnName: "NumberOfSeriesRelatedInstances"
+    AllowNulls: true
   - ColumnName: NumberOfSlices
     AllowNulls: true
   - ColumnName: EnergyWindowRange_EnergyWindowLowerLimit

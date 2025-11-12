@@ -104,9 +104,12 @@ Tables:
     AllowNulls: true
     IsPrimaryKey: false
   - ColumnName: SeriesNumber
-    Type: 
+    Type:
     AllowNulls: true
     IsPrimaryKey: false
+  - DicomTag: "(0020,1209)"
+    ColumnName: "NumberOfSeriesRelatedInstances"
+    AllowNulls: true
   - ColumnName: MRAcquisitionType
     Type: 
     AllowNulls: true
