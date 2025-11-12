@@ -70,7 +70,10 @@ Tables:
     AllowNulls: true
 - TableName: ImageTable
   Columns:
+  - ColumnName: StudyInstanceUID
   - ColumnName: SeriesInstanceUID
+  - ColumnName: PatientID
+    AllowNulls: true
   - ColumnName: SOPInstanceUID
     IsPrimaryKey: true
   - ColumnName: BurnedInAnnotation
@@ -154,4 +157,6 @@ Tables:
   - ColumnName: HighBit
     AllowNulls: true
   - ColumnName: PixelRepresentation
+    AllowNulls: true
+  - ColumnName: DicomFileSize
     AllowNulls: true
