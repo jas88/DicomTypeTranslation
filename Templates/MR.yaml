@@ -159,4 +159,6 @@ Tables:
   - ColumnName: PixelRepresentation
     AllowNulls: true
   - ColumnName: DicomFileSize
+    Type:
+      CSharpType: System.Int64
     AllowNulls: true
