@@ -1,10 +1,9 @@
 #Last Modified: 2020-04-07
 Tables:
-- TableName: StudyTable
+- TableName: ImageTable
   Columns:
   - ColumnName: PatientID
   - ColumnName: StudyInstanceUID
-    IsPrimaryKey: true
   - ColumnName: StudyDate
     AllowNulls: true
   - ColumnName: StudyTime
@@ -12,6 +11,8 @@ Tables:
   - ColumnName: ModalitiesInStudy
     AllowNulls: true
   - ColumnName: StudyDescription
+    AllowNulls: true
+  - ColumnName: PatientBirthDate
     AllowNulls: true
   - ColumnName: AccessionNumber
     AllowNulls: true
@@ -21,33 +22,23 @@ Tables:
     AllowNulls: true
   - ColumnName: NumberOfStudyRelatedInstances
     AllowNulls: true
-  - ColumnName: PatientBirthDate
-    AllowNulls: true
-- TableName: SeriesTable
-  Columns:
-  - ColumnName: StudyInstanceUID
   - ColumnName: SeriesInstanceUID
     IsPrimaryKey: true
   - ColumnName: Modality
     AllowNulls: true
+  - ColumnName: SourceApplicationEntityTitle
+    AllowNulls: true
   - ColumnName: InstitutionName
+    AllowNulls: true
+  - ColumnName: ProcedureCodeSequence
     AllowNulls: true
   - ColumnName: ProtocolName
     AllowNulls: true
-  - ColumnName: ProcedureCodeSequence_CodeValue
+  - ColumnName: PerformedProcedureStepID
     AllowNulls: true
-    Type:
-      CSharpType: System.String
-      Size:
-        IsEmpty: true
-      Width: 16
   - ColumnName: PerformedProcedureStepDescription
     AllowNulls: true
   - ColumnName: SeriesDescription
-    AllowNulls: true
-  - ColumnName: SeriesDate
-    AllowNulls: true
-  - ColumnName: SeriesTime
     AllowNulls: true
   - ColumnName: BodyPartExamined
     AllowNulls: true
@@ -55,14 +46,14 @@ Tables:
     AllowNulls: true
   - ColumnName: SeriesNumber
     AllowNulls: true
-- TableName: ImageTable
-  Columns:
-  - ColumnName: StudyInstanceUID
-  - ColumnName: SeriesInstanceUID
-  - ColumnName: PatientID
+  - ColumnName: SequenceName
     AllowNulls: true
   - ColumnName: SOPInstanceUID
     IsPrimaryKey: true
+  - ColumnName: SeriesDate
+    AllowNulls: true
+  - ColumnName: SeriesTime
+    AllowNulls: true
   - ColumnName: BurnedInAnnotation
     AllowNulls: true
   - ColumnName: RelativeFileArchiveURI
@@ -75,55 +66,23 @@ Tables:
     AllowNulls: true
   - ColumnName: SpacingBetweenSlices
     AllowNulls: true
-  - ColumnName: SpiralPitchFactor
-    AllowNulls: true
-  - ColumnName: KVP
-    AllowNulls: true
-  - ColumnName: ExposureTime
-    AllowNulls: true
-  - ColumnName: Exposure
-    AllowNulls: true
   - ColumnName: ImageType
     AllowNulls: true
   - ColumnName: ManufacturerModelName
     AllowNulls: true
   - ColumnName: Manufacturer
     AllowNulls: true
-  - ColumnName: SoftwareVersions
-    AllowNulls: true
-  - ColumnName: XRayTubeCurrent
-    AllowNulls: true
   - ColumnName: PhotometricInterpretation
     AllowNulls: true
-  - ColumnName: ContrastBolusRoute
+  - ColumnName: TransferSyntaxUID
     AllowNulls: true
-  - ColumnName: ContrastBolusAgent
+  - ColumnName: BitsAllocated
     AllowNulls: true
-  - ColumnName: AcquisitionNumber
+  - ColumnName: BitsStored
     AllowNulls: true
-  - ColumnName: AcquisitionDate
+  - ColumnName: HighBit
     AllowNulls: true
-  - ColumnName: AcquisitionTime
-    AllowNulls: true
-  - ColumnName: ImagePositionPatient
-    AllowNulls: true
-  - ColumnName: PixelSpacing
-    AllowNulls: true
-  - ColumnName: FieldOfViewDimensions
-    AllowNulls: true
-  - ColumnName: FieldOfViewDimensionsInFloat
-    AllowNulls: true
-  - ColumnName: DerivationDescription
-    AllowNulls: true
-  - ColumnName: LossyImageCompression
-    AllowNulls: true
-  - ColumnName: LossyImageCompressionMethod
-    AllowNulls: true
-  - ColumnName: LossyImageCompressionRatio
-    AllowNulls: true
-  - ColumnName: LossyImageCompressionRetired
-    AllowNulls: true
-  - ColumnName: ScanOptions
+  - ColumnName: PixelRepresentation
     AllowNulls: true
   - ColumnName: DicomFileSize
     Type:

@@ -1,8 +1,10 @@
+#Last Modified: 2020-04-07
 Tables:
 - TableName: StudyTable
   Columns:
   - ColumnName: PatientID
   - ColumnName: StudyInstanceUID
+    IsPrimaryKey: true
   - ColumnName: StudyDate
     AllowNulls: true
   - ColumnName: StudyTime
@@ -21,7 +23,11 @@ Tables:
     AllowNulls: true
   - ColumnName: PatientBirthDate
     AllowNulls: true
+- TableName: SeriesTable
+  Columns:
+  - ColumnName: StudyInstanceUID
   - ColumnName: SeriesInstanceUID
+    IsPrimaryKey: true
   - ColumnName: Modality
     AllowNulls: true
   - ColumnName: InstitutionName
@@ -29,12 +35,12 @@ Tables:
   - ColumnName: ProtocolName
     AllowNulls: true
   - ColumnName: ProcedureCodeSequence_CodeValue
+    AllowNulls: true
     Type:
       CSharpType: System.String
       Size:
         IsEmpty: true
       Width: 16
-    AllowNulls: true
   - ColumnName: PerformedProcedureStepDescription
     AllowNulls: true
   - ColumnName: SeriesDescription
@@ -49,6 +55,12 @@ Tables:
     AllowNulls: true
   - ColumnName: SeriesNumber
     AllowNulls: true
+- TableName: ImageTable
+  Columns:
+  - ColumnName: StudyInstanceUID
+  - ColumnName: SeriesInstanceUID
+  - ColumnName: PatientID
+    AllowNulls: true
   - ColumnName: SOPInstanceUID
     IsPrimaryKey: true
   - ColumnName: BurnedInAnnotation
@@ -56,6 +68,20 @@ Tables:
   - ColumnName: RelativeFileArchiveURI
     AllowNulls: true
   - ColumnName: MessageGuid
+    AllowNulls: true
+  - ColumnName: SliceLocation
+    AllowNulls: true
+  - ColumnName: SliceThickness
+    AllowNulls: true
+  - ColumnName: SpacingBetweenSlices
+    AllowNulls: true
+  - ColumnName: SpiralPitchFactor
+    AllowNulls: true
+  - ColumnName: KVP
+    AllowNulls: true
+  - ColumnName: ExposureTime
+    AllowNulls: true
+  - ColumnName: Exposure
     AllowNulls: true
   - ColumnName: ImageType
     AllowNulls: true
@@ -65,7 +91,13 @@ Tables:
     AllowNulls: true
   - ColumnName: SoftwareVersions
     AllowNulls: true
+  - ColumnName: XRayTubeCurrent
+    AllowNulls: true
   - ColumnName: PhotometricInterpretation
+    AllowNulls: true
+  - ColumnName: ContrastBolusRoute
+    AllowNulls: true
+  - ColumnName: ContrastBolusAgent
     AllowNulls: true
   - ColumnName: AcquisitionNumber
     AllowNulls: true
@@ -73,17 +105,37 @@ Tables:
     AllowNulls: true
   - ColumnName: AcquisitionTime
     AllowNulls: true
+  - ColumnName: ImagePositionPatient
+    AllowNulls: true
   - ColumnName: PixelSpacing
     AllowNulls: true
-  - ColumnName: AcquisitionDeviceProcessingDescription
+  - ColumnName: FieldOfViewDimensions
     AllowNulls: true
-  - ColumnName: NumberOfWaveformChannels
+  - ColumnName: FieldOfViewDimensionsInFloat
     AllowNulls: true
-  - ColumnName: NumberOfWaveformSamples
+  - ColumnName: DerivationDescription
     AllowNulls: true
-  - ColumnName: SamplingFrequency
+  - ColumnName: LossyImageCompression
     AllowNulls: true
-  - ColumnName: WaveformBitsAllocated
+  - ColumnName: LossyImageCompressionMethod
     AllowNulls: true
-  - ColumnName: WaveformSequence
+  - ColumnName: LossyImageCompressionRatio
+    AllowNulls: true
+  - ColumnName: LossyImageCompressionRetired
+    AllowNulls: true
+  - ColumnName: ScanOptions
+    AllowNulls: true
+  - ColumnName: TransferSyntaxUID
+    AllowNulls: true
+  - ColumnName: BitsAllocated
+    AllowNulls: true
+  - ColumnName: BitsStored
+    AllowNulls: true
+  - ColumnName: HighBit
+    AllowNulls: true
+  - ColumnName: PixelRepresentation
+    AllowNulls: true
+  - ColumnName: DicomFileSize
+    Type:
+      CSharpType: System.Int64
     AllowNulls: true

@@ -334,6 +334,16 @@ Tables:
     AllowNulls: true
     IsPrimaryKey: false
   - ColumnName: SamplesPerPixel
-    Type: 
+    Type:
     AllowNulls: true
     IsPrimaryKey: false
+  - ColumnName: TransferSyntaxUID
+    AllowNulls: true
+  - ColumnName: BitsAllocated
+    AllowNulls: true
+  - ColumnName: BitsStored
+    AllowNulls: true
+  - ColumnName: HighBit
+    AllowNulls: true
+  - ColumnName: PixelRepresentation
+    AllowNulls: true

@@ -183,3 +183,13 @@ Tables:
       Size:
         IsEmpty: true
       Width: 16
+  - ColumnName: TransferSyntaxUID
+    AllowNulls: true
+  - ColumnName: BitsAllocated
+    AllowNulls: true
+  - ColumnName: BitsStored
+    AllowNulls: true
+  - ColumnName: HighBit
+    AllowNulls: true
+  - ColumnName: PixelRepresentation
+    AllowNulls: true

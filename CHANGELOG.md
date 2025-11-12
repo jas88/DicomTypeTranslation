@@ -7,6 +7,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [5.0.0] - 2025-11-12
+
+### Added
+- Pixel data format fields to all templates for better image encoding metadata tracking (#19):
+  - TransferSyntaxUID (0002,0010) - Compression/encoding identification
+  - PhotometricInterpretation (0028,0004) - Color space information (already present in some templates, now in all)
+  - BitsAllocated (0028,0100) - Bits per pixel sample
+  - BitsStored (0028,0101) - Actual bits used
+  - HighBit (0028,0102) - High bit position
+  - PixelRepresentation (0028,0103) - Signed vs unsigned representation
+
+### Changed
+- **BREAKING**: Template file extension changed from `.it` to `.yaml` (#17)
+  - All template files now use standard YAML extension
+  - Update any code that hardcodes `.it` extension
+- Harmonized template field sets for consistency across all modalities (#16)
+- Template inclusion in .csproj now uses wildcard pattern (`*.yaml`) for cleaner configuration
+
+### Migration Guide
+If you reference template files by extension:
+- Old: `CT.it`, `MR.it`, etc.
+- New: `CT.yaml`, `MR.yaml`, etc.
+
+[5.0.0]: https://github.com/jas88/DicomTypeTranslation/compare/v4.3.0...v5.0.0
+
 ## [4.3.0] - 2025-11-05
 
 ### Added

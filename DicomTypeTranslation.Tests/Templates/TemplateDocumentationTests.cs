@@ -10,7 +10,7 @@ class TemplateDocumentationTests
     [Test]
     public void Test_TemplateDocumentation_Generate()
     {
-        var files = Directory.EnumerateFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Templates"), "*.it");
+        var files = Directory.EnumerateFiles(Path.Combine(TestContext.CurrentContext.TestDirectory, "Templates"), "*.yaml");
 
         var sb = new StringBuilder();
 
