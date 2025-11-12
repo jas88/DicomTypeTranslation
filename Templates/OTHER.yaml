@@ -1,5 +1,6 @@
+#Last Modified: 2020-04-07
 Tables:
-- TableName: StudyTable
+- TableName: ImageTable
   Columns:
   - ColumnName: PatientID
   - ColumnName: StudyInstanceUID
@@ -11,6 +12,8 @@ Tables:
     AllowNulls: true
   - ColumnName: StudyDescription
     AllowNulls: true
+  - ColumnName: PatientBirthDate
+    AllowNulls: true
   - ColumnName: AccessionNumber
     AllowNulls: true
   - ColumnName: PatientSex
@@ -19,29 +22,23 @@ Tables:
     AllowNulls: true
   - ColumnName: NumberOfStudyRelatedInstances
     AllowNulls: true
-  - ColumnName: PatientBirthDate
-    AllowNulls: true
   - ColumnName: SeriesInstanceUID
+    IsPrimaryKey: true
   - ColumnName: Modality
+    AllowNulls: true
+  - ColumnName: SourceApplicationEntityTitle
     AllowNulls: true
   - ColumnName: InstitutionName
     AllowNulls: true
+  - ColumnName: ProcedureCodeSequence
+    AllowNulls: true
   - ColumnName: ProtocolName
     AllowNulls: true
-  - ColumnName: ProcedureCodeSequence_CodeValue
-    Type:
-      CSharpType: System.String
-      Size:
-        IsEmpty: true
-      Width: 16
+  - ColumnName: PerformedProcedureStepID
     AllowNulls: true
   - ColumnName: PerformedProcedureStepDescription
     AllowNulls: true
   - ColumnName: SeriesDescription
-    AllowNulls: true
-  - ColumnName: SeriesDate
-    AllowNulls: true
-  - ColumnName: SeriesTime
     AllowNulls: true
   - ColumnName: BodyPartExamined
     AllowNulls: true
@@ -52,13 +49,25 @@ Tables:
   - DicomTag: "(0020,1209)"
     ColumnName: "NumberOfSeriesRelatedInstances"
     AllowNulls: true
+  - ColumnName: SequenceName
+    AllowNulls: true
   - ColumnName: SOPInstanceUID
     IsPrimaryKey: true
+  - ColumnName: SeriesDate
+    AllowNulls: true
+  - ColumnName: SeriesTime
+    AllowNulls: true
   - ColumnName: BurnedInAnnotation
     AllowNulls: true
   - ColumnName: RelativeFileArchiveURI
     AllowNulls: true
   - ColumnName: MessageGuid
+    AllowNulls: true
+  - ColumnName: SliceLocation
+    AllowNulls: true
+  - ColumnName: SliceThickness
+    AllowNulls: true
+  - ColumnName: SpacingBetweenSlices
     AllowNulls: true
   - ColumnName: ImageType
     AllowNulls: true
@@ -66,27 +75,19 @@ Tables:
     AllowNulls: true
   - ColumnName: Manufacturer
     AllowNulls: true
-  - ColumnName: SoftwareVersions
-    AllowNulls: true
   - ColumnName: PhotometricInterpretation
     AllowNulls: true
-  - ColumnName: AcquisitionNumber
+  - ColumnName: TransferSyntaxUID
     AllowNulls: true
-  - ColumnName: AcquisitionDate
+  - ColumnName: BitsAllocated
     AllowNulls: true
-  - ColumnName: AcquisitionTime
+  - ColumnName: BitsStored
     AllowNulls: true
-  - ColumnName: PixelSpacing
+  - ColumnName: HighBit
     AllowNulls: true
-  - ColumnName: AcquisitionDeviceProcessingDescription
+  - ColumnName: PixelRepresentation
     AllowNulls: true
-  - ColumnName: NumberOfWaveformChannels
-    AllowNulls: true
-  - ColumnName: NumberOfWaveformSamples
-    AllowNulls: true
-  - ColumnName: SamplingFrequency
-    AllowNulls: true
-  - ColumnName: WaveformBitsAllocated
-    AllowNulls: true
-  - ColumnName: WaveformSequence
+  - ColumnName: DicomFileSize
+    Type:
+      CSharpType: System.Int64
     AllowNulls: true

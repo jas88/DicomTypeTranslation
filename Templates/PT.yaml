@@ -19,9 +19,9 @@ Tables:
     AllowNulls: true
   - ColumnName: PatientAge
     AllowNulls: true
-  - ColumnName: PatientBirthDate
-    AllowNulls: true
   - ColumnName: NumberOfStudyRelatedInstances
+    AllowNulls: true
+  - ColumnName: PatientBirthDate
     AllowNulls: true
 - TableName: SeriesTable
   Columns:
@@ -35,12 +35,12 @@ Tables:
   - ColumnName: ProtocolName
     AllowNulls: true
   - ColumnName: ProcedureCodeSequence_CodeValue
-    AllowNulls: true
     Type:
       CSharpType: System.String
       Size:
         IsEmpty: true
       Width: 16
+    AllowNulls: true
   - ColumnName: PerformedProcedureStepDescription
     AllowNulls: true
   - ColumnName: SeriesDescription
@@ -58,18 +58,71 @@ Tables:
   - DicomTag: "(0020,1209)"
     ColumnName: "NumberOfSeriesRelatedInstances"
     AllowNulls: true
-  - ColumnName: MRAcquisitionType
+  - ColumnName: NumberOfSlices
     AllowNulls: true
-  - ColumnName: AngioFlag
+  - ColumnName: EnergyWindowRange_EnergyWindowLowerLimit
     AllowNulls: true
-  - ColumnName: MagneticFieldStrength
+    Type:
+       CSharpType: System.Decimal
+       Size:
+         NumbersBeforeDecimalPlace: 19
+         NumbersAfterDecimalPlace: 19
+  - ColumnName: EnergyWindowRange_EnergyWindowUpperLimit
     AllowNulls: true
-  - ColumnName: TransmitCoilName
+    Type:
+       CSharpType: System.Decimal
+       Size:
+         NumbersBeforeDecimalPlace: 19
+         NumbersAfterDecimalPlace: 19
+  - ColumnName: Radiopharmaceutical_Radiopharmaceutical
     AllowNulls: true
-  - ColumnName: PatientPosition
+    Type:
+       CSharpType: System.String
+       Width: 64
+  - ColumnName: Radiopharmaceutical_RadiopharmaceuticalVolume
+    AllowNulls: true
+    Type:
+       CSharpType: System.Decimal
+       Size:
+         NumbersBeforeDecimalPlace: 19
+         NumbersAfterDecimalPlace: 19
+  - ColumnName: Radiopharmaceutical_RadionuclideCode_CodeValue
+    AllowNulls: true
+    Type:
+       CSharpType: System.String
+       Width: 16
+  - ColumnName: Radiopharmaceutical_RadionuclideCode_CodeMeaning
+    AllowNulls: true
+    Type:
+       CSharpType: System.String
+       Width: 64
+  - ColumnName: Radiopharmaceutical_RadionuclideTotalDose
+    AllowNulls: true
+    Type:
+       CSharpType: System.Decimal
+       Size:
+         NumbersBeforeDecimalPlace: 19
+         NumbersAfterDecimalPlace: 19
+    AllowNulls: true
+  - ColumnName: RandomsCorrectionMethod
+    AllowNulls: true
+  - ColumnName: AttenuationCorrectionMethod
+    AllowNulls: true
+  - ColumnName: DecayCorrection
+    AllowNulls: true
+  - ColumnName: ReconstructionMethod
+    AllowNulls: true
+  - ColumnName: ScatterCorrectionMethod
+    AllowNulls: true
+  - ColumnName: DateOfLastCalibration
+    AllowNulls: true
+  - ColumnName: TimeOfLastCalibration
     AllowNulls: true
 - TableName: ImageTable
   Columns:
+  - ColumnName: PatientID
+    AllowNulls: true
+  - ColumnName: StudyInstanceUID
   - ColumnName: SeriesInstanceUID
   - ColumnName: SOPInstanceUID
     IsPrimaryKey: true
@@ -95,10 +148,6 @@ Tables:
     AllowNulls: true
   - ColumnName: PhotometricInterpretation
     AllowNulls: true
-  - ColumnName: ContrastBolusRoute
-    AllowNulls: true
-  - ColumnName: ContrastBolusAgent
-    AllowNulls: true
   - ColumnName: AcquisitionNumber
     AllowNulls: true
   - ColumnName: AcquisitionDate
@@ -107,11 +156,11 @@ Tables:
     AllowNulls: true
   - ColumnName: ImagePositionPatient
     AllowNulls: true
-  - ColumnName: ImageOrientationPatient
-    AllowNulls: true
   - ColumnName: PixelSpacing
     AllowNulls: true
   - ColumnName: FieldOfViewDimensions
+    AllowNulls: true
+  - ColumnName: ActualFrameDuration
     AllowNulls: true
   - ColumnName: FieldOfViewDimensionsInFloat
     AllowNulls: true
@@ -127,21 +176,17 @@ Tables:
     AllowNulls: true
   - ColumnName: ScanOptions
     AllowNulls: true
-  - ColumnName: EchoTime
+  - ColumnName: TransferSyntaxUID
     AllowNulls: true
-  - ColumnName: EchoNumbers
+  - ColumnName: BitsAllocated
     AllowNulls: true
-  - ColumnName: EchoTrainLength
+  - ColumnName: BitsStored
     AllowNulls: true
-  - ColumnName: InversionTime
+  - ColumnName: HighBit
     AllowNulls: true
-  - ColumnName: RepetitionTime
+  - ColumnName: PixelRepresentation
     AllowNulls: true
-  - ColumnName: NumberOfPhaseEncodingSteps
-    AllowNulls: true
-  - ColumnName: FlipAngle
-    AllowNulls: true
-  - ColumnName: VariableFlipAngleFlag
-    AllowNulls: true
-  - ColumnName: SequenceName
+  - ColumnName: DicomFileSize
+    Type:
+      CSharpType: System.Int64
     AllowNulls: true
