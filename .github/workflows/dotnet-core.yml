@@ -14,7 +14,7 @@ env:
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     permissions:
       actions: read
       contents: read
@@ -35,7 +35,7 @@ jobs:
       run: |
         curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
         curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
-        curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-preview.list | sudo tee /etc/apt/sources.list.d/mssql-server-preview.list
+        curl -fsSL https://packages.microsoft.com/config/ubuntu/24.04/mssql-server-preview.list | sudo tee /etc/apt/sources.list.d/mssql-server-preview.list
         sudo apt-get update
         ACCEPT_EULA=y sudo apt-get install -qqy mssql-tools mssql-server --no-install-recommends
         sed -i -e 's/Pwd=;/Pwd=root;AllowPublicKeyRetrieval=True;/' DicomTypeTranslation.Tests/TestDatabases.xml
