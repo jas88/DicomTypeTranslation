@@ -146,7 +146,7 @@ public class DicomToBsonTranslationTests
                                 { "val", "ELSCINT1" }
                             }
                         },
-                        { "(07a1,1050:ELSCINT1)-Unknown",
+                        { "(07a1,1050:ELSCINT1)-Tamar Site Id",
                             new BsonDocument
                             {
                                 { "vr", "US" },
@@ -217,6 +217,11 @@ public class DicomToBsonTranslationTests
             }
         };
 
+        if (!convertedDoc.Equals(expectedDoc))
+        {
+            var settings = new MongoDB.Bson.IO.JsonWriterSettings { Indent = true };
+            Assert.That(convertedDoc.ToJson(settings), Is.EqualTo(expectedDoc.ToJson(settings)));
+        }
         Assert.That(convertedDoc, Is.EqualTo(expectedDoc));
     }
 
