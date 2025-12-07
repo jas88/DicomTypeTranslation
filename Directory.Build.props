@@ -2,7 +2,7 @@
   <PropertyGroup>
     <!-- Common build settings -->
     <LangVersion>latest</LangVersion>
-    <TargetFramework>net9.0</TargetFramework>
+    <!-- TargetFramework(s) set in subdirectory Directory.Build.props files -->
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
@@ -12,10 +12,10 @@
     <Company>Universities of Dundee and Edinburgh</Company>
     <Product>DicomTypeTranslation</Product>
     <Copyright>Copyright © 2020-2025</Copyright>
-    <Version>5.0.0</Version>
-    <AssemblyVersion>5.0.0</AssemblyVersion>
-    <FileVersion>5.0.0</FileVersion>
-    <InformationalVersion>5.0.0</InformationalVersion>
+    <Version>5.0.1</Version>
+    <AssemblyVersion>5.0.1</AssemblyVersion>
+    <FileVersion>5.0.1</FileVersion>
+    <InformationalVersion>5.0.1</InformationalVersion>
 
     <!-- Enable Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
