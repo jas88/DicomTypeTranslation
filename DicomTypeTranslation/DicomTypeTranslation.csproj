@@ -1,7 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- Override TargetFramework from Directory.Build.props to use TargetFrameworks -->
-    <TargetFrameworks>net9.0</TargetFrameworks>
     <AssemblyTitle>DicomTypeTranslation</AssemblyTitle>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 

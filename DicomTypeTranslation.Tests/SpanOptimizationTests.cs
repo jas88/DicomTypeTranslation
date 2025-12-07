@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using FellowOakDicom;
 using DicomTypeTranslation.Helpers;
-using DicomTypeTranslation.Tests.Helpers;
 using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
@@ -16,22 +15,6 @@ namespace DicomTypeTranslation.Tests;
 [TestFixture]
 public class SpanOptimizationTests
 {
-    #region Fixture Methods
-
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-        TestLogger.Setup();
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
-        TestLogger.ShutDown();
-    }
-
-    #endregion
-
     #region TryGetSequenceFromDatasetOptimized Tests
 
     [Test]

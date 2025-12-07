@@ -7,6 +7,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [5.0.1] - 2025-12-07
+
+### Added
+- Auto-targeting script (`scripts/generate-build-props.sh`) that automatically updates target frameworks based on installed SDK version
+- Library now multi-targets net8.0, net9.0, net10.0 (all non-EOL .NET versions)
+
+### Removed
+- NLog dependency (was only used for test logging, not required by library)
+
+### Changed
+- Tests now target only the latest .NET version
+- CI workflow runs auto-targeting script and can auto-commit framework updates
+
 ## [5.0.0] - 2025-11-12
 
 ### Added
@@ -30,6 +43,7 @@ If you reference template files by extension:
 - Old: `CT.it`, `MR.it`, etc.
 - New: `CT.yaml`, `MR.yaml`, etc.
 
+[5.0.1]: https://github.com/jas88/DicomTypeTranslation/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/jas88/DicomTypeTranslation/compare/v4.3.0...v5.0.0
 
 ## [4.3.0] - 2025-11-05
@@ -237,7 +251,7 @@ If you reference template files by extension:
 
 Initial Release
 
-[Unreleased]: https://github.com/jas88/DicomTypeTranslation/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/jas88/DicomTypeTranslation/compare/v5.0.1...HEAD
 [4.3.0]: https://github.com/jas88/DicomTypeTranslation/compare/v4.2.1...v4.3.0
 [4.2.1]: https://github.com/jas88/DicomTypeTranslation/compare/v4.2.0...v4.2.1
 [4.2.0]: https://github.com/jas88/DicomTypeTranslation/compare/v4.1.5...v4.2.0

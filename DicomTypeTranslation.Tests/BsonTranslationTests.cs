@@ -9,8 +9,6 @@ using DicomTypeTranslation.Tests.Helpers;
 
 using MongoDB.Bson;
 
-using NLog;
-
 using NUnit.Framework;
 
 
@@ -362,24 +360,6 @@ public class BsonToDicomTranslationTests
 [TestFixture]
 public class BsonRoundTripTranslationTests
 {
-    private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-    #region Fixture Methods
-
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-        TestLogger.Setup();
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
-        TestLogger.ShutDown();
-    }
-
-    #endregion
-
     #region Test Helpers
 
     private static void VerifyBsonTripleTrip(DicomDataset ds)
@@ -545,9 +525,6 @@ public class BsonRoundTripTranslationTests
         var maskDataset = DicomTypeTranslater.DeserializeJsonToDataset(rawJson);
 
         Assert.That(maskDataset.Count(), Is.EqualTo(12));
-
-        foreach (var item in maskDataset.Where(x => x.Tag.DictionaryEntry.Keyword == DicomTag.OverlayRows.DictionaryEntry.Keyword))
-            _logger.Debug("{0} {1} - Val: {2}", item.Tag, item.Tag.DictionaryEntry.Keyword, maskDataset.GetString(item.Tag));
 
         VerifyBsonTripleTrip(maskDataset);
     }

@@ -3,11 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using FellowOakDicom;
 using DicomTypeTranslation.Helpers;
 using DicomTypeTranslation.Tests.Helpers;
-using NLog;
 using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
@@ -15,24 +13,6 @@ namespace DicomTypeTranslation.Tests;
 [TestFixture]
 public class DicomTypeTranslatorTests
 {
-    private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
-
-    #region Fixture Methods
-
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
-    {
-        TestLogger.Setup();
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTearDown()
-    {
-        TestLogger.ShutDown();
-    }
-
-    #endregion
-
     #region Tests
 
     [Test]
@@ -201,16 +181,11 @@ public class DicomTypeTranslatorTests
             if (vr == DicomVR.SQ)
                 continue;
 
-            _logger.Info($"VR: {vr.Code}\t Type: {vr.ValueType.Name}\t IsString: {vr.IsString}");
             uniqueTypes.Add(vr.ValueType.Name.TrimEnd(']', '['));
         }
 
-        var sb = new StringBuilder();
-        foreach (var str in uniqueTypes)
-            sb.Append($"{str}, ");
-
-        sb.Length -= 2;
-        _logger.Info($"Unique underlying types: {sb}");
+        // Verify we have the expected number of unique types
+        Assert.That(uniqueTypes, Is.Not.Empty);
     }
 
     [Test]

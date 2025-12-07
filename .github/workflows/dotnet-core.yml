@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       actions: read
-      contents: read
+      contents: write
       security-events: write
 
     steps:
@@ -25,6 +25,8 @@ jobs:
     - uses: actions/checkout@v6
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v5
+    - name: Update Directory.Build.props for SDK version
+      run: ./scripts/generate-build-props.sh
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
