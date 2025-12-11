@@ -1,6 +1,7 @@
 
 [![.NET Core](https://github.com/jas88/DicomTypeTranslation/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/jas88/DicomTypeTranslation/actions/workflows/dotnet-core.yml)
 [![codecov](https://codecov.io/gh/jas88/DicomTypeTranslation/graph/badge.svg)](https://codecov.io/gh/jas88/DicomTypeTranslation)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jas88_DicomTypeTranslation&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jas88_DicomTypeTranslation)
 [![NuGet Badge](https://img.shields.io/nuget/v/DicomTypeTranslation.svg)](https://www.nuget.org/packages/DicomTypeTranslation/)
 
 # DicomTypeTranslation
