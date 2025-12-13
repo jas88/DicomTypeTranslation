@@ -20,9 +20,15 @@
     <!-- Enable Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 
+    <!-- Disable AOT compatibility - this library uses reflection and dynamic code -->
+    <IsAotCompatible>false</IsAotCompatible>
+    <IsTrimmable>false</IsTrimmable>
+
     <!-- Suppress analyzer warnings from shared config that need gradual adoption -->
     <!-- These can be removed incrementally as the code is improved -->
     <NoWarn>$(NoWarn);CA1018;CA1051;CA1062;CA1069;CA1304;CA1305;CA1309;CA1311;CA1707;CA1711;CA1805;CA1822;CA1852;CA1859;CA1860;CA1861;CA1865;CA2201;CA2211</NoWarn>
+    <!-- Suppress AOT/trimming warnings - this library intentionally uses reflection -->
+    <NoWarn>$(NoWarn);IL2057;IL2067;IL2072;IL3050</NoWarn>
   </PropertyGroup>
 
   <!-- Release configuration settings -->
