@@ -20,9 +20,7 @@
     <!-- Enable Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 
-    <!-- Disable AOT compatibility - this library uses reflection and dynamic code -->
-    <IsAotCompatible>false</IsAotCompatible>
-    <IsTrimmable>false</IsTrimmable>
+    <!-- AOT compatibility disabled in Directory.Build.targets (reflection-heavy library) -->
 
     <!-- Suppress analyzer warnings from shared config that need gradual adoption -->
     <!-- These can be removed incrementally as the code is improved -->
