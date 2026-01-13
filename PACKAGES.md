@@ -23,3 +23,4 @@ These packages are only used during the build process and are not distributed wi
 | MinVer | [GitHub](https://github.com/adamralph/minver) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) | Git-based semantic versioning | |
 | DotNet.ReproducibleBuilds | [GitHub](https://github.com/dotnet/reproducible-builds) | [MIT](https://opensource.org/licenses/MIT) | Ensures deterministic and reproducible builds | |
 | coverlet.collector | [GitHub](https://github.com/coverlet-coverage/coverlet) | [MIT](https://opensource.org/licenses/MIT) | Code coverage collection for tests (dev/test only) | |
+| Microsoft.Testing.Extensions.CodeCoverage | [GitHub](https://github.com/microsoft/testfx) | [MIT](https://opensource.org/licenses/MIT) | Code coverage for Microsoft.Testing.Platform (required by build-standards) | |
