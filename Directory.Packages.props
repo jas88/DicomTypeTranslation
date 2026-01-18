@@ -6,7 +6,7 @@
     <!-- Main dependencies -->
     <PackageVersion Include="fo-dicom" Version="5.2.5" />
     <PackageVersion Include="FAnsiSql.Legacy" Version="3.6.3" />
-    <PackageVersion Include="MongoDB.Bson" Version="3.5.2" />
+    <PackageVersion Include="MongoDB.Bson" Version="3.6.0" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
 
     <!-- Build tools (referenced from build-standards/Directory.Build.props.shared) -->
