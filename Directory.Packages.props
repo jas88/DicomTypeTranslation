@@ -11,7 +11,7 @@
 
     <!-- Build tools (referenced from build-standards/Directory.Build.props.shared) -->
     <PackageVersion Include="MinVer" Version="6.0.0" />
-    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="1.2.39" />
+    <PackageVersion Include="DotNet.ReproducibleBuilds" Version="2.0.2" />
 
     <!-- Test dependencies -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />

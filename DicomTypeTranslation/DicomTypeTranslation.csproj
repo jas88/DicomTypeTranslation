@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <!-- Package versions managed centrally in Directory.Packages.props -->
+    <PackageReference Include="DotNet.ReproducibleBuilds" />
     <PackageReference Include="fo-dicom" />
     <PackageReference Include="FAnsiSql.Legacy" />
     <PackageReference Include="MongoDB.Bson" />
