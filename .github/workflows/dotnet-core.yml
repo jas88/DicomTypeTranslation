@@ -50,7 +50,7 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release --verbosity normal --nologo --collect:"XPlat Code Coverage" --results-directory ./coverage
     - name: Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
