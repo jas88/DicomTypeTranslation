@@ -26,6 +26,7 @@
     <!-- Package versions managed centrally in Directory.Packages.props -->
     <PackageReference Include="fo-dicom" />
     <PackageReference Include="FAnsiSql.Legacy" />
+  <PackageReference Include="MinVer" />
     <PackageReference Include="MongoDB.Bson" />
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
