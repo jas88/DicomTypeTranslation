@@ -19,6 +19,8 @@
 
     <!-- Enable Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <!-- Allow pinning transitive package versions centrally (used to override vulnerable transitive deps) -->
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
 
     <!-- AOT compatibility disabled in Directory.Build.targets (reflection-heavy library) -->
 

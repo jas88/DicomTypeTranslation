@@ -5,6 +5,10 @@
   <ItemGroup>
     <!-- Main dependencies -->
     <PackageVersion Include="fo-dicom" Version="5.2.6" />
+    <!-- Transitive pin: override vulnerable native SQLite (CVE-2025-6965 / GHSA-2m69-gcr7-jv3q,
+         affects SQLitePCLRaw.lib.e_sqlite3 <= 2.1.11) pulled in via FAnsiSql.Legacy ->
+         FAnsiSql.Sqlite -> Microsoft.Data.Sqlite. 3.50.3 bundles SQLite >= 3.50.2. -->
+    <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
     <PackageVersion Include="FAnsiSql.Legacy" Version="3.6.3" />
     <PackageVersion Include="MongoDB.Bson" Version="3.9.0" />
     <PackageVersion Include="YamlDotNet" Version="18.0.0" />
