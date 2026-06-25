@@ -13,6 +13,7 @@
 | MongoDB.Bson | [GitHub](https://github.com/mongodb/mongo-csharp-driver) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) | BSON serialization for writing dicom tags to MongoDb databases|
 | fo-dicom | [GitHub](https://github.com/fo-dicom/fo-dicom) | [MS-PL](https://opensource.org/licenses/MS-PL) | Handles reading/writing dicom tags from dicom datasets | |
 | YamlDotNet | [GitHub](https://github.com/aaubry/YamlDotNet) | [MIT](https://opensource.org/licenses/MIT) | Loading configuration files|
+| SQLitePCLRaw.lib.e_sqlite3 | [GitHub](https://github.com/ericsink/SQLitePCL.raw) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) | Transitive pin of the native SQLite binary (via FAnsiSql.Sqlite/Microsoft.Data.Sqlite) to 3.50.3 to fix CVE-2025-6965 | Pinned to override a vulnerable transitive version |
 
 ## Build Tools (PrivateAssets)
 
