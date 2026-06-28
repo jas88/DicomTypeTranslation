@@ -11,7 +11,7 @@
     <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
     <PackageVersion Include="FAnsiSql.Legacy" Version="3.6.3" />
     <PackageVersion Include="MongoDB.Bson" Version="3.9.0" />
-    <PackageVersion Include="YamlDotNet" Version="18.0.0" />
+    <PackageVersion Include="YamlDotNet" Version="18.1.0" />
 
     <!-- Build tools (referenced from build-standards/Directory.Build.props.shared) -->
     <PackageVersion Include="MinVer" Version="6.0.0" />
