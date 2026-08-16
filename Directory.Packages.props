@@ -10,7 +10,7 @@
          FAnsiSql.Sqlite -> Microsoft.Data.Sqlite. 3.50.3 bundles SQLite >= 3.50.2. -->
     <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
     <PackageVersion Include="FAnsiSql.Legacy" Version="3.6.3" />
-    <PackageVersion Include="MongoDB.Bson" Version="3.10.0" />
+    <PackageVersion Include="MongoDB.Bson" Version="3.11.0" />
     <PackageVersion Include="YamlDotNet" Version="18.1.0" />
 
     <!-- Build tools (referenced from build-standards/Directory.Build.props.shared) -->
