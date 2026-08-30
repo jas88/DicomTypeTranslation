@@ -21,7 +21,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageVersion Include="NUnit" Version="4.6.1" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.14.0" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="6.2.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="6.3.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <!-- Version required by build-standards shared props, but coverlet.collector used for actual coverage -->
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.0.4" />
