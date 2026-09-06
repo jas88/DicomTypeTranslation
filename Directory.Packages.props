@@ -14,7 +14,7 @@
     <PackageVersion Include="YamlDotNet" Version="18.1.0" />
 
     <!-- Build tools (referenced from build-standards/Directory.Build.props.shared) -->
-    <PackageVersion Include="MinVer" Version="6.0.0" />
+    <PackageVersion Include="MinVer" Version="8.0.0" />
     <PackageVersion Include="DotNet.ReproducibleBuilds" Version="2.0.5" />
 
     <!-- Test dependencies -->
