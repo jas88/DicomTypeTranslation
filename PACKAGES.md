@@ -14,6 +14,7 @@
 | fo-dicom | [GitHub](https://github.com/fo-dicom/fo-dicom) | [MS-PL](https://opensource.org/licenses/MS-PL) | Handles reading/writing dicom tags from dicom datasets | |
 | YamlDotNet | [GitHub](https://github.com/aaubry/YamlDotNet) | [MIT](https://opensource.org/licenses/MIT) | Loading configuration files|
 | SQLitePCLRaw.lib.e_sqlite3 | [GitHub](https://github.com/ericsink/SQLitePCL.raw) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) | Transitive pin of the native SQLite binary (via FAnsiSql.Sqlite/Microsoft.Data.Sqlite) to 3.50.3 to fix CVE-2025-6965 | Pinned to override a vulnerable transitive version |
+| System.Security.Cryptography.Pkcs | [GitHub](https://github.com/dotnet/runtime) | [MIT](https://opensource.org/licenses/MIT) | Transitive pin (via Microsoft.Data.SqlClient/Oracle.ManagedDataAccess.Core) to 9.0.21 to fix GHSA-846f-f764-76mx and GHSA-2fmv-rv2c-59x7 | Pinned to override a vulnerable transitive version |
 
 ## Build Tools (PrivateAssets)
 
