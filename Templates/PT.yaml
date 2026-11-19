@@ -103,7 +103,6 @@ Tables:
        Size:
          NumbersBeforeDecimalPlace: 19
          NumbersAfterDecimalPlace: 19
-    AllowNulls: true
   - ColumnName: RandomsCorrectionMethod
     AllowNulls: true
   - ColumnName: AttenuationCorrectionMethod
