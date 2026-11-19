@@ -95,12 +95,16 @@ class ExampleUsages
         var flattenedValue = DicomTypeTranslater.Flatten(seq);
         Assert.That(flattenedValue, Is.Not.Null);
         var flattened = (string)flattenedValue;
-        Assert.That(
-            flattened.Replace("\r", ""), Is.EqualTo(@"[0] - 
- 	 (0010,0010) - 	 Rabbit
 
- [1] - 
- 	 (0010,0010) - 	 Roger".Replace("\r", "")));
+        // The "[n] - " lines end in a space, so spell each line out rather than
+        // keep trailing whitespace inside a verbatim string.
+        Assert.That(
+            flattened.Replace("\r", ""), Is.EqualTo(string.Join('\n',
+                "[0] - ",
+                " \t (0010,0010) - \t Rabbit",
+                "",
+                " [1] - ",
+                " \t (0010,0010) - \t Roger")));
     }
 
     [Test]
