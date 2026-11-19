@@ -14,10 +14,10 @@ namespace DicomTypeTranslation.Tests.ElevationTests;
 //Includes sample dicom files taken from http://www.dclunie.com/medical-image-faq/html/index.html
 public class TagElevatorTests
 {
-    private static readonly string _dcmDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestDicomFiles");
+    private static readonly string DcmDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestDicomFiles");
 
-    private readonly string _srDcmPath = Path.Combine(_dcmDir, "report01.dcm");
-    private readonly string _imDcmPath = Path.Combine(_dcmDir, "image11.dcm");
+    private readonly string _srDcmPath = Path.Combine(DcmDir, "report01.dcm");
+    private readonly string _imDcmPath = Path.Combine(DcmDir, "image11.dcm");
 
 
     [OneTimeSetUp]

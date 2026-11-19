@@ -19,12 +19,12 @@ public static partial class DicomTypeTranslaterWriter
     /// <summary>
     /// Methods to call to add the given Type to the dataset (requires casting due to generic T) and sometimes you have to call Add(a,b) sometimes only Add(b) works
     /// </summary>
-    private static readonly FrozenDictionary<Type, Action<DicomDataset, DicomTag, object>> _dicomAddMethodDictionary;
+    private static readonly FrozenDictionary<Type, Action<DicomDataset, DicomTag, object>> DicomAddMethodDictionary;
 
     [GeneratedRegex(@":(.*)\)-", RegexOptions.CultureInvariant)]
     private static partial Regex PrivateCreatorRegex();
 
-    private static readonly string[] _ignoredBsonKeys = { "_id", "header" };
+    private static readonly string[] IgnoredBsonKeys = { "_id", "header" };
 
 
     static DicomTypeTranslaterWriter()
@@ -74,7 +74,7 @@ public static partial class DicomTypeTranslaterWriter
             { typeof(TimeSpan[]), (ds, t, o) => ds.Add(t, ((TimeSpan[])o).Select(TimeSpanToDate).ToArray()) }
         };
 
-        _dicomAddMethodDictionary = dictionary.ToFrozenDictionary();
+        DicomAddMethodDictionary = dictionary.ToFrozenDictionary();
     }
 
     private static DateTime TimeSpanToDate(TimeSpan ts)
@@ -115,15 +115,15 @@ public static partial class DicomTypeTranslaterWriter
         // Otherwise do generic add
         var valueType = value.GetType(); // Cache the type
 
-        if (_dicomAddMethodDictionary.TryGetValue(valueType, out var addMethod))
+        if (DicomAddMethodDictionary.TryGetValue(valueType, out var addMethod))
         {
             addMethod(dataset, tag, value);
         }
         else
         {
-            var key = _dicomAddMethodDictionary.Keys.FirstOrDefault(k => k.IsInstanceOfType(value))
+            var key = DicomAddMethodDictionary.Keys.FirstOrDefault(k => k.IsInstanceOfType(value))
                 ?? throw new ArgumentException($"No method to call for value type {valueType}", nameof(value));
-            _dicomAddMethodDictionary[key](dataset, tag, value);
+            DicomAddMethodDictionary[key](dataset, tag, value);
         }
     }
 
@@ -155,7 +155,7 @@ public static partial class DicomTypeTranslaterWriter
 
         foreach (var element in document)
         {
-            if (_ignoredBsonKeys.Contains(element.Name))
+            if (IgnoredBsonKeys.Contains(element.Name))
                 continue;
 
             if (element.Name.Contains("PrivateCreator"))
@@ -277,7 +277,7 @@ public static partial class DicomTypeTranslaterWriter
         return new DicomAttributeTag(tag, parsed.ToArray());
     }
 
-    private static readonly BsonTypeMapperOptions _bsonTypeMapperOptions = new BsonTypeMapperOptions
+    private static readonly BsonTypeMapperOptions BsonTypeMapperOptions = new BsonTypeMapperOptions
     {
         MapBsonArrayTo = typeof(object[])
     };
@@ -290,7 +290,7 @@ public static partial class DicomTypeTranslaterWriter
         var bsonArray = bsonValue.AsBsonArray;
 
         Array typedArray = new T[bsonArray.Count];
-        var mappedBsonArray = (object[])BsonTypeMapper.MapToDotNetValue(bsonArray, _bsonTypeMapperOptions);
+        var mappedBsonArray = (object[])BsonTypeMapper.MapToDotNetValue(bsonArray, BsonTypeMapperOptions);
 
         // Some types have to be stored in larger representations for storage in MongoDB. Need to manually convert them back.
         if (typeof(T) == typeof(float))
