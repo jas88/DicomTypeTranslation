@@ -169,7 +169,7 @@ class TemplateTests : DatabaseTests
     [TestCase("SmiTagElevation")]
     public void TestElevationTemplate(string template)
     {
-        var templateFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Templates", $"{template}.xml");
+        var templateFile = Path.Join(TestContext.CurrentContext.TestDirectory, "Templates", $"{template}.xml");
 
         var elevation = new TagElevationRequestCollection(File.ReadAllText(templateFile));
 

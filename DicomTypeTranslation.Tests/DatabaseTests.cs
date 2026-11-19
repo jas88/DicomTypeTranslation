@@ -39,7 +39,7 @@ public abstract class DatabaseTests
         ImplementationManager.Load<PostgreSqlImplementation>();
 #pragma warning restore CS0618 // Type or member is obsolete
 
-        var file = Path.Combine(TestContext.CurrentContext.TestDirectory, TestFilename);
+        var file = Path.Join(TestContext.CurrentContext.TestDirectory, TestFilename);
 
         Assert.That(File.Exists(file), Is.True, "Could not find " + TestFilename);
 

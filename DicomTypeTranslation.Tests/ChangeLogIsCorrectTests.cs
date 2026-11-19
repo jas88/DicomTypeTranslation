@@ -12,7 +12,7 @@ class ChangeLogIsCorrectTests
         Assert.That(changeLogPath, Is.Not.Null, "changeLogPath must be provided");
 
         if (!Path.IsPathRooted(changeLogPath))
-            changeLogPath = Path.Combine(TestContext.CurrentContext.TestDirectory, changeLogPath);
+            changeLogPath = Path.Join(TestContext.CurrentContext.TestDirectory, changeLogPath);
 
         if (!File.Exists(changeLogPath))
             Assert.Fail($"Could not find file {changeLogPath}");
