@@ -1,4 +1,4 @@
-﻿using DicomTypeTranslation.Elevation.Serialization;
+using DicomTypeTranslation.Elevation.Serialization;
 using System;
 
 namespace DicomTypeTranslation.Elevation.Exceptions;

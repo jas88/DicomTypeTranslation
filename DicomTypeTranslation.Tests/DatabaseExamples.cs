@@ -1,4 +1,4 @@
-﻿using FellowOakDicom;
+using FellowOakDicom;
 using DicomTypeTranslation.TableCreation;
 using NUnit.Framework;
 using System;

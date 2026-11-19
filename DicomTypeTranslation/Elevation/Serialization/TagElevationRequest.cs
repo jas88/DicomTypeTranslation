@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using DicomTypeTranslation.Elevation.Exceptions;
 using FellowOakDicom;
 

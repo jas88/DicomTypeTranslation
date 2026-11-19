@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FellowOakDicom;
 using DicomTypeTranslation.Elevation.Exceptions;
 using System.Collections.Generic;

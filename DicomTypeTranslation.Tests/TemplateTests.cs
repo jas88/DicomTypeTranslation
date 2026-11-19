@@ -1,4 +1,4 @@
-﻿using FellowOakDicom;
+using FellowOakDicom;
 using DicomTypeTranslation.Elevation.Serialization;
 using DicomTypeTranslation.TableCreation;
 using FAnsi.Discovery;

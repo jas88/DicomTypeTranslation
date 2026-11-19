@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FAnsi;
 using TypeGuesser;
 using YamlDotNet.Serialization;

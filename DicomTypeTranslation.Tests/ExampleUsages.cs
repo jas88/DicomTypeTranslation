@@ -1,4 +1,4 @@
-﻿using FellowOakDicom;
+using FellowOakDicom;
 using FAnsi.Implementations.MicrosoftSQL;
 using FAnsi.Implementations.Oracle;
 using NUnit.Framework;

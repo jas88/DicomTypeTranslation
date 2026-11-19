@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Text;
 using DicomTypeTranslation.TableCreation;
 using NUnit.Framework;
