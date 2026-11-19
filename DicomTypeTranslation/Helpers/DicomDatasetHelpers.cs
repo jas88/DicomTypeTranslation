@@ -71,7 +71,7 @@ public static class DicomDatasetHelpers
     private static bool ValueEquals(IByteBuffer a, IByteBuffer b)
     {
         if (a == null || b == null)
-            return ReferenceEquals(a,b);
+            return ReferenceEquals(a, b);
 
         if (ReferenceEquals(a, b))
             return true;
@@ -82,23 +82,23 @@ public static class DicomDatasetHelpers
         switch (a)
         {
             case IBulkDataUriByteBuffer abuff:
-            {
-                if (b is not IBulkDataUriByteBuffer bbuff)
-                    return false;
+                {
+                    if (b is not IBulkDataUriByteBuffer bbuff)
+                        return false;
 
-                return abuff.BulkDataUri == bbuff.BulkDataUri;
-            }
+                    return abuff.BulkDataUri == bbuff.BulkDataUri;
+                }
             case EmptyBuffer when b is EmptyBuffer:
                 return true;
             case StreamByteBuffer buffer when b is StreamByteBuffer bsbb:
-            {
-                var asbb = buffer;
+                {
+                    var asbb = buffer;
 
-                if (asbb.Stream == null || bsbb.Stream == null)
-                    return asbb.Stream == bsbb.Stream;
+                    if (asbb.Stream == null || bsbb.Stream == null)
+                        return asbb.Stream == bsbb.Stream;
 
-                return asbb.Position == bsbb.Position && asbb.Size == bsbb.Size && asbb.Stream.Equals(bsbb.Stream);
-            }
+                    return asbb.Position == bsbb.Position && asbb.Size == bsbb.Size && asbb.Stream.Equals(bsbb.Stream);
+                }
             case CompositeByteBuffer buffer when b is CompositeByteBuffer bufferB:
                 return buffer.Buffers.Zip(bufferB.Buffers, ValueEquals).All(static x => x);
             default:
@@ -153,7 +153,8 @@ public static class DicomDatasetHelpers
                 var before = a.GetString(item.Tag);
                 var after = b.GetString(item.Tag);
 
-                if (string.Equals(before, after)) continue;
+                if (string.Equals(before, after))
+                    continue;
 
                 if (ignoreTrailingNull && Math.Abs(before.Length - after.Length) == 1)
                 {

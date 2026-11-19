@@ -12,7 +12,7 @@ public class MalformedTagElevationRequestCollectionXmlException : Exception
     /// Creates a new instance with the provided message
     /// </summary>
     /// <param name="message"></param>
-    public MalformedTagElevationRequestCollectionXmlException(string message):base(message)
+    public MalformedTagElevationRequestCollectionXmlException(string message) : base(message)
     {
 
     }
@@ -22,7 +22,7 @@ public class MalformedTagElevationRequestCollectionXmlException : Exception
     /// </summary>
     /// <param name="message"></param>
     /// <param name="ex"></param>
-    public MalformedTagElevationRequestCollectionXmlException(string message, Exception ex):base(message,ex)
+    public MalformedTagElevationRequestCollectionXmlException(string message, Exception ex) : base(message, ex)
     {
 
     }

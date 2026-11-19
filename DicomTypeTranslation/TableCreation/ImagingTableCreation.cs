@@ -31,7 +31,7 @@ public class ImagingTableCreation
     {
         return new DatabaseColumnRequest(RelativeFileArchiveURI, new DatabaseTypeRequest(typeof(string), 512),
                 allowNulls)
-            { IsPrimaryKey = pk };
+        { IsPrimaryKey = pk };
     }
 
     /// <summary>
@@ -66,9 +66,9 @@ public class ImagingTableCreation
     /// <param name="tableTemplate"></param>
     /// <param name="schema">Only applies to DBMS which support schemas (e.g. dbo)</param>
     /// <returns></returns>
-    public string GetCreateTableSql(DiscoveredDatabase expectedDatabase,string tablename, ImageTableTemplate tableTemplate,string? schema=null)
+    public string GetCreateTableSql(DiscoveredDatabase expectedDatabase, string tablename, ImageTableTemplate tableTemplate, string? schema = null)
     {
-        return expectedDatabase.Helper.GetCreateTableSql(expectedDatabase,tablename, tableTemplate.GetColumns(expectedDatabase.Server.DatabaseType),null,false,schema);
+        return expectedDatabase.Helper.GetCreateTableSql(expectedDatabase, tablename, tableTemplate.GetColumns(expectedDatabase.Server.DatabaseType), null, false, schema);
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class ImagingTableCreation
         if (col.Type is not null)
             return new DatabaseColumnRequest(col.ColumnName, col.Type, col.AllowNulls) { IsPrimaryKey = col.IsPrimaryKey };
 
-        return GetColumnDefinition(col.ColumnName,col.AllowNulls,col.IsPrimaryKey);
+        return GetColumnDefinition(col.ColumnName, col.AllowNulls, col.IsPrimaryKey);
     }
 
     /// <summary>

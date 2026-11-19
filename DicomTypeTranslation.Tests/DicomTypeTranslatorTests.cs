@@ -206,7 +206,7 @@ public class DicomTypeTranslatorTests
         // Create a dataset with the private tag in it
         var aTag = new DicomTag(0x3001, 0x08, "PRIVATE");
         var ds = new DicomDataset();
-        ds.Add<int>(DicomVR.IS,aTag, 1);
+        ds.Add<int>(DicomVR.IS, aTag, 1);
 
         Assert.Multiple(() =>
         {

@@ -50,7 +50,7 @@ public class TagElevator
     /// Creates a new instance of the resolver ready to start evaluating matches to the given <paramref name="request"/>
     /// </summary>
     /// <param name="request"></param>
-    public TagElevator(TagElevationRequest request):this(request.ElevationPathway,request.ConditionalPathway,request.ConditionalRegex)
+    public TagElevator(TagElevationRequest request) : this(request.ElevationPathway, request.ConditionalPathway, request.ConditionalRegex)
     {
 
     }
@@ -59,10 +59,10 @@ public class TagElevator
     /// Creates a new instance of the resolver ready to start evaluating leaf matches to the given <paramref name="elevationPathway"/> in <see cref="DicomDataset"/>s with
     /// the provided (optional) <paramref name="conditional"/>
     /// </summary>
-    public TagElevator(string elevationPathway, string? conditional, string? conditionalShouldMatch): this(elevationPathway)
+    public TagElevator(string elevationPathway, string? conditional, string? conditionalShouldMatch) : this(elevationPathway)
     {
 
-        if(conditional == null)
+        if (conditional == null)
             if (conditionalShouldMatch == null)
                 return;
             else
@@ -71,7 +71,7 @@ public class TagElevator
 
         if (conditional.Contains("[]"))
         {
-            if(!conditional.Equals("[]"))
+            if (!conditional.Equals("[]"))
                 throw new InvalidTagElevatorPathException(
                     $"Array operator conditional is only valid in isolation (i.e. '[]'), it cannot be part of a pathway (e.g. '{conditional}')");
 
@@ -174,15 +174,15 @@ public class TagElevator
                         toReturn.Add(val);
                 }
                 else
-                if (!ConcatenateMultiplicity)
-                    throw new TagNavigationException(
-                        $"Found {a.Length} multiplicity in leaf tag (ConcatenateMultiplicity is off - append a '&' to turn it on)");
-                else
-                    toReturn.Add(string.Join(ConcatenateMultiplicitySplitter, a.Cast<object>().Select(s => s.ToString())));
+                    if (!ConcatenateMultiplicity)
+                        throw new TagNavigationException(
+                            $"Found {a.Length} multiplicity in leaf tag (ConcatenateMultiplicity is off - append a '&' to turn it on)");
+                    else
+                        toReturn.Add(string.Join(ConcatenateMultiplicitySplitter, a.Cast<object>().Select(s => s.ToString())));
             }
             else
-            if (o is not null && IsMatch(o))
-                toReturn.Add(o);
+                if (o is not null && IsMatch(o))
+                    toReturn.Add(o);
         }
         else
             foreach (var subSequence in _navigations[i].GetSubset(element))

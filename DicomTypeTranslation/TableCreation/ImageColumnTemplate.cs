@@ -58,6 +58,6 @@ public record class ImageColumnTemplate
     public ImageColumnTemplate(DicomTag tag)
         : this()
     {
-        ColumnName = DicomTypeTranslaterReader.GetColumnNameForTag(tag,false);
+        ColumnName = DicomTypeTranslaterReader.GetColumnNameForTag(tag, false);
     }
 }

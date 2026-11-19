@@ -32,20 +32,20 @@ class TagRelativeConditional
             return;
         }
 
-        var path = conditional.Split(new []{TagElevator.Splitter}, StringSplitOptions.RemoveEmptyEntries);
+        var path = conditional.Split(new[] { TagElevator.Splitter }, StringSplitOptions.RemoveEmptyEntries);
 
         if (!validStartersTokens.Contains(path[0]))
             throw new InvalidTagElevatorPathException(
                 $"Invalid starter token in TagRelativeConditional '{conditional}'.  Valid starter tokens are '{string.Join("','", validStartersTokens)}'");
 
-        if(path.Length == 1)
+        if (path.Length == 1)
             throw new InvalidTagElevatorPathException(
                 $"TagRelativeConditional must have a valid terminating non Sequence Tag e.g. '..->ConceptNameCodeSequence->CodeMeaning'.  Your path was '{conditional}'");
 
         _navigations = new List<TagNavigation>();
 
         //Process the . and .. elements
-        for (var i=0; i < path.Length; i++)
+        for (var i = 0; i < path.Length; i++)
         {
             //if it is a relative positional
 
@@ -83,13 +83,13 @@ class TagRelativeConditional
             return IsMatch(element.Dataset[currentTag]);
 
         //match all elements in the current array of the sequence e.g. [2]
-        var toMatchIn = new List<SequenceElement> {element};
+        var toMatchIn = new List<SequenceElement> { element };
 
         foreach (var relativeOperator in _relativeOperators)
         {
             //[..] - match array siblings
-            if(relativeOperator == "[..]")
-                toMatchIn = toMatchIn.SelectMany(s=>s.ArraySiblings).Distinct().ToList();
+            if (relativeOperator == "[..]")
+                toMatchIn = toMatchIn.SelectMany(s => s.ArraySiblings).Distinct().ToList();
 
             //.. - match containing parent of the current Sequence (where not null)
             if (relativeOperator == "..")
@@ -132,22 +132,22 @@ class TagRelativeConditional
             if (a.Length == 0)
                 return false;
             else
-            if (a.Length == 1)
-            {
-                value = a.GetValue(0);
-                if (value == null)
-                    return false;
-            }
-            else
-            {
-                //return ((Array) value).Cast<object>().Any(o => o != null && Regex.IsMatch(o.ToString(), _conditionalShouldMatch));
+                if (a.Length == 1)
+                {
+                    value = a.GetValue(0);
+                    if (value == null)
+                        return false;
+                }
+                else
+                {
+                    //return ((Array) value).Cast<object>().Any(o => o != null && Regex.IsMatch(o.ToString(), _conditionalShouldMatch));
 
-                throw new TagNavigationException($"Conditional matched a leaf node with Multiplicity of {a.Length}");
-            }
+                    throw new TagNavigationException($"Conditional matched a leaf node with Multiplicity of {a.Length}");
+                }
 
 
         //its not multiplicity
         var valueStr = value.ToString();
-        return valueStr is not null && Regex.IsMatch(valueStr,_conditionalShouldMatch);
+        return valueStr is not null && Regex.IsMatch(valueStr, _conditionalShouldMatch);
     }
 }

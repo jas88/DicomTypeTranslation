@@ -20,7 +20,7 @@ namespace DicomTypeTranslation.Tests;
 [NonParallelizable]
 public abstract class DatabaseTests
 {
-    protected Dictionary<DatabaseType,string> TestConnectionStrings = new Dictionary<DatabaseType, string>();
+    protected Dictionary<DatabaseType, string> TestConnectionStrings = new Dictionary<DatabaseType, string>();
 
     protected bool AllowDatabaseCreation;
     private string _testScratchDatabase;
@@ -65,7 +65,7 @@ public abstract class DatabaseTests
 
             var constr = element.Element("ConnectionString")?.Value ?? throw new Exception("Missing ConnectionString element");
 
-            TestConnectionStrings.Add(databaseType,constr);
+            TestConnectionStrings.Add(databaseType, constr);
         }
     }
 
@@ -75,19 +75,19 @@ public abstract class DatabaseTests
     }
     protected DiscoveredServer GetTestServer(DatabaseType type)
     {
-        if(!TestConnectionStrings.ContainsKey(type))
+        if (!TestConnectionStrings.ContainsKey(type))
             Assert.Inconclusive("No connection string configured for that server");
 
         return new DiscoveredServer(TestConnectionStrings[type], type);
     }
 
-    protected DiscoveredDatabase GetTestDatabase(DatabaseType type, bool cleanDatabase=true)
+    protected DiscoveredDatabase GetTestDatabase(DatabaseType type, bool cleanDatabase = true)
     {
         var server = GetTestServer(type);
         var db = server.ExpectDatabase(_testScratchDatabase);
 
-        if(!db.Exists())
-            if(AllowDatabaseCreation)
+        if (!db.Exists())
+            if (AllowDatabaseCreation)
                 db.Create();
             else
             {
@@ -111,7 +111,7 @@ public abstract class DatabaseTests
 
     protected void AssertCanCreateDatabases()
     {
-        if(!AllowDatabaseCreation)
+        if (!AllowDatabaseCreation)
             Assert.Inconclusive("Test cannot run when AllowDatabaseCreation is false");
     }
 

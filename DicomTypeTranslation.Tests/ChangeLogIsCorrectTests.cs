@@ -22,12 +22,12 @@ class ChangeLogIsCorrectTests
         if (fi.Directory == null)
             Assert.Fail($"Could not determine directory of {changeLogPath}");
 
-        var assemblyInfo = Path.Join(fi.Directory!.FullName,"SharedAssemblyInfo.cs");
+        var assemblyInfo = Path.Join(fi.Directory!.FullName, "SharedAssemblyInfo.cs");
 
-        if(!File.Exists(assemblyInfo))
+        if (!File.Exists(assemblyInfo))
             Assert.Fail($"Could not find file {assemblyInfo}");
 
-        var match = Regex.Match(File.ReadAllText(assemblyInfo),@"AssemblyInformationalVersion\(""(.*)""\)");
+        var match = Regex.Match(File.ReadAllText(assemblyInfo), @"AssemblyInformationalVersion\(""(.*)""\)");
         Assert.That(match.Success, Is.True, $"Could not find AssemblyInformationalVersion tag in {assemblyInfo}");
 
         var currentVersion = match.Groups[1].Value;

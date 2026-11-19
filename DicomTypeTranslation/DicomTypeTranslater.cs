@@ -44,7 +44,7 @@ public static class DicomTypeTranslater
     public static string SerializeDatasetToJson(DicomDataset dataset)
     {
         ArgumentNullException.ThrowIfNull(dataset);
-        return DicomJson.ConvertDicomToJson(dataset,false,false,NumberSerializationMode.PreferablyAsNumber);
+        return DicomJson.ConvertDicomToJson(dataset, false, false, NumberSerializationMode.PreferablyAsNumber);
     }
 
     /// <summary>

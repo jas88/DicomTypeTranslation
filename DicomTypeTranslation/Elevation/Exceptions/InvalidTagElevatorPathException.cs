@@ -11,7 +11,7 @@ public class InvalidTagElevatorPathException : Exception
     /// Creates a new instance with the provided message
     /// </summary>
     /// <param name="message"></param>
-    public InvalidTagElevatorPathException(string message): base(message)
+    public InvalidTagElevatorPathException(string message) : base(message)
     {
 
     }
@@ -20,7 +20,7 @@ public class InvalidTagElevatorPathException : Exception
     /// </summary>
     /// <param name="message"></param>
     /// <param name="ex"></param>
-    public InvalidTagElevatorPathException(string message,Exception ex): base(message,ex)
+    public InvalidTagElevatorPathException(string message, Exception ex) : base(message, ex)
     {
 
     }

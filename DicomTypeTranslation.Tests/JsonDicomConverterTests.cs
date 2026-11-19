@@ -69,8 +69,8 @@ public class JsonDicomConverterTests
 
         // Handle sequences
         foreach (var sq in dataset.Where(x => x.ValueRepresentation == DicomVR.SQ).Cast<DicomSequence>())
-        foreach (var item in sq.Items)
-            RemoveGroupLengths(item);
+            foreach (var item in sq.Items)
+                RemoveGroupLengths(item);
     }
 
     private static void ValidatePrivateCreatorsExist(DicomDataset dataset)
@@ -180,7 +180,7 @@ public class JsonDicomConverterTests
 
         ValidatePrivateCreatorsExist(originalDataset);
 
-        var json = DicomJson.ConvertDicomToJson(originalDataset,false,false,NumberSerializationMode.PreferablyAsNumber);
+        var json = DicomJson.ConvertDicomToJson(originalDataset, false, false, NumberSerializationMode.PreferablyAsNumber);
         var recoDs = DicomJson.ConvertJsonToDicom(json);
 
         ValidatePrivateCreatorsExist(recoDs);
