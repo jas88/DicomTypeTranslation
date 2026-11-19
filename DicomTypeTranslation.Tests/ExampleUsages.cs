@@ -84,8 +84,12 @@ class ExampleUsages
         });
 
         var seqValue = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.ActualHumanPerformersSequence);
-        Assert.That(seqValue, Is.Not.Null);
-        var seq = (Dictionary<DicomTag, object>[])seqValue;
+        if (seqValue is not Dictionary<DicomTag, object>[] seq)
+        {
+            Assert.Fail($"Expected the sequence as Dictionary<DicomTag, object>[] but got {seqValue?.GetType().Name ?? "null"}");
+            return;
+        }
+
         Assert.Multiple(() =>
         {
             Assert.That(seq[0][DicomTag.PatientName], Is.EqualTo("Rabbit"));

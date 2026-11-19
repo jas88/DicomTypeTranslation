@@ -23,7 +23,7 @@ public abstract class DatabaseTests
     protected Dictionary<DatabaseType, string> TestConnectionStrings = new Dictionary<DatabaseType, string>();
 
     protected bool AllowDatabaseCreation;
-    private string _testScratchDatabase;
+    private string _testScratchDatabase = string.Empty;
 
     protected const string TestFilename = "TestDatabases.xml";
 
