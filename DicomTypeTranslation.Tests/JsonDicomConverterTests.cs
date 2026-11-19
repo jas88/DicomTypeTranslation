@@ -1,11 +1,11 @@
 
-using FellowOakDicom;
-using DicomTypeTranslation.Helpers;
-using DicomTypeTranslation.Tests.Helpers;
-using NUnit.Framework;
 using System.IO;
 using System.Linq;
+using DicomTypeTranslation.Helpers;
+using DicomTypeTranslation.Tests.Helpers;
+using FellowOakDicom;
 using FellowOakDicom.Serialization;
+using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
 

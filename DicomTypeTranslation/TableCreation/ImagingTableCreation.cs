@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using FellowOakDicom;
 using FAnsi.Discovery;
 using FAnsi.Discovery.QuerySyntax;
 using FAnsi.Discovery.TypeTranslation;
+using FellowOakDicom;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.TableCreation;

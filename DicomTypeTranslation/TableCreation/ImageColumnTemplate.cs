@@ -1,5 +1,5 @@
-using FellowOakDicom;
 using FAnsi.Discovery;
+using FellowOakDicom;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.TableCreation;

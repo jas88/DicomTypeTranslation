@@ -1,9 +1,9 @@
-using FellowOakDicom;
-using FAnsi.Implementations.MicrosoftSQL;
-using FAnsi.Implementations.Oracle;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using FAnsi.Implementations.MicrosoftSQL;
+using FAnsi.Implementations.Oracle;
+using FellowOakDicom;
+using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
 

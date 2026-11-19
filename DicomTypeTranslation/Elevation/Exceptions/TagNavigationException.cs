@@ -1,5 +1,5 @@
-using DicomTypeTranslation.Elevation.Serialization;
 using System;
+using DicomTypeTranslation.Elevation.Serialization;
 
 namespace DicomTypeTranslation.Elevation.Exceptions;
 

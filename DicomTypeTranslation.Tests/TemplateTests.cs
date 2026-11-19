@@ -1,13 +1,13 @@
-using FellowOakDicom;
-using DicomTypeTranslation.Elevation.Serialization;
-using DicomTypeTranslation.TableCreation;
-using FAnsi.Discovery;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DicomTypeTranslation.Elevation.Serialization;
+using DicomTypeTranslation.TableCreation;
+using FAnsi.Discovery;
+using FellowOakDicom;
+using NUnit.Framework;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.Tests;

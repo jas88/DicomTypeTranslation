@@ -1,9 +1,9 @@
 
-using FellowOakDicom;
-using FellowOakDicom.IO.Buffer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FellowOakDicom;
+using FellowOakDicom.IO.Buffer;
 
 namespace DicomTypeTranslation.Helpers;
 

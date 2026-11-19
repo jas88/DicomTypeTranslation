@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using FellowOakDicom;
 using DicomTypeTranslation.Elevation.Exceptions;
 using DicomTypeTranslation.Elevation.Serialization;
+using FellowOakDicom;
 
 namespace DicomTypeTranslation.Elevation;
 

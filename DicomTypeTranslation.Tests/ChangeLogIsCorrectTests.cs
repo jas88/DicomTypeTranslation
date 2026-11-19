@@ -1,6 +1,6 @@
-using NUnit.Framework;
 using System.IO;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
 

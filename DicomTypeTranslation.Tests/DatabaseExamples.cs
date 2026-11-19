@@ -1,10 +1,10 @@
-using FellowOakDicom;
-using DicomTypeTranslation.TableCreation;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using DicomTypeTranslation.TableCreation;
+using FellowOakDicom;
+using NUnit.Framework;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.Tests;

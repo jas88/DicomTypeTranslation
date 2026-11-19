@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using FellowOakDicom;
 using DicomTypeTranslation.Helpers;
 using DicomTypeTranslation.Tests.Helpers;
+using FellowOakDicom;
 using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
