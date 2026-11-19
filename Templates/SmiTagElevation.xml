@@ -16,7 +16,7 @@
   </TagElevationRequest>
 
   <!-- Structured Reports (SR)-->
-  
+
   <!-- SR: ReferencedStudySequence-->
   <TagElevationRequest>
     <ColumnName>Study_ReferencedSOPClassUID</ColumnName>
@@ -26,7 +26,7 @@
     <ColumnName>Study_ReferencedSOPInstanceUID</ColumnName>
     <ElevationPathway>ReferencedStudySequence->ReferencedSOPInstanceUID+</ElevationPathway>
   </TagElevationRequest>
-  
+
   <!-- ReferencedImageSequence -->
   <TagElevationRequest>
     <ColumnName>RefImageSeq_ReferencedSOPClassUID</ColumnName>
@@ -46,7 +46,7 @@
     <ColumnName>SourceImageSeq_ReferencedSOPInstanceUID</ColumnName>
     <ElevationPathway>SourceImageSequence->ReferencedSOPInstanceUID+</ElevationPathway>
   </TagElevationRequest>
-  
+
   <!--SR: ReferencedPerformedProcedureStepSequence-->
   <TagElevationRequest>
     <ColumnName>RefProcStep_ReferencedSOPClassUID</ColumnName>

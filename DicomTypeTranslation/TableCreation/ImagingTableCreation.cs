@@ -88,9 +88,9 @@ public class ImagingTableCreation
     /// <summary>
     /// Returns a <see cref="DatabaseColumnRequest"/> that describes the provided dicom <paramref name="tag"/> (See <see cref="GetDataTypeForTag"/>).  Also supports
     /// <see cref="RelativeFileArchiveURI"/> as <paramref name="tag"/>.
-    /// 
+    ///
     /// <para>This overload does NOT handle arbitrary (non DicomTag) columns, use <see cref="GetColumnDefinition(ImageColumnTemplate)"/> instead</para>
-    /// 
+    ///
     /// </summary>
     /// <param name="tag">The name of a dicom tag or <see cref="RelativeFileArchiveURI"/></param>
     /// <param name="allowNulls"></param>

@@ -183,4 +183,3 @@ Tables:
     Type:
       CSharpType: System.Int64
     AllowNulls: true
-
