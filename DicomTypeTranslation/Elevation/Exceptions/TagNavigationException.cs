@@ -1,5 +1,5 @@
-﻿using DicomTypeTranslation.Elevation.Serialization;
 using System;
+using DicomTypeTranslation.Elevation.Serialization;
 
 namespace DicomTypeTranslation.Elevation.Exceptions;
 
@@ -13,7 +13,7 @@ public class TagNavigationException : Exception
     /// Creates a new instance with the provided message
     /// </summary>
     /// <param name="message"></param>
-    public TagNavigationException(string message):base(message)
+    public TagNavigationException(string message) : base(message)
     {
 
     }
@@ -23,7 +23,7 @@ public class TagNavigationException : Exception
     /// </summary>
     /// <param name="message"></param>
     /// <param name="ex"></param>
-    public TagNavigationException(string message,Exception ex):base(message,ex)
+    public TagNavigationException(string message, Exception ex) : base(message, ex)
     {
 
     }

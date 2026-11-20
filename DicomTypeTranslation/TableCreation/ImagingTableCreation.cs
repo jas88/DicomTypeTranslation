@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
-using FellowOakDicom;
 using FAnsi.Discovery;
 using FAnsi.Discovery.QuerySyntax;
 using FAnsi.Discovery.TypeTranslation;
+using FellowOakDicom;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.TableCreation;
@@ -31,7 +31,7 @@ public class ImagingTableCreation
     {
         return new DatabaseColumnRequest(RelativeFileArchiveURI, new DatabaseTypeRequest(typeof(string), 512),
                 allowNulls)
-            { IsPrimaryKey = pk };
+        { IsPrimaryKey = pk };
     }
 
     /// <summary>
@@ -66,9 +66,9 @@ public class ImagingTableCreation
     /// <param name="tableTemplate"></param>
     /// <param name="schema">Only applies to DBMS which support schemas (e.g. dbo)</param>
     /// <returns></returns>
-    public string GetCreateTableSql(DiscoveredDatabase expectedDatabase,string tablename, ImageTableTemplate tableTemplate,string? schema=null)
+    public string GetCreateTableSql(DiscoveredDatabase expectedDatabase, string tablename, ImageTableTemplate tableTemplate, string? schema = null)
     {
-        return expectedDatabase.Helper.GetCreateTableSql(expectedDatabase,tablename, tableTemplate.GetColumns(expectedDatabase.Server.DatabaseType),null,false,schema);
+        return expectedDatabase.Helper.GetCreateTableSql(expectedDatabase, tablename, tableTemplate.GetColumns(expectedDatabase.Server.DatabaseType), null, false, schema);
     }
 
     /// <summary>
@@ -82,15 +82,15 @@ public class ImagingTableCreation
         if (col.Type is not null)
             return new DatabaseColumnRequest(col.ColumnName, col.Type, col.AllowNulls) { IsPrimaryKey = col.IsPrimaryKey };
 
-        return GetColumnDefinition(col.ColumnName,col.AllowNulls,col.IsPrimaryKey);
+        return GetColumnDefinition(col.ColumnName, col.AllowNulls, col.IsPrimaryKey);
     }
 
     /// <summary>
     /// Returns a <see cref="DatabaseColumnRequest"/> that describes the provided dicom <paramref name="tag"/> (See <see cref="GetDataTypeForTag"/>).  Also supports
     /// <see cref="RelativeFileArchiveURI"/> as <paramref name="tag"/>.
-    /// 
+    ///
     /// <para>This overload does NOT handle arbitrary (non DicomTag) columns, use <see cref="GetColumnDefinition(ImageColumnTemplate)"/> instead</para>
-    /// 
+    ///
     /// </summary>
     /// <param name="tag">The name of a dicom tag or <see cref="RelativeFileArchiveURI"/></param>
     /// <param name="allowNulls"></param>

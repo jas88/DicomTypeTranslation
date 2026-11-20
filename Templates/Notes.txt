@@ -8,7 +8,7 @@ Cohort Identification
 ProtocolName: This is standard for operation X e.g. pancreatitis
 
 Demographics:
-Patient Age (in years) & Sex 
+Patient Age (in years) & Sex
 For performance reasons in queries and for sanity checking against other datasets e.g. demography
 
 
@@ -17,7 +17,7 @@ Included for validation purposes, have we succesfully loaded all the images in t
 
 
 PhotometricInterpretation
-Useful for identifying that you don't have colour images 
+Useful for identifying that you don't have colour images
 
 SeriesDate	SeriesTime
 05/01/2009	15:09:49

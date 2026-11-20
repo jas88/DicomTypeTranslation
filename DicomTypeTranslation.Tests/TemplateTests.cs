@@ -1,18 +1,18 @@
-﻿using FellowOakDicom;
-using DicomTypeTranslation.Elevation.Serialization;
-using DicomTypeTranslation.TableCreation;
-using FAnsi.Discovery;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DicomTypeTranslation.Elevation.Serialization;
+using DicomTypeTranslation.TableCreation;
+using FAnsi.Discovery;
+using FellowOakDicom;
+using NUnit.Framework;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.Tests;
 
-class TemplateTests:DatabaseTests
+class TemplateTests : DatabaseTests
 {
     [OneTimeSetUp]
     public void DisableDicomValidation()
@@ -29,7 +29,7 @@ class TemplateTests:DatabaseTests
         {
             ColumnName = "mycol",
             AllowNulls = true,
-            Type = new DatabaseTypeRequest(typeof(string),100)
+            Type = new DatabaseTypeRequest(typeof(string), 100)
         };
 
         var table = new ImageTableTemplate
@@ -54,18 +54,18 @@ class TemplateTests:DatabaseTests
     [TestCase("NM", FAnsi.DatabaseType.MicrosoftSQLServer)]
     [TestCase("NM", FAnsi.DatabaseType.MySql)]
     [TestCase("NM", FAnsi.DatabaseType.Oracle)]
-    [TestCase("OTHER",FAnsi.DatabaseType.MicrosoftSQLServer)]
-    [TestCase("OTHER",FAnsi.DatabaseType.MySql)]
-    [TestCase("OTHER",FAnsi.DatabaseType.Oracle)]
-    [TestCase("DX",FAnsi.DatabaseType.MicrosoftSQLServer)]
-    [TestCase("DX",FAnsi.DatabaseType.MySql)]
-    [TestCase("DX",FAnsi.DatabaseType.Oracle)]
-    [TestCase("SR",FAnsi.DatabaseType.MicrosoftSQLServer)]
-    [TestCase("SR",FAnsi.DatabaseType.MySql)]
-    [TestCase("SR",FAnsi.DatabaseType.Oracle)]
-    [TestCase("ECG",FAnsi.DatabaseType.MicrosoftSQLServer)]
-    [TestCase("ECG",FAnsi.DatabaseType.MySql)]
-    [TestCase("ECG",FAnsi.DatabaseType.Oracle)]
+    [TestCase("OTHER", FAnsi.DatabaseType.MicrosoftSQLServer)]
+    [TestCase("OTHER", FAnsi.DatabaseType.MySql)]
+    [TestCase("OTHER", FAnsi.DatabaseType.Oracle)]
+    [TestCase("DX", FAnsi.DatabaseType.MicrosoftSQLServer)]
+    [TestCase("DX", FAnsi.DatabaseType.MySql)]
+    [TestCase("DX", FAnsi.DatabaseType.Oracle)]
+    [TestCase("SR", FAnsi.DatabaseType.MicrosoftSQLServer)]
+    [TestCase("SR", FAnsi.DatabaseType.MySql)]
+    [TestCase("SR", FAnsi.DatabaseType.Oracle)]
+    [TestCase("ECG", FAnsi.DatabaseType.MicrosoftSQLServer)]
+    [TestCase("ECG", FAnsi.DatabaseType.MySql)]
+    [TestCase("ECG", FAnsi.DatabaseType.Oracle)]
     [TestCase("XA", FAnsi.DatabaseType.MicrosoftSQLServer)]
     [TestCase("XA", FAnsi.DatabaseType.MySql)]
     [TestCase("XA", FAnsi.DatabaseType.Oracle)]
@@ -74,26 +74,26 @@ class TemplateTests:DatabaseTests
     [TestCase("US", FAnsi.DatabaseType.Oracle)]
     public void TestTemplate(string template, FAnsi.DatabaseType dbType)
     {
-        var templateFile = Path.Join(TestContext.CurrentContext.TestDirectory,"Templates", $"{template}.yaml");
+        var templateFile = Path.Join(TestContext.CurrentContext.TestDirectory, "Templates", $"{template}.yaml");
 
         var collection = ImageTableTemplateCollection.LoadFrom(File.ReadAllText(templateFile));
 
         foreach (var tableTemplate in collection.Tables)
-            Validate(tableTemplate,templateFile);
+            Validate(tableTemplate, templateFile);
 
         var db = GetTestDatabase(dbType);
 
         var creator = new ImagingTableCreation(db.Server.GetQuerySyntaxHelper());
 
-        foreach(var table in collection.Tables)
+        foreach (var table in collection.Tables)
         {
-            if(string.Equals(table.TableName, "ImageTable",StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(table.TableName, "ImageTable", StringComparison.CurrentCultureIgnoreCase))
             {
-                EnforceExpectedImageColumns(template,table);
+                EnforceExpectedImageColumns(template, table);
             }
 
             var tbl = db.ExpectTable(table.TableName);
-            creator.CreateTable(tbl,table);
+            creator.CreateTable(tbl, table);
 
             Assert.That(tbl.Exists(), Is.True);
         }
@@ -101,7 +101,7 @@ class TemplateTests:DatabaseTests
 
     private void EnforceExpectedImageColumns(string template, ImageTableTemplate table)
     {
-        foreach(var req in new[] { "PatientID","DicomFileSize","StudyInstanceUID"})
+        foreach (var req in new[] { "PatientID", "DicomFileSize", "StudyInstanceUID" })
         {
             if (!table.Columns.Any(c => c.ColumnName.Equals(req)))
             {
@@ -156,8 +156,8 @@ class TemplateTests:DatabaseTests
             }
         }
 
-        if(errors.Any())
-            throw new AggregateException($"Errors in file '{templateFile}'",errors.ToArray());
+        if (errors.Any())
+            throw new AggregateException($"Errors in file '{templateFile}'", errors.ToArray());
     }
 
     private string DescribeSize(DecimalSize typeSize)
@@ -169,7 +169,7 @@ class TemplateTests:DatabaseTests
     [TestCase("SmiTagElevation")]
     public void TestElevationTemplate(string template)
     {
-        var templateFile = Path.Combine(TestContext.CurrentContext.TestDirectory,"Templates", $"{template}.xml");
+        var templateFile = Path.Join(TestContext.CurrentContext.TestDirectory, "Templates", $"{template}.xml");
 
         var elevation = new TagElevationRequestCollection(File.ReadAllText(templateFile));
 
@@ -218,12 +218,12 @@ class TemplateTests:DatabaseTests
         });
 
         //doesn't actually have to exist
-        var db = new DiscoveredServer("localhost","nobody",FAnsi.DatabaseType.MySql,"captain","morgans").ExpectDatabase("neverland");
+        var db = new DiscoveredServer("localhost", "nobody", FAnsi.DatabaseType.MySql, "captain", "morgans").ExpectDatabase("neverland");
 
         var creator = new ImagingTableCreation(db.Server.GetQuerySyntaxHelper());
 
 
-        var sql1 = creator.GetCreateTableSql(db,collection.Tables[0].TableName, collection.Tables[0],null);
+        var sql1 = creator.GetCreateTableSql(db, collection.Tables[0].TableName, collection.Tables[0], null);
         var sql2 = creator.GetCreateTableSql(db, collection2.Tables[0].TableName, collection.Tables[0], null);
 
         Assert.That(sql2, Is.EqualTo(sql1));

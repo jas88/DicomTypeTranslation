@@ -2,13 +2,11 @@
 using System;
 using System.IO;
 using System.Linq;
-using FellowOakDicom;
-using FellowOakDicom.IO.Buffer;
 using DicomTypeTranslation.Helpers;
 using DicomTypeTranslation.Tests.Helpers;
-
+using FellowOakDicom;
+using FellowOakDicom.IO.Buffer;
 using MongoDB.Bson;
-
 using NUnit.Framework;
 
 

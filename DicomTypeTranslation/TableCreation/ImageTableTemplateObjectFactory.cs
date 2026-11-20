@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using TypeGuesser;
 using YamlDotNet.Serialization.ObjectFactories;
 

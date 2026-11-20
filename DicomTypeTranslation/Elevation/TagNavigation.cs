@@ -1,8 +1,8 @@
-﻿using System;
-using FellowOakDicom;
-using DicomTypeTranslation.Elevation.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using DicomTypeTranslation.Elevation.Exceptions;
+using FellowOakDicom;
 
 namespace DicomTypeTranslation.Elevation;
 

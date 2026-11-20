@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FAnsi;
 using TypeGuesser;
 using YamlDotNet.Serialization;
@@ -52,7 +52,7 @@ public class ImageTableTemplateCollection
     {
 
         var serializer = new SerializerBuilder()
-            .WithAttributeOverride<DecimalSize>(s=>s.Precision, new YamlIgnoreAttribute())
+            .WithAttributeOverride<DecimalSize>(s => s.Precision, new YamlIgnoreAttribute())
             .WithAttributeOverride<DecimalSize>(s => s.Scale, new YamlIgnoreAttribute())
             .WithTypeConverter(new SystemTypeTypeConverter())
             .Build();

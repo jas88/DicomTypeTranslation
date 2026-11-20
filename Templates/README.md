@@ -752,4 +752,3 @@ Since structured reports are almost exclusively single file entities only an Ima
 | Manufacturer |  |
 | PhotometricInterpretation |  |
 | DicomFileSize | |
-

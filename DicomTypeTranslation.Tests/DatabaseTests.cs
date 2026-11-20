@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -7,9 +7,9 @@ using System.Xml.Linq;
 using FAnsi;
 using FAnsi.Discovery;
 using FAnsi.Implementation;
+using FAnsi.Implementations.MicrosoftSQL;
 using FAnsi.Implementations.MySql;
 using FAnsi.Implementations.Oracle;
-using FAnsi.Implementations.MicrosoftSQL;
 using FAnsi.Implementations.PostgreSql;
 using NUnit.Framework;
 
@@ -20,10 +20,10 @@ namespace DicomTypeTranslation.Tests;
 [NonParallelizable]
 public abstract class DatabaseTests
 {
-    protected Dictionary<DatabaseType,string> TestConnectionStrings = new Dictionary<DatabaseType, string>();
+    protected Dictionary<DatabaseType, string> TestConnectionStrings = new Dictionary<DatabaseType, string>();
 
     protected bool AllowDatabaseCreation;
-    private string _testScratchDatabase;
+    private string _testScratchDatabase = string.Empty;
 
     protected const string TestFilename = "TestDatabases.xml";
 
@@ -39,7 +39,7 @@ public abstract class DatabaseTests
         ImplementationManager.Load<PostgreSqlImplementation>();
 #pragma warning restore CS0618 // Type or member is obsolete
 
-        var file = Path.Combine(TestContext.CurrentContext.TestDirectory, TestFilename);
+        var file = Path.Join(TestContext.CurrentContext.TestDirectory, TestFilename);
 
         Assert.That(File.Exists(file), Is.True, "Could not find " + TestFilename);
 
@@ -65,7 +65,7 @@ public abstract class DatabaseTests
 
             var constr = element.Element("ConnectionString")?.Value ?? throw new Exception("Missing ConnectionString element");
 
-            TestConnectionStrings.Add(databaseType,constr);
+            TestConnectionStrings.Add(databaseType, constr);
         }
     }
 
@@ -75,19 +75,19 @@ public abstract class DatabaseTests
     }
     protected DiscoveredServer GetTestServer(DatabaseType type)
     {
-        if(!TestConnectionStrings.ContainsKey(type))
+        if (!TestConnectionStrings.ContainsKey(type))
             Assert.Inconclusive("No connection string configured for that server");
 
         return new DiscoveredServer(TestConnectionStrings[type], type);
     }
 
-    protected DiscoveredDatabase GetTestDatabase(DatabaseType type, bool cleanDatabase=true)
+    protected DiscoveredDatabase GetTestDatabase(DatabaseType type, bool cleanDatabase = true)
     {
         var server = GetTestServer(type);
         var db = server.ExpectDatabase(_testScratchDatabase);
 
-        if(!db.Exists())
-            if(AllowDatabaseCreation)
+        if (!db.Exists())
+            if (AllowDatabaseCreation)
                 db.Create();
             else
             {
@@ -111,7 +111,7 @@ public abstract class DatabaseTests
 
     protected void AssertCanCreateDatabases()
     {
-        if(!AllowDatabaseCreation)
+        if (!AllowDatabaseCreation)
             Assert.Inconclusive("Test cannot run when AllowDatabaseCreation is false");
     }
 

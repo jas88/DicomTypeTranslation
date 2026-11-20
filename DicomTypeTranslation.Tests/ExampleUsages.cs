@@ -1,9 +1,9 @@
-﻿using FellowOakDicom;
-using FAnsi.Implementations.MicrosoftSQL;
-using FAnsi.Implementations.Oracle;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using FAnsi.Implementations.MicrosoftSQL;
+using FAnsi.Implementations.Oracle;
+using FellowOakDicom;
+using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
 
@@ -84,8 +84,12 @@ class ExampleUsages
         });
 
         var seqValue = DicomTypeTranslaterReader.GetCSharpValue(ds, DicomTag.ActualHumanPerformersSequence);
-        Assert.That(seqValue, Is.Not.Null);
-        var seq = (Dictionary<DicomTag, object>[])seqValue;
+        if (seqValue is not Dictionary<DicomTag, object>[] seq)
+        {
+            Assert.Fail($"Expected the sequence as Dictionary<DicomTag, object>[] but got {seqValue?.GetType().Name ?? "null"}");
+            return;
+        }
+
         Assert.Multiple(() =>
         {
             Assert.That(seq[0][DicomTag.PatientName], Is.EqualTo("Rabbit"));
@@ -95,12 +99,16 @@ class ExampleUsages
         var flattenedValue = DicomTypeTranslater.Flatten(seq);
         Assert.That(flattenedValue, Is.Not.Null);
         var flattened = (string)flattenedValue;
-        Assert.That(
-            flattened.Replace("\r", ""), Is.EqualTo(@"[0] - 
- 	 (0010,0010) - 	 Rabbit
 
- [1] - 
- 	 (0010,0010) - 	 Roger".Replace("\r", "")));
+        // The "[n] - " lines end in a space, so spell each line out rather than
+        // keep trailing whitespace inside a verbatim string.
+        Assert.That(
+            flattened.Replace("\r", ""), Is.EqualTo(string.Join('\n',
+                "[0] - ",
+                " \t (0010,0010) - \t Rabbit",
+                "",
+                " [1] - ",
+                " \t (0010,0010) - \t Roger")));
     }
 
     [Test]

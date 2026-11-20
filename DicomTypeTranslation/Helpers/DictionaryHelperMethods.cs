@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +43,7 @@ public static class DictionaryHelperMethods
     {
         //if either is null
         if (dict1 == null || dict2 == null)
-            return Object.ReferenceEquals(dict1,dict2); //they are only equal if they are both null
+            return Object.ReferenceEquals(dict1, dict2); //they are only equal if they are both null
 
         var keys1 = new HashSet<object>();
 
@@ -124,11 +124,11 @@ public static class DictionaryHelperMethods
                 sb.Append($" {keys1[i]} : \r\n {ArrayHelperMethods.AsciiArt(array, $"{prefix}\t")}");
             else
                 //if both are dictionaries
-            if (val is IDictionary valDict)
-                sb.Append($" {keys1[i]} : \r\n {AsciiArt(valDict, $"{prefix}\t")}");
-            else
-                //if we haven't outrun of either array
-                sb.AppendLine($" {keys1[i]} - \t {val}");
+                if (val is IDictionary valDict)
+                    sb.Append($" {keys1[i]} : \r\n {AsciiArt(valDict, $"{prefix}\t")}");
+                else
+                    //if we haven't outrun of either array
+                    sb.AppendLine($" {keys1[i]} - \t {val}");
 
         }
 
@@ -176,11 +176,11 @@ public static class DictionaryHelperMethods
                         array2, $"{prefix}\t")}");
                 else
                     //if both are dictionaries
-                if (val1 is IDictionary valDict1 && val2 is IDictionary valDict2)
-                    sb.Append($" {keys1[i]} : \r\n {AsciiArt(valDict1, valDict2, $"{prefix}\t")}");
-                else
-                    //if we haven't outrun of either array
-                    sb.AppendLine($" {keys1[i]} - \t {dict[keys1[i]]} \t {dict2[keys2[i]]} {(FlexibleEquality.FlexibleEquals(dict[keys1[i]], dict2[keys2[i]]) ? "" : "<DIFF>")}");
+                    if (val1 is IDictionary valDict1 && val2 is IDictionary valDict2)
+                        sb.Append($" {keys1[i]} : \r\n {AsciiArt(valDict1, valDict2, $"{prefix}\t")}");
+                    else
+                        //if we haven't outrun of either array
+                        sb.AppendLine($" {keys1[i]} - \t {dict[keys1[i]]} \t {dict2[keys2[i]]} {(FlexibleEquality.FlexibleEquals(dict[keys1[i]], dict2[keys2[i]]) ? "" : "<DIFF>")}");
             }
         }
 

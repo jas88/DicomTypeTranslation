@@ -3,10 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
-using FellowOakDicom;
-
 using DicomTypeTranslation.Helpers;
+using FellowOakDicom;
 using FellowOakDicom.Serialization;
 using TypeGuesser;
 
@@ -44,7 +42,7 @@ public static class DicomTypeTranslater
     public static string SerializeDatasetToJson(DicomDataset dataset)
     {
         ArgumentNullException.ThrowIfNull(dataset);
-        return DicomJson.ConvertDicomToJson(dataset,false,false,NumberSerializationMode.PreferablyAsNumber);
+        return DicomJson.ConvertDicomToJson(dataset, false, false, NumberSerializationMode.PreferablyAsNumber);
     }
 
     /// <summary>

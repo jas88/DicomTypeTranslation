@@ -1,10 +1,10 @@
-﻿using FellowOakDicom;
-using DicomTypeTranslation.TableCreation;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using DicomTypeTranslation.TableCreation;
+using FellowOakDicom;
+using NUnit.Framework;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.Tests;
@@ -43,7 +43,7 @@ public class DatabaseExamples : DatabaseTests
         dt.Columns.Add("PatientID");
         dt.Columns.Add("FileLocation");
 
-        var dir = Path.Combine(TestContext.CurrentContext.TestDirectory ,"TestDicomFiles");
+        var dir = Path.Join(TestContext.CurrentContext.TestDirectory, "TestDicomFiles");
 
         //Load some dicom files and copy tag data into DataTable (where tag exists)
         foreach (var file in Directory.EnumerateFiles(dir, "*.dcm", SearchOption.AllDirectories))
@@ -88,7 +88,7 @@ public class DatabaseExamples : DatabaseTests
         var creator = new ImagingTableCreation(db.Server.GetQuerySyntaxHelper());
 
         //actually do it
-        creator.CreateTable(db.ExpectTable("MyCoolTable"),toCreate);
+        creator.CreateTable(db.ExpectTable("MyCoolTable"), toCreate);
     }
 
     [Test]

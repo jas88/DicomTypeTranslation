@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Xml;
 using DicomTypeTranslation.Elevation.Exceptions;
 
@@ -26,7 +26,7 @@ public class TagElevationRequestCollection
         var root = doc["TagElevationRequestCollection"] ?? throw new MalformedTagElevationRequestCollectionXmlException("No root tag TagElevationRequestCollection");
         foreach (var n in root.ChildNodes)
         {
-            if(n is XmlComment)
+            if (n is XmlComment)
                 continue;
             var requestXml = (XmlElement)n;
             var toAdd = new TagElevationRequest(requestXml);

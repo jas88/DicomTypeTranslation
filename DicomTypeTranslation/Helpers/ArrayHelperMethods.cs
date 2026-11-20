@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,12 +89,12 @@ public static class ArrayHelperMethods
                 if (val1 is IDictionary dict1 && val2 is IDictionary dict2)
                     sb.Append($"\r\n {DictionaryHelperMethods.AsciiArt(dict1, dict2, $"{prefix}\t")}");
                 else
-                if (val1 is Array array1 && val2 is Array array2)
-                    sb.Append($"\r\n {AsciiArt(array1,
-                        array2, $"{prefix}\t")}");
-                else
-                    //if we haven't outrun of either array
-                    sb.AppendLine($" \t {val1} \t {val2} {(FlexibleEquality.FlexibleEquals(val1, val2) ? "" : "<DIFF>")}");
+                    if (val1 is Array array1 && val2 is Array array2)
+                        sb.Append($"\r\n {AsciiArt(array1,
+                            array2, $"{prefix}\t")}");
+                    else
+                        //if we haven't outrun of either array
+                        sb.AppendLine($" \t {val1} \t {val2} {(FlexibleEquality.FlexibleEquals(val1, val2) ? "" : "<DIFF>")}");
             }
         }
 

@@ -1,21 +1,21 @@
 
-using FellowOakDicom;
-using DicomTypeTranslation.Helpers;
-using DicomTypeTranslation.Tests.Helpers;
-using NUnit.Framework;
 using System.IO;
 using System.Linq;
+using DicomTypeTranslation.Helpers;
+using DicomTypeTranslation.Tests.Helpers;
+using FellowOakDicom;
 using FellowOakDicom.Serialization;
+using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;
 
 [TestFixture]
 public class JsonDicomConverterTests
 {
-    private static readonly string _dcmDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "TestDicomFiles");
+    private static readonly string DcmDir = Path.Join(TestContext.CurrentContext.TestDirectory, "TestDicomFiles");
 
-    private readonly string _srDcmPath = Path.Combine(_dcmDir, "report01.dcm");
-    private readonly string _imDcmPath = Path.Combine(_dcmDir, "image11.dcm");
+    private readonly string _srDcmPath = Path.Join(DcmDir, "report01.dcm");
+    private readonly string _imDcmPath = Path.Join(DcmDir, "image11.dcm");
 
     #region Fixture Methods
 
@@ -69,8 +69,8 @@ public class JsonDicomConverterTests
 
         // Handle sequences
         foreach (var sq in dataset.Where(x => x.ValueRepresentation == DicomVR.SQ).Cast<DicomSequence>())
-        foreach (var item in sq.Items)
-            RemoveGroupLengths(item);
+            foreach (var item in sq.Items)
+                RemoveGroupLengths(item);
     }
 
     private static void ValidatePrivateCreatorsExist(DicomDataset dataset)
@@ -180,7 +180,7 @@ public class JsonDicomConverterTests
 
         ValidatePrivateCreatorsExist(originalDataset);
 
-        var json = DicomJson.ConvertDicomToJson(originalDataset,false,false,NumberSerializationMode.PreferablyAsNumber);
+        var json = DicomJson.ConvertDicomToJson(originalDataset, false, false, NumberSerializationMode.PreferablyAsNumber);
         var recoDs = DicomJson.ConvertJsonToDicom(json);
 
         ValidatePrivateCreatorsExist(recoDs);

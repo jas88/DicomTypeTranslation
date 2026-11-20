@@ -1,8 +1,8 @@
 
 using System;
 using System.Collections.Generic;
-using FellowOakDicom;
 using DicomTypeTranslation.Helpers;
+using FellowOakDicom;
 using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests;

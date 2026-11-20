@@ -1,4 +1,4 @@
-﻿using System.Xml;
+using System.Xml;
 using DicomTypeTranslation.Elevation.Exceptions;
 using FellowOakDicom;
 
@@ -42,7 +42,7 @@ public class TagElevationRequest
     /// <param name="element"></param>
     public TagElevationRequest(XmlElement element)
     {
-        if(element.Name != "TagElevationRequest")
+        if (element.Name != "TagElevationRequest")
             throw new MalformedTagElevationRequestCollectionXmlException("Expected xml element name to be TagElevationRequest");
 
         ColumnName = element["ColumnName"]!.InnerText;

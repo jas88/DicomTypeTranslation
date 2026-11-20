@@ -1,4 +1,4 @@
-﻿using DicomTypeTranslation.Elevation.Serialization;
+using DicomTypeTranslation.Elevation.Serialization;
 using NUnit.Framework;
 
 namespace DicomTypeTranslation.Tests.ElevationTests;

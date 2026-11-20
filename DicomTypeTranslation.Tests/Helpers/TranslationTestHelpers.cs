@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -237,12 +237,12 @@ public static class TranslationTestHelpers
                     sb.AppendLine($":\t{item.Value}");
                     break;
                 default:
-                {
-                    object? value = item.Value.IsBsonNull ? null : item.Value;
+                    {
+                        object? value = item.Value.IsBsonNull ? null : item.Value;
 
-                    sb.AppendLine($":\t\"{value}\"");
-                    break;
-                }
+                        sb.AppendLine($":\t\"{value}\"");
+                        break;
+                    }
             }
         }
 

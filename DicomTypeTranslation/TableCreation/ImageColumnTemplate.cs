@@ -1,5 +1,5 @@
-﻿using FellowOakDicom;
 using FAnsi.Discovery;
+using FellowOakDicom;
 using TypeGuesser;
 
 namespace DicomTypeTranslation.TableCreation;
@@ -58,6 +58,6 @@ public record class ImageColumnTemplate
     public ImageColumnTemplate(DicomTag tag)
         : this()
     {
-        ColumnName = DicomTypeTranslaterReader.GetColumnNameForTag(tag,false);
+        ColumnName = DicomTypeTranslaterReader.GetColumnNameForTag(tag, false);
     }
 }
