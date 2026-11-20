@@ -16,7 +16,7 @@ DicomTypeTranslation is a well-structured library for converting DICOM medical i
 
 ### 1.1 Project Structure
 
-```
+```text
 DicomTypeTranslation/
 ├── Core Translation (Static Utilities)
 │   ├── DicomTypeTranslater.cs          # Core type mapping logic
@@ -65,6 +65,7 @@ var json = DicomTypeTranslater.SerializeDatasetToJson(dataset);
 ```
 
 **Characteristics:**
+
 - ✅ Simple, direct API
 - ✅ No object lifecycle management
 - ✅ Performance-oriented (no abstraction overhead)
@@ -80,7 +81,7 @@ var json = DicomTypeTranslater.SerializeDatasetToJson(dataset);
 ### 2.1 Dependency Coupling Assessment
 
 | Component | Coupling Level | External Dependencies | Notes |
-|-----------|---------------|----------------------|-------|
+| ----------- | --------------- | ---------------------- | ------- |
 | DicomTypeTranslater | **Medium** | fo-dicom, TypeGuesser, Newtonsoft.Json | Static methods with VR mapping logic |
 | DicomTypeTranslaterReader | **High** | fo-dicom, MongoDB.Bson | Direct coupling to BSON types |
 | DicomTypeTranslaterWriter | **Very High** | fo-dicom, MongoDB.Bson, Newtonsoft.Json | Static dictionary with reflection |
@@ -91,12 +92,14 @@ var json = DicomTypeTranslater.SerializeDatasetToJson(dataset);
 ### 2.2 Problematic Dependencies
 
 **Global Mutable State:**
+
 ```csharp
 // DicomTypeTranslater.cs:38
 public static bool SerializeBinaryData = false;  // ⚠️ Thread-safety concerns
 ```
 
 **Static Dictionary Initialization:**
+
 ```csharp
 // DicomTypeTranslaterWriter.cs:30-73
 static DicomTypeTranslaterWriter()
@@ -108,6 +111,7 @@ static DicomTypeTranslaterWriter()
 ```
 
 **Direct Database Coupling:**
+
 ```csharp
 // ImagingTableCreation.cs:16
 private readonly IQuerySyntaxHelper _querySyntaxHelper;  // FAnsiSql dependency
@@ -200,6 +204,7 @@ public class ImageTableTemplateObjectFactory
 ```
 
 **Recommended Enhancement:**
+
 - Abstract factory for different database providers
 - Factory for serialization strategies
 - Factory for tag elevation configurations
@@ -331,6 +336,7 @@ public void TestBasicCSharpTranslation()
 ```
 
 **Issues:**
+
 - ❌ Cannot mock `DicomTypeTranslaterReader`
 - ❌ Tests depend on fo-dicom implementation details
 - ❌ No boundary testing with fake implementations
@@ -400,6 +406,7 @@ public class FakeDicomReader : IDicomReader
 ### 6.1 Current Approach
 
 **Strengths:**
+
 - ✅ Descriptive exceptions with context
 - ✅ Domain-specific exception types in Elevation namespace
 
@@ -415,6 +422,7 @@ public class MalformedTagElevationRequestCollectionXmlException : Exception { }
 ```
 
 **Weaknesses:**
+
 - ❌ Inconsistent exception handling patterns
 - ❌ No centralized error handling strategy
 - ❌ Limited use of Result<T> pattern for expected failures
@@ -576,6 +584,7 @@ public class DicomTranslationOptionsValidator : IValidateOptions<DicomTranslatio
 ### 8.1 Current Optimizations
 
 **Strengths:**
+
 - ✅ Static dictionaries for type lookups (DicomTypeTranslaterWriter)
 - ✅ Lazy evaluation in TagElevator
 - ✅ Efficient LINQ usage
@@ -592,6 +601,7 @@ private static DicomTag ParseTag(ReadOnlySpan<char> tagStr)
 ```
 
 **Potential Issues:**
+
 - ⚠️ Large static dictionary initialization overhead
 - ⚠️ No caching for frequently accessed tags
 - ⚠️ Recursive sequence navigation without depth limits
@@ -792,6 +802,7 @@ public class DicomReaderService : IDicomReader
 **Goal:** Full architectural alignment with .NET 9 patterns
 
 **Key Changes:**
+
 1. Remove all static classes
 2. Full DI support throughout
 3. Result<T> pattern for error handling
@@ -1050,7 +1061,7 @@ public class DicomReaderTests
 ### 11.1 Risks of NOT Modernizing
 
 | Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
+| ------ | -------- | ------------- | ------------ |
 | **Testability Debt** | High | Very High | Accumulating test complexity, harder to maintain |
 | **Performance Bottlenecks** | Medium | High | Static initialization overhead as codebase grows |
 | **Extensibility Limitations** | High | High | Cannot add custom VR handlers without forking |
@@ -1060,7 +1071,7 @@ public class DicomReaderTests
 ### 11.2 Risks of Modernizing
 
 | Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
+| ------ | -------- | ------------- | ------------ |
 | **Breaking Changes** | High | High | Use phased approach with deprecation warnings |
 | **Performance Regression** | Medium | Low | Benchmark before/after, optimize abstractions |
 | **Increased Complexity** | Medium | Medium | Comprehensive documentation and examples |
@@ -1069,6 +1080,7 @@ public class DicomReaderTests
 ### 11.3 Recommended Approach
 
 **Hybrid Strategy:**
+
 1. **v4.x:** Add interfaces and DI support (non-breaking)
 2. **v5.0:** Deprecate static APIs, introduce strategies
 3. **v6.0:** Remove static APIs, full modernization
@@ -1098,34 +1110,34 @@ This allows existing consumers to migrate gradually while providing immediate be
 
 ### Important (Medium Priority)
 
-4. **Strategy Pattern for VR Conversion** ⭐⭐⭐⭐
+1. **Strategy Pattern for VR Conversion** ⭐⭐⭐⭐
    - Replace giant switch statements
    - Enable custom VR handlers
    - Estimated effort: 3 weeks (breaking change)
 
-5. **Result<T> Error Handling** ⭐⭐⭐
+2. **Result<T> Error Handling** ⭐⭐⭐
    - Better error handling semantics
    - Reduces exception overhead
    - Estimated effort: 2 weeks
 
-6. **Validation Pipeline** ⭐⭐⭐
+3. **Validation Pipeline** ⭐⭐⭐
    - Centralized input validation
    - Better error messages
    - Estimated effort: 1 week
 
 ### Nice-to-Have (Low Priority)
 
-7. **Object Pooling** ⭐⭐
+1. **Object Pooling** ⭐⭐
    - Performance optimization
    - Reduces GC pressure
    - Estimated effort: 1 week
 
-8. **Source Generators** ⭐⭐
+2. **Source Generators** ⭐⭐
    - Compile-time VR mappings
    - Native AOT compatibility
    - Estimated effort: 4 weeks
 
-9. **Async Support** ⭐
+3. **Async Support** ⭐
    - Async I/O operations
    - Better scalability
    - Estimated effort: 2 weeks
@@ -1139,7 +1151,7 @@ The DicomTypeTranslation library demonstrates solid software engineering fundame
 **Overall Assessment:**
 
 | Criterion | Score | Grade |
-|-----------|-------|-------|
+| ----------- | ------- | ------- |
 | Code Quality | 85% | B+ |
 | Testability | 60% | C |
 | Extensibility | 55% | C- |
@@ -1153,6 +1165,7 @@ The DicomTypeTranslation library demonstrates solid software engineering fundame
 The recommended modernization roadmap provides a phased approach to incrementally improve architecture without forcing immediate breaking changes on existing consumers. By introducing interfaces and DI support in v4.x, the library can support both legacy static usage and modern DI patterns simultaneously, allowing gradual migration.
 
 Priority should be given to:
+
 1. Interface extraction (non-breaking)
 2. Options pattern adoption (non-breaking)
 3. DI registration support (additive)
@@ -1164,7 +1177,7 @@ This approach balances the need for modernization with respect for existing user
 
 ## Appendix A: File Statistics
 
-```
+```text
 Total C# Files: 42
 Core Library: 24 files
 Test Project: 18 files
@@ -1181,7 +1194,7 @@ Total Library LOC: ~5,500 lines
 
 ## Appendix B: Dependency Graph
 
-```
+```text
 DicomTypeTranslation
 ├── fo-dicom (Core DICOM support)
 │   ├── Used by: All core classes
