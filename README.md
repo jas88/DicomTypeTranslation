@@ -192,13 +192,15 @@ Again if you don't want to deal with this you can just call Flatten:
 var flattened = DicomTypeTranslater.Flatten(seq);
 ```
 
+`Flatten` separates the columns with tab characters (one before each tag, and one between the tag and its value), which the sample below shows as spaces.
+
 The Flattened (string) representation of the above example is:
 
 ```text
 [0] - 
      (0010,0010) -   Rabbit
 
-[1] - 
+ [1] - 
      (0010,0010) -   Roger
 ```
 
