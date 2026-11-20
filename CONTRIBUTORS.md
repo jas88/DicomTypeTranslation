@@ -1,5 +1,5 @@
 
-<img src="https://avatars2.githubusercontent.com/u/56437605?s=200"/>
+<img src="https://avatars2.githubusercontent.com/u/56437605?s=200" alt="SMI logo"/>
 
 # Contributors to DicomTypeTranslation
 

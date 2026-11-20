@@ -1,4 +1,5 @@
 # .NET 9 Modernization Research Report
+
 ## DicomTypeTranslation Codebase Analysis
 
 **Date**: 2025-10-27
@@ -13,6 +14,7 @@
 This report documents .NET 9 features, C# 12/13 language improvements, and modern patterns that should be applied to the DicomTypeTranslation codebase. The codebase is already targeting .NET 9 with nullable reference types enabled and latest C# language version, providing a solid foundation for modernization.
 
 **Key Findings:**
+
 - Already using .NET 9 and C# 13 (latest)
 - Nullable reference types enabled globally
 - Significant performance optimization opportunities with `Span<T>` and `Memory<T>`
@@ -42,6 +44,7 @@ This report documents .NET 9 features, C# 12/13 language improvements, and moder
 **File: `DicomTypeTranslation/Helpers/DicomDatasetHelpers.cs`**
 
 Current implementation using arrays and LINQ:
+
 ```csharp
 // Line 81: Current pattern using byte arrays
 if (a.IsMemory)
@@ -51,6 +54,7 @@ if (a.IsMemory)
 **Recommendations:**
 
 #### Replace byte array comparisons with ReadOnlySpan<byte>
+
 ```csharp
 // BEFORE (current)
 private static bool ValueEquals(IByteBuffer a, IByteBuffer b)
@@ -74,6 +78,7 @@ private static bool ValueEquals(IByteBuffer a, IByteBuffer b)
 **File: `DicomTypeTranslation/DicomTypeTranslater.cs`**
 
 Current string manipulation can be optimized:
+
 ```csharp
 // Line 84: String trimming
 string s => s.Trim(),
@@ -124,6 +129,7 @@ string.Join(", ", "StudyID", "SeriesID", "InstanceUID");  // No heap allocation
 ```
 
 **Action Items:**
+
 1. Convert `IByteBuffer` comparisons to use `Span<byte>`
 2. Use `ReadOnlySpan<char>` for string parsing and manipulation
 3. Leverage new `File` API overloads for span-based I/O
@@ -140,6 +146,7 @@ string.Join(", ", "StudyID", "SeriesID", "InstanceUID");  // No heap allocation
 Primary constructors reduce boilerplate for dependency injection and immutable types.
 
 **Current Pattern:**
+
 ```csharp
 // File: DicomTypeTranslation/TableCreation/ImageTableTemplate.cs
 public class ImageTableTemplate
@@ -150,6 +157,7 @@ public class ImageTableTemplate
 ```
 
 **Modernized with Primary Constructors:**
+
 ```csharp
 // Recommended for new code
 public class ImageTableTemplate(string tableName, ImageColumnTemplate[] columns)
@@ -169,6 +177,7 @@ public class ImageTableTemplate(string tableName, ImageColumnTemplate[] columns)
 ```
 
 **Current File Needing Update:**
+
 - `DicomTypeTranslation/Elevation/TagElevator.cs` (lines 53-83): Multiple constructor overloads can be simplified
 
 ### 2.2 Collection Expressions (C# 12)
@@ -178,6 +187,7 @@ public class ImageTableTemplate(string tableName, ImageColumnTemplate[] columns)
 Unified syntax for creating collections with spread operator support.
 
 **Current Pattern:**
+
 ```csharp
 // File: DicomTypeTranslation/DicomTypeTranslater.cs (line 26-32)
 public static readonly DicomVR[] DicomVrBlacklist =
@@ -190,6 +200,7 @@ public static readonly DicomVR[] DicomVrBlacklist =
 ```
 
 **Modernized:**
+
 ```csharp
 // Collection expression syntax (cleaner, same performance)
 public static readonly DicomVR[] DicomVrBlacklist =
@@ -202,6 +213,7 @@ public static readonly DicomVR[] DicomVrBlacklist =
 ```
 
 **Spread Operator Usage:**
+
 ```csharp
 // Combining collections
 DicomVR[] customBlacklist = [..DicomVrBlacklist, DicomVR.UT, DicomVR.UR];
@@ -215,6 +227,7 @@ DicomVR[] GetBlacklist(bool includeExtended) => includeExtended
 ### 2.3 Required Members (C# 11) and Init-Only Properties
 
 **Current Pattern:**
+
 ```csharp
 public class ImageColumnTemplate
 {
@@ -224,6 +237,7 @@ public class ImageColumnTemplate
 ```
 
 **Recommended with Required Members:**
+
 ```csharp
 public class ImageColumnTemplate
 {
@@ -237,6 +251,7 @@ public class ImageColumnTemplate
 ```
 
 **Benefits:**
+
 - Compile-time enforcement of required properties
 - Immutability with `init` prevents accidental modification
 - Better API design and intent expression
@@ -244,6 +259,7 @@ public class ImageColumnTemplate
 ### 2.4 File-Scoped Namespaces (C# 10)
 
 **Current Pattern:**
+
 ```csharp
 namespace DicomTypeTranslation.Elevation;
 
@@ -258,6 +274,7 @@ public class TagElevator
 ### 2.5 Pattern Matching Enhancements (C# 12/13)
 
 **Current Usage (Good):**
+
 ```csharp
 // File: DicomTypeTranslation/DicomTypeTranslater.cs (line 80-86)
 public static object Flatten(object value)
@@ -273,6 +290,7 @@ public static object Flatten(object value)
 ```
 
 **Enhanced with C# 12/13 Features:**
+
 ```csharp
 // List patterns and length patterns
 public static object Flatten(object value)
@@ -303,6 +321,7 @@ New methods eliminate intermediate `GroupBy` allocations, providing 30-50% perfo
 ### 3.2 Applicable Scenarios in Codebase
 
 **Potential Usage:**
+
 ```csharp
 // Scenario: Count DICOM tags by VR type
 // BEFORE (allocates intermediate groupings)
@@ -378,6 +397,7 @@ var dataset = LoadDatasetAsync(path).GetAwaiter().GetResult();  // ❌ NEVER
 ```
 
 **Best Practices:**
+
 1. Use `async`/`await` keywords throughout the call stack
 2. Accept `CancellationToken` for long-running operations
 3. Return `Task` or `ValueTask`, never `async void` (except event handlers)
@@ -411,6 +431,7 @@ private async ValueTask<DicomDataset> LoadDatasetSlowPathAsync(string key)
 ### 5.1 Current State
 
 **Status**: ✅ Enabled globally via `Directory.Build.props`:
+
 ```xml
 <Nullable>enable</Nullable>
 ```
@@ -437,12 +458,14 @@ public class DicomMetadata
 ```
 
 **Current Usage:**
+
 ```csharp
 // File: DicomTypeTranslation/DicomTypeTranslater.cs (line 49)
 ArgumentNullException.ThrowIfNull(dataset);  // ✅ Good pattern
 ```
 
 **Recommendations:**
+
 1. Continue using `ArgumentNullException.ThrowIfNull()` for public APIs
 2. Consider enabling `RespectNullableAnnotations` if migrating from Newtonsoft.Json to System.Text.Json
 3. Use nullable annotations consistently (`string?` for nullable, `string` for non-null)
@@ -522,6 +545,7 @@ public static class ServiceCollectionExtensions
 ### 6.5 Service Lifetimes
 
 **Guidelines:**
+
 - **Singleton**: Stateless services, caches (use for DicomTypeTranslator)
 - **Scoped**: Per-request services (ASP.NET Core)
 - **Transient**: Stateful, short-lived services
@@ -572,6 +596,7 @@ var tagValue = new DicomTagValue(DicomTag.StudyID, "12345");
 ```
 
 **Benefits:**
+
 - Stack allocation (no GC pressure)
 - Value equality by default
 - Immutability enforced with `readonly`
@@ -585,6 +610,7 @@ var tagValue = new DicomTagValue(DicomTag.StudyID, "12345");
 .NET 9 includes a new exception handling implementation based on NativeAOT:
 
 **Measured Improvements:**
+
 - Windows x64: 2-4x faster
 - Linux x64: 2-3x faster
 - ARM64: 3-4x faster
@@ -600,6 +626,7 @@ public class MalformedTagElevationRequestCollectionXmlException : Exception { }
 ```
 
 **Recommendations:**
+
 - ✅ Continue using custom exceptions for domain errors
 - ✅ Use `ArgumentNullException.ThrowIfNull()` helper
 - ✅ Avoid exceptions in hot paths (use `Try*` patterns)
@@ -709,6 +736,7 @@ public class DicomParsingBenchmarks
 ### 10.2 Expected Performance Gains
 
 Based on .NET 9 improvements:
+
 - **JSON serialization**: 35% faster
 - **String operations with spans**: 20-40% faster
 - **LINQ with CountBy/AggregateBy**: 30-50% faster
@@ -720,24 +748,28 @@ Based on .NET 9 improvements:
 ## 11. Migration Roadmap
 
 ### Phase 1: Low-Risk Syntax Updates (Week 1)
+
 - [ ] Convert array initializers to collection expressions `[]`
 - [ ] Replace `new DicomVR[]` with `DicomVR[]` or `[]`
 - [ ] Add `required` modifier to essential properties
 - [ ] Convert mutable properties to `init`-only where appropriate
 
 ### Phase 2: Performance Optimizations (Week 2-3)
+
 - [ ] Replace byte array comparisons with `Span<byte>`
 - [ ] Use `ReadOnlySpan<char>` for string parsing
 - [ ] Implement `params ReadOnlySpan<T>` in new APIs
 - [ ] Apply LINQ `CountBy`/`AggregateBy` where applicable
 
 ### Phase 3: Architectural Improvements (Week 4)
+
 - [ ] Introduce primary constructors for new classes
 - [ ] Convert DTOs to record types for value equality
 - [ ] Add DI-friendly abstractions (interfaces)
 - [ ] Implement Try* patterns to reduce exceptions
 
 ### Phase 4: Advanced Features (Future)
+
 - [ ] Add async APIs for I/O operations
 - [ ] Implement `IAsyncEnumerable<T>` for streaming
 - [ ] Native AOT preparation (trim warnings)
@@ -749,7 +781,8 @@ Based on .NET 9 improvements:
 
 ### 12.1 DicomTypeTranslater.cs
 
-**Lines 26-32: DicomVrBlacklist**
+#### Lines 26-32: DicomVrBlacklist
+
 ```csharp
 // CURRENT
 public static readonly DicomVR[] DicomVrBlacklist =
@@ -770,7 +803,8 @@ public static readonly DicomVR[] DicomVrBlacklist =
 ];
 ```
 
-**Lines 49-54: Null checking**
+#### Lines 49-54: Null checking
+
 ```csharp
 // CURRENT (good)
 ArgumentNullException.ThrowIfNull(dataset);
@@ -778,7 +812,8 @@ ArgumentNullException.ThrowIfNull(dataset);
 // Continue this pattern throughout
 ```
 
-**Lines 78-87: Flatten method**
+#### Lines 78-87: Flatten method
+
 ```csharp
 // CURRENT
 public static object Flatten(object value)
@@ -810,7 +845,8 @@ public static object Flatten(object value)
 
 ### 12.2 DicomDatasetHelpers.cs
 
-**Lines 80-81: Buffer comparison**
+#### Lines 80-81: Buffer comparison
+
 ```csharp
 // CURRENT
 if (a.IsMemory)
@@ -823,7 +859,8 @@ if (a.IsMemory)
 
 ### 12.3 TagElevator.cs
 
-**Lines 50-83: Constructor overloads**
+#### Lines 50-83: Constructor overloads
+
 ```csharp
 // CURRENT (multiple constructors)
 public TagElevator(TagElevationRequest request)
@@ -863,7 +900,8 @@ public class TagElevator(string elevationPathway)
 
 ### 12.4 ImageTableTemplate.cs
 
-**Entire file: Convert to record**
+#### Entire file: Convert to record
+
 ```csharp
 // CURRENT
 public class ImageTableTemplate
@@ -959,6 +997,7 @@ public void BufferComparison_SpanVersion_IsFaster()
 ## 14. Summary of Actionable Items
 
 ### Immediate (No Breaking Changes)
+
 1. ✅ Replace `new Type[]` with collection expressions `[]`
 2. ✅ Use `ArgumentNullException.ThrowIfNull()` consistently
 3. ✅ Apply `Span<T>` for buffer comparisons
@@ -966,24 +1005,27 @@ public void BufferComparison_SpanVersion_IsFaster()
 5. ✅ Enable additional code analyzers in project file
 
 ### Short-term (Minor API Changes)
-6. Convert DTOs to record types for immutability
-7. Add `required` modifier to essential properties
-8. Replace `GroupBy` with `CountBy`/`AggregateBy`
-9. Introduce primary constructors for new classes
-10. Add Try* patterns to avoid exceptions
+
+1. Convert DTOs to record types for immutability
+2. Add `required` modifier to essential properties
+3. Replace `GroupBy` with `CountBy`/`AggregateBy`
+4. Introduce primary constructors for new classes
+5. Add Try* patterns to avoid exceptions
 
 ### Long-term (Major Enhancements)
-11. Design async APIs for I/O operations
-12. Add DI-friendly abstractions
-13. Implement `IAsyncEnumerable<T>` streaming
-14. Prepare for Native AOT compilation
-15. Add comprehensive performance benchmarks
+
+1. Design async APIs for I/O operations
+2. Add DI-friendly abstractions
+3. Implement `IAsyncEnumerable<T>` streaming
+4. Prepare for Native AOT compilation
+5. Add comprehensive performance benchmarks
 
 ---
 
 ## 15. References and Further Reading
 
 ### Official Microsoft Documentation
+
 - [What's New in .NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview)
 - [What's New in C# 13](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13)
 - [Performance Improvements in .NET 9](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-9/)
@@ -991,10 +1033,12 @@ public void BufferComparison_SpanVersion_IsFaster()
 - [Async Best Practices](https://learn.microsoft.com/en-us/dotnet/standard/asynchronous-programming-patterns/)
 
 ### Key Blog Posts
+
 - [Performance Improvements in .NET 9 (Stephen Toub)](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-9/)
 - [Embracing Nullable Reference Types](https://devblogs.microsoft.com/dotnet/embracing-nullable-reference-types/)
 
 ### Community Resources
+
 - [C# 12 Collection Expressions (Red Hat)](https://developers.redhat.com/articles/2024/04/22/c-12-collection-expressions-and-primary-constructors)
 - [Understanding Span in .NET (DEV Community)](https://dev.to/moh_moh701/understanding-span-in-net-usage-comparisons-and-best-practices-2690)
 
@@ -1012,6 +1056,7 @@ The DicomTypeTranslation codebase is well-positioned for .NET 9 modernization wi
 These changes can be implemented incrementally without breaking existing consumers, following the phased approach outlined in Section 11.
 
 **Estimated Overall Impact:**
+
 - Performance: 20-35% improvement in hot paths
 - Code reduction: 10-15% fewer lines through modern syntax
 - Maintainability: Improved with immutability and required members

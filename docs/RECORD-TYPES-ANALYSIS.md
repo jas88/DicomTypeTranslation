@@ -8,6 +8,7 @@
 ## Executive Summary
 
 This analysis identifies 10 classes in the DicomTypeTranslation codebase that are candidates for conversion to C# record types. The project currently targets .NET 9.0 with nullable reference types enabled, providing full access to modern record features including:
+
 - Primary constructors
 - Init-only setters
 - With-expressions
@@ -25,6 +26,7 @@ This analysis identifies 10 classes in the DicomTypeTranslation codebase that ar
 **Purpose**: Describes a column to be created in a relational database, based on DICOM tags or arbitrary column definitions.
 
 **Properties**:
+
 - `ColumnName` (string)
 - `Type` (DatabaseTypeRequest)
 - `AllowNulls` (bool)
@@ -33,23 +35,27 @@ This analysis identifies 10 classes in the DicomTypeTranslation codebase that ar
 **Recommended Type**: `record class`
 
 **Rationale**:
+
 - Pure data container with no behavior beyond GetHashCode/Equals
 - Used for YAML serialization/deserialization
 - Benefits from value-based equality for comparisons in tests
 - Currently has 3 constructors that can be simplified
 
 **Benefits**:
+
 - **Automatic value equality**: Tests compare templates extensively (lines 206-207, 270-280 in TemplateTests.cs)
 - **Cleaner syntax**: Reduce boilerplate from 61 lines to ~15-20 lines
 - **With-expressions**: Enable non-destructive mutations like `template with { AllowNulls = true }`
 - **Pattern matching**: Better switch expressions and is-patterns
 
 **Risks**:
+
 - **YAML Serialization**: YamlDotNet compatibility needs verification (currently uses `ImageTableTemplateObjectFactory`)
 - **Breaking Change**: YES - changes equality semantics, though unlikely to affect external consumers
 - **Constructor Overloads**: Need to maintain compatibility or use optional parameters
 
 **Migration Strategy**:
+
 ```csharp
 // Option A: Record with init-only properties (minimal change)
 public record class ImageColumnTemplate
@@ -109,28 +115,33 @@ public record class ImageColumnTemplate(
 **Purpose**: Describes a table schema for storing DICOM image metadata
 
 **Properties**:
+
 - `TableName` (string)
 - `Columns` (ImageColumnTemplate[])
 
 **Recommended Type**: `record class`
 
 **Rationale**:
+
 - Extremely simple data container (only 33 lines total)
 - Has one method `GetColumns()` which can remain
 - Used heavily in YAML serialization
 - Always used with object initializer syntax
 
 **Benefits**:
+
 - **Structural equality**: Tables with same name and columns are equal
 - **With-expressions**: `table with { TableName = "NewName" }` is cleaner than mutation
 - **Reduced boilerplate**: 33 lines → ~12 lines
 
 **Risks**:
+
 - **YAML Serialization**: Same YamlDotNet concerns as ImageColumnTemplate
 - **Breaking Change**: MINOR - equality semantics change
 - **Array mutability**: `Columns` array is still mutable internally
 
 **Migration Strategy**:
+
 ```csharp
 public record class ImageTableTemplate
 {
@@ -156,12 +167,14 @@ public record class ImageTableTemplate
 **Purpose**: Collection of tables to create, primarily for serialization and ETL design
 
 **Properties**:
+
 - `DatabaseType` (DatabaseType enum)
 - `Tables` (List<ImageTableTemplate>)
 
 **Recommended Type**: **NOT RECOMMENDED** - Keep as class
 
 **Rationale**:
+
 - Contains mutable collection that is modified after construction
 - Has static factory method `LoadFrom()`
 - Has instance method `Serialize()`
@@ -170,6 +183,7 @@ public record class ImageTableTemplate
 **Benefits**: None significant
 
 **Risks**:
+
 - Breaking change for no real benefit
 - Mutable collection defeats record immutability guarantees
 
@@ -184,6 +198,7 @@ public record class ImageTableTemplate
 **Purpose**: Describes a request to identify a DicomTag in a nested DicomSequence and return values for database storage
 
 **Properties**:
+
 - `ColumnName` (string, mutable setter)
 - `ElevationPathway` (string, mutable setter)
 - `ConditionalPathway` (string, mutable setter)
@@ -193,22 +208,26 @@ public record class ImageTableTemplate
 **Recommended Type**: **PARTIAL** - `record class` with init-only properties
 
 **Rationale**:
+
 - Primarily a data container deserialized from XML
 - The `Elevator` property is computed/cached state, not serialized data
 - Properties are currently mutable but never mutated after construction
 - Used in tests for equality comparisons (lines 40-44, 82-90 in TagElevatorSerializationTests.cs)
 
 **Benefits**:
+
 - **Value equality**: Tests verify properties match expected values
 - **Immutability enforcement**: Properties should be init-only
 - **Cleaner deserialization**: Can use required members
 
 **Risks**:
+
 - **XML Deserialization**: Custom constructor handles XmlElement parsing
 - **Breaking Change**: YES - `Elevator` property initialization changes
 - **Computed property**: `Elevator` doesn't fit pure DTO pattern
 
 **Migration Strategy**:
+
 ```csharp
 public record class TagElevationRequest
 {
@@ -252,11 +271,13 @@ public record class TagElevationRequest
 **Purpose**: Handles serialization/deserialization of TagElevationRequests from XML
 
 **Properties**:
+
 - `Requests` (List<TagElevationRequest>, public field)
 
 **Recommended Type**: **NOT RECOMMENDED** - Keep as class
 
 **Rationale**:
+
 - Has public mutable collection field (very bad practice)
 - Only has deserialization constructor
 - Collection is modified during construction
@@ -267,6 +288,7 @@ public record class TagElevationRequest
 **Risks**: Would expose poor design more prominently
 
 **Recommended Refactoring** (separate from record analysis):
+
 ```csharp
 public class TagElevationRequestCollection
 {
@@ -305,6 +327,7 @@ public class TagElevationRequestCollection
 **Purpose**: Represents an element in a DICOM sequence hierarchy with parent/sibling relationships
 
 **Properties**:
+
 - `Parent` (SequenceElement, private setter, set in constructor)
 - `ArraySiblings` (List<SequenceElement>, private setter, initialized empty, populated externally)
 - `SequenceTag` (DicomTag, private setter, set in constructor)
@@ -313,23 +336,27 @@ public class TagElevationRequestCollection
 **Recommended Type**: `readonly record struct`
 
 **Rationale**:
+
 - Short-lived internal data structure used during tree traversal
 - Properties are conceptually immutable after initialization
 - Stack allocation would improve performance
 - Small size: 4 properties, all reference types except DicomTag (struct)
 
 **Benefits**:
+
 - **Performance**: Stack allocation for traversal algorithms
 - **Immutability**: Enforce design intent (properties shouldn't change)
 - **Value semantics**: Useful for comparisons during traversal
 
 **Risks**:
+
 - **Array mutability**: `ArraySiblings` List is mutated after construction (line 62 in TagNavigation.cs)
 - **Reference semantics**: Code may rely on reference equality
 - **Copying overhead**: Structs are copied by value
 - **Breaking Change**: MAJOR for internal API
 
 **Migration Strategy** (requires design change):
+
 ```csharp
 // Option A: Keep as class, make immutable
 internal record class SequenceElement(
@@ -357,28 +384,33 @@ internal record class SequenceElement(
 **Purpose**: Represents a single navigation step in a DICOM tag pathway
 
 **Properties**:
+
 - `IsLast` (bool, readonly field)
 - `_tag` (DicomTag, private readonly field)
 
 **Recommended Type**: `readonly record struct`
 
 **Rationale**:
+
 - Extremely simple: 2 immutable fields + methods
 - Created frequently during pathway parsing
 - Truly immutable after construction
 - Small memory footprint
 
 **Benefits**:
+
 - **Performance**: Stack allocation, no GC pressure
 - **Immutability**: Already immutable, record makes it explicit
 - **Pattern matching**: `navigation is { IsLast: true }` syntax
 
 **Risks**:
+
 - **Struct copying**: May degrade performance if passed frequently by value
 - **Breaking Change**: MINOR - internal class only
 - **Size**: Should be ≤16 bytes (DicomTag is struct, bool is 1 byte, likely 12-16 bytes total)
 
 **Migration Strategy**:
+
 ```csharp
 internal readonly record struct TagNavigation(string NavigationToken, bool IsLast)
 {
@@ -416,6 +448,7 @@ internal readonly record struct TagNavigation(string NavigationToken, bool IsLas
 **Purpose**: Represents conditional matching logic for tag elevation
 
 **Properties**:
+
 - `IsCurrentNodeMatch` (bool, private setter)
 - `_conditionalShouldMatch` (string, private readonly field)
 - `_navigations` (List<TagNavigation>, private readonly field, initialized in constructor)
@@ -424,6 +457,7 @@ internal readonly record struct TagNavigation(string NavigationToken, bool IsLas
 **Recommended Type**: **NOT RECOMMENDED** - Keep as class
 
 **Rationale**:
+
 - Complex initialization with validation logic
 - Contains mutable collections (even if not mutated after construction)
 - Behavior-rich class, not a DTO
@@ -442,6 +476,7 @@ internal readonly record struct TagNavigation(string NavigationToken, bool IsLas
 #### 9-11. **Exception Classes** (Elevation/Exceptions/*.cs)
 
 **Classes**:
+
 - `TagNavigationException`
 - `InvalidTagElevatorPathException`
 - `MalformedTagElevationRequestCollectionXmlException`
@@ -449,6 +484,7 @@ internal readonly record struct TagNavigation(string NavigationToken, bool IsLas
 **Recommended Type**: **NOT RECOMMENDED** - Keep as classes
 
 **Rationale**:
+
 - Exception classes should inherit from `Exception` (class)
 - Cannot be records because `Exception` is not a record
 - Standard pattern: exception classes with message/inner exception constructors
@@ -461,7 +497,7 @@ internal readonly record struct TagNavigation(string NavigationToken, bool IsLas
 ## Serialization Compatibility Matrix
 
 | Class | YAML | XML | JSON | Concerns |
-|-------|------|-----|------|----------|
+| ------- | ------ | ----- | ------ | ---------- |
 | ImageColumnTemplate | ✓ (YamlDotNet) | - | - | Custom ObjectFactory may need updates |
 | ImageTableTemplate | ✓ (YamlDotNet) | - | - | Same as above |
 | TagElevationRequest | - | ✓ (Custom) | - | Custom deserialization constructor |
@@ -476,6 +512,7 @@ YamlDotNet **supports records** as of version 11.0 (released 2021). Key consider
 4. **Custom ObjectFactory**: May need updates for positional records
 
 **Current Usage**:
+
 ```csharp
 var deserializer = new DeserializerBuilder()
     .IgnoreUnmatchedProperties()
@@ -491,7 +528,7 @@ var deserializer = new DeserializerBuilder()
 ## Breaking Changes Summary
 
 | Change | Breaking? | Severity | Mitigation |
-|--------|-----------|----------|------------|
+| -------- | ----------- | ---------- | ------------ |
 | ImageColumnTemplate → record | YES | Medium | Equality semantics change; provide shims if needed |
 | ImageTableTemplate → record | YES | Low | Minimal external usage |
 | TagElevationRequest → record | YES | Medium | XML deserialization changes; use factory method |
@@ -503,6 +540,7 @@ var deserializer = new DeserializerBuilder()
 ## Implementation Recommendations
 
 ### Phase 1: Low-Risk High-Value (v4.3.0)
+
 1. ✅ **ImageTableTemplate** → record class
    - Simplest conversion
    - High test coverage ensures safety
@@ -514,23 +552,26 @@ var deserializer = new DeserializerBuilder()
    - Maintain backward-compatible constructors
 
 ### Phase 2: Medium-Risk High-Value (v4.4.0)
-3. ✅ **TagElevationRequest** → record class
+
+1. ✅ **TagElevationRequest** → record class
    - Refactor `Elevator` to lazy property or factory
    - Use static factory method for XML deserialization
    - Update tests for equality semantics
 
 ### Phase 3: Internal Optimizations (v5.0.0)
-4. 🔍 **TagNavigation** → readonly record struct
+
+1. 🔍 **TagNavigation** → readonly record struct
    - Performance test before/after
    - Measure struct copying overhead vs. allocation savings
    - Internal-only change, can be reverted
 
-5. 🔍 **SequenceElement** → record class (NOT struct)
+2. 🔍 **SequenceElement** → record class (NOT struct)
    - Refactor mutation pattern for `ArraySiblings`
    - Use builder or factory pattern
    - Breaking change for internal API, coordinate across codebase
 
 ### Not Recommended
+
 - ❌ ImageTableTemplateCollection (mutable collection)
 - ❌ TagElevationRequestCollection (needs refactoring, not record conversion)
 - ❌ TagRelativeConditional (complex behavior-rich class)
@@ -543,6 +584,7 @@ var deserializer = new DeserializerBuilder()
 For each conversion:
 
 1. **Equality Tests**: Verify value-based equality works as expected
+
    ```csharp
    var t1 = new ImageColumnTemplate { ColumnName = "Study", Type = typeRequest };
    var t2 = new ImageColumnTemplate { ColumnName = "Study", Type = typeRequest };
@@ -550,6 +592,7 @@ For each conversion:
    ```
 
 2. **Serialization Tests**: Verify YAML/XML round-trips
+
    ```csharp
    var original = new ImageTableTemplate { ... };
    var yaml = collection.Serialize();
@@ -558,6 +601,7 @@ For each conversion:
    ```
 
 3. **With-Expression Tests**: Verify non-destructive mutation
+
    ```csharp
    var template = new ImageColumnTemplate { ColumnName = "Study" };
    var modified = template with { AllowNulls = true };
@@ -575,7 +619,7 @@ For each conversion:
 ## Code Size Reduction Estimates
 
 | Class | Current LOC | Estimated LOC with Record | Reduction |
-|-------|-------------|---------------------------|-----------|
+| ------- | ------------- | --------------------------- | ----------- |
 | ImageColumnTemplate | 61 | ~25 | 59% |
 | ImageTableTemplate | 33 | ~12 | 64% |
 | TagElevationRequest | 62 | ~35 | 44% |
@@ -587,11 +631,13 @@ For each conversion:
 ## Conclusion
 
 **High-Value Conversions** (3 classes):
+
 - `ImageColumnTemplate` - **Highest priority**, pure DTO with extensive test coverage
 - `ImageTableTemplate` - **High priority**, simple and safe
 - `TagElevationRequest` - **Medium priority**, requires design consideration
 
 **Total Impact**:
+
 - 90 lines of code reduction (~38%)
 - Better immutability guarantees
 - Cleaner test code with value equality

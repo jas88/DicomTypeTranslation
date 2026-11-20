@@ -3,7 +3,6 @@
 
 Documentation for classes which convert between DICOM and JSON. Each is an implementation of the [Newtonsoft.Json.JsonConverter](https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_JsonConverter.htm) class.
 
-
 ## Default fo-dicom converter
 
 The default converter as found in fo-dicom, at the current version as specified in the project [packages](../Packages.md). Aims to follow the [DICOM JSON model](http://dicom.nema.org/medical/dicom/current/output/chtml/part18/sect_F.2.2.html).

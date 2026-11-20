@@ -9,10 +9,9 @@
 - [Dependencies](./Packages.md)
 - [Changelog](./CHANGELOG.md)
 
-
 [Fo Dicom](https://github.com/fo-dicom/fo-dicom)/[FAnsiSql](https://github.com/jas88/FAnsiSql) powered library for converting [dicom](https://www.dicomlibrary.com/dicom/) types into database/C# types at speed. The library lets you cherry pick specific tags from dicom images (e.g. PatientID) and populate a relational (or MongoDB) database with flat record results (e.g. 1 record per image). With DicomTypeTranslation you can create whatever schema works for you in whatever DBMS you want and then link it with existing EHR data you already have (E.g. by PatientID).
 
-Also included is a DICOM to JSON converter, which aims to allow better coverage when converting "real world" DICOM data than the standard fo-dicom implementation. More details [here](docs/JsonDicomConverters.md).
+Also included is a DICOM to JSON converter, which aims to allow better coverage when converting "real world" DICOM data than the standard fo-dicom implementation. More details in [JsonDicomConverters.md](docs/JsonDicomConverters.md).
 
 ![Copying dicom tags into a database](docs/images/LibraryPurpose.png "What we do, take dicom tags and put them in a database")
 
@@ -74,17 +73,19 @@ This results in the following table (with sensible datatypes):
 ## Installing Nuget Package
 
 You can install the library via NuGet Package Manager:
-```
+
+```powershell
 PM> Install-Package DicomTypeTranslation
 ```
 
 Or use the .Net CLI:
 
-```
+```console
 > dotnet add package DicomTypeTranslation
 ```
 
 ## The Dicom Specification
+
 Dicom is a complex specification that includes many data types and data structures (e.g. trees, arrays).  The following section describes how these issues are addressed by DicomTypeTranslation.
 
 ### Reading Types
@@ -191,13 +192,16 @@ Again if you don't want to deal with this you can just call Flatten:
 var flattened = DicomTypeTranslater.Flatten(seq);
 ```
 
-The Flattened (string) representation of the above example is:
-```
-[0] - 
- 	 (0010,0010) - 	 Rabbit
+`Flatten` separates the columns with tab characters (one before each tag, and one between the tag and its value), which the sample below shows as spaces.
 
-[1] - 
- 	 (0010,0010) - 	 Roger
+The Flattened (string) representation of the above example is:
+
+```text
+[0] - 
+     (0010,0010) -   Rabbit
+
+ [1] - 
+     (0010,0010) -   Roger
 ```
 
 ### Database Types
