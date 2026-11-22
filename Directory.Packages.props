@@ -9,7 +9,7 @@
          affects SQLitePCLRaw.lib.e_sqlite3 <= 2.1.11) pulled in via FAnsiSql.Legacy ->
          FAnsiSql.Sqlite -> Microsoft.Data.Sqlite. 3.50.3 bundles SQLite >= 3.50.2. -->
     <PackageVersion Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.50.3" />
-    <PackageVersion Include="FAnsiSql.Legacy" Version="3.7.0" />
+    <PackageVersion Include="FAnsiSql.Legacy" Version="3.8.0" />
     <PackageVersion Include="MongoDB.Bson" Version="3.14.0" />
     <PackageVersion Include="YamlDotNet" Version="18.1.0" />
 
