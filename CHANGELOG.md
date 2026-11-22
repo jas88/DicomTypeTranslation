@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Tests run on Microsoft Testing Platform through the NUnit runner instead of VSTest, as the shared build-standards now set up for `*.Tests` projects. `global.json` selects that runner for `dotnet test`
+- CI collects code coverage with Microsoft.Testing.Extensions.CodeCoverage instead of coverlet
+
+### Fixed
+
+- CI uploads code coverage to Codecov again. Nothing had referenced `coverlet.collector` since build-standards stopped adding it in January 2026, so no coverage report was produced
+
 ## [5.0.1] - 2025-12-07
 
 ### Added

@@ -22,8 +22,8 @@
     <PackageVersion Include="NUnit" Version="5.0.0" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.15.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
-    <!-- Version required by build-standards shared props, but coverlet.collector used for actual coverage -->
-    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.0.4" />
+    <!-- Referenced by build-standards/Directory.Build.props.shared for test projects; collects the coverage that CI uploads.
+         It must be built for the Microsoft.Testing.Platform major version that NUnit3TestAdapter depends on. -->
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
   </ItemGroup>
 </Project>
