@@ -4,7 +4,7 @@
 
 1. Packages on NuGet are virus scanned by the NuGet site.
 2. This package is widely used and is actively maintained.
-3. It is open source.
+3. Of the packages listed here, every runtime dependency is open source, and so is every build and test tool except Microsoft.Testing.Extensions.CodeCoverage. That package is closed source, licensed under the Microsoft Software License Terms (Microsoft .NET Library). It is used only to collect code coverage when the tests run, and is not shipped with the library. FAnsiSql.Legacy brings in two packages that are not listed here and are not open source: Oracle.ManagedDataAccess.Core (Oracle Free Distribution, Hosting, and Use Terms and Conditions) and Microsoft.Data.SqlClient.SNI.runtime (Microsoft Software License Terms for the Microsoft.Data.SqlClient.SNI Library).
 
 ## Runtime Dependencies
 
@@ -24,4 +24,4 @@ These packages are only used during the build process and are not distributed wi
 | ------- | ------------ | ------- | ------- | -------------------------- |
 | MinVer | [GitHub](https://github.com/adamralph/minver) | [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0) | Git-based semantic versioning | |
 | DotNet.ReproducibleBuilds | [GitHub](https://github.com/dotnet/reproducible-builds) | [MIT](https://opensource.org/licenses/MIT) | Ensures deterministic and reproducible builds | |
-| Microsoft.Testing.Extensions.CodeCoverage | [GitHub](https://github.com/microsoft/codecoverage) | [Microsoft Software License Terms (Microsoft .NET Library)](https://www.nuget.org/packages/Microsoft.Testing.Extensions.CodeCoverage/18.12.0/License) | Code coverage collection for the tests on Microsoft Testing Platform; build-standards adds it to test projects (test only) | Not open source; the licence allows its use to develop and test applications |
+| Microsoft.Testing.Extensions.CodeCoverage | Closed source; documentation and samples on [GitHub](https://github.com/microsoft/codecoverage) | [Microsoft Software License Terms (Microsoft .NET Library)](https://www.nuget.org/packages/Microsoft.Testing.Extensions.CodeCoverage/18.12.0/License) | Code coverage collection for the tests on Microsoft Testing Platform; build-standards adds it to test projects (test only) | Not open source; the licence allows its use to develop and test applications |
